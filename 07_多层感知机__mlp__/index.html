@@ -524,9 +524,9 @@
 <li><strong>多轮面试</strong> 像逐级筛选——初筛看简历关键词，复试评估专业能力，终面综合判断。每一轮都是基于上一轮结果的<strong>进一步加工</strong>。</li>
 </ul>
 <p>数学上，如果我们有 3 层，输入为 <code>x</code>：</p>
-<p>$$
+<div class="arithmatex">\[
 \mathbf{y} = \text{Layer}_3\big( \text{Layer}_2( \text{Layer}_1(\mathbf{x}) ) \big)
-$$</p>
+\]</div>
 <p>层层嵌套调用，前一层的输出作为后一层的输入。</p>
 <h2 id="mlp_1">三、看一眼 <code>MLP</code> 的真身<a class="headerlink" href="#mlp_1" title="Permanent link">¶</a></h2>
 <p>让我们打开 <code>micrograd/nn.py</code>，看看 <code>MLP</code> 长什么样。它的 <code>__init__</code> 部分非常巧妙：</p>
@@ -785,6 +785,8 @@ $$</p>
 </div>
 <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
 <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../javascripts/mathjax.js"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
 window.mermaidConfig = {default: {
     startOnLoad: false
