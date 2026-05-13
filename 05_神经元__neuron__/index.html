@@ -1,0 +1,711 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI-generated deep-teaching walkthrough of the micrograd codebase" name="description"/>
+<link href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/" rel="prev"/>
+<link href="../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Chapter 5: 神经元 (Neuron) - micrograd — 深度教学</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#chapter-5-neuron">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="micrograd — 深度教学" class="md-header__button md-logo" data-md-component="logo" href=".." title="micrograd — 深度教学">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            micrograd — 深度教学
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Chapter 5: 神经元 (Neuron)
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  Tutorial: micrograd
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+        
+  
+  
+    
+  
+  Chapter 1: 标量值与自动微分 (Value)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+        
+  
+  
+    
+  
+  Chapter 2: 动态计算图 (DAG)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+        
+  
+  
+    
+  
+  Chapter 3: 反向传播与链式法则 (backward)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+        
+  
+  
+    
+  
+  Chapter 4: 模块基类 (Module)
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
+        
+  
+  
+    
+  
+  Chapter 5: 神经元 (Neuron)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+        
+  
+  
+    
+  
+  Chapter 6: 神经网络层 (Layer)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+        
+  
+  
+    
+  
+  Chapter 7: 多层感知机 (MLP)
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="micrograd — 深度教学" class="md-nav__button md-logo" data-md-component="logo" href=".." title="micrograd — 深度教学">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    micrograd — 深度教学
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    Tutorial: micrograd
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 1: 标量值与自动微分 (Value)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 2: 动态计算图 (DAG)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 3: 反向传播与链式法则 (backward)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 4: 模块基类 (Module)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Chapter 5: 神经元 (Neuron)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Chapter 5: 神经元 (Neuron)
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        一、我们要解决什么问题？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#neuron">
+<span class="md-ellipsis">
+      
+        二、Neuron 是什么？一个"小型投票器"
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#neuron_1">
+<span class="md-ellipsis">
+      
+        三、看一眼 Neuron 的真身
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#neuron-__call__">
+<span class="md-ellipsis">
+      
+        四、Neuron 如何"工作"——__call__ 方法
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#neuron_2">
+<span class="md-ellipsis">
+      
+        五、亲手用一下 Neuron
+      
+    </span>
+</a>
+<nav aria-label="五、亲手用一下 Neuron" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-2">
+<span class="md-ellipsis">
+      
+        例子 1：创建一个 2 输入的神经元
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        例子 2：喂给它一些输入
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3">
+<span class="md-ellipsis">
+      
+        例子 3：查看它的参数
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#nonlin">
+<span class="md-ellipsis">
+      
+        六、nonlin 开关有什么用？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        七、内部到底发生了什么？一次完整的前向过程
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#neuron_3">
+<span class="md-ellipsis">
+      
+        八、用一张图看 Neuron 内部的计算图
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#neuron_4">
+<span class="md-ellipsis">
+      
+        九、为什么说 Neuron 是"可学习"的？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        十、单个神经元能做什么？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        十一、常见疑问
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        十二、本章小结
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 6: 神经网络层 (Layer)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 7: 多层感知机 (MLP)
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="chapter-5-neuron">Chapter 5: 神经元 (Neuron)<a class="headerlink" href="#chapter-5-neuron" title="Permanent link">¶</a></h1>
+<p>在上一章 <a href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">模块基类 (Module)</a> 中，我们认识了所有神经网络组件的"共同祖先"——<code>Module</code>。它为我们提供了 <code>parameters()</code> 和 <code>zero_grad()</code> 这两个通用能力。</p>
+<p>从这一章开始，我们要正式见到 <code>Module</code> 的第一个孩子，也是整个神经网络中<strong>最小、最基础的计算单元</strong>——<code>Neuron</code>（神经元）。</p>
+<h2 id="_1">一、我们要解决什么问题？<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>让我们想象一个最直观的小场景。假设你是一家小公司的招聘经理，面前摆着一份候选人的简历，上面有三个指标：</p>
+<ul>
+<li>学历分数：<code>x1 = 0.8</code></li>
+<li>工作经验：<code>x2 = 0.5</code></li>
+<li>面试表现：<code>x3 = 0.9</code></li>
+</ul>
+<p>你心里有一杆秤——觉得"工作经验最重要、学历其次、面试表现最次"，于是分别给它们打上权重 <code>w1 = 0.3, w2 = 0.7, w3 = 0.1</code>。再加上一个"基础印象分" <code>b = 0.2</code>。最后你计算：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>总分 = w1*x1 + w2*x2 + w3*x3 + b
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>     = 0.3*0.8 + 0.7*0.5 + 0.1*0.9 + 0.2
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>     = 0.79
+</code></pre></div>
+<p>如果总分 &gt; 0，就给候选人通过；否则刷掉。</p>
+<blockquote>
+<p><strong>恭喜你！你刚刚手动模拟了一个"神经元"的工作流程。</strong></p>
+</blockquote>
+<p><code>Neuron</code> 就是把这个"加权打分 + 决策是否激活"的过程，<strong>自动化、可学习地</strong>封装起来。我们这一章的目标就是搞清楚：</p>
+<ul>
+<li><code>Neuron</code> 内部到底有什么？</li>
+<li>它怎么把输入"算"成一个输出？</li>
+<li>它和我们前面学的 <code>Value</code>、<code>Module</code> 怎么串到一起？</li>
+</ul>
+<h2 id="neuron">二、<code>Neuron</code> 是什么？一个"小型投票器"<a class="headerlink" href="#neuron" title="Permanent link">¶</a></h2>
+<p>你可以把 <code>Neuron</code> 想象成一个<strong>小型投票器</strong>：</p>
+<ul>
+<li>它有几根"输入线"——接收外界传来的信号 <code>x1, x2, ..., xn</code>。</li>
+<li>每根线上都挂着一个"权重旋钮" <code>w1, w2, ..., wn</code>——表示"我对这条线的重视程度"。</li>
+<li>还有一个"偏置" <code>b</code>——一个固定的"基础态度"。</li>
+<li>它把所有输入按权重加起来，再加上偏置，得到一个总分。</li>
+<li>最后<strong>可选</strong>地过一个"激活函数"（比如 ReLU），决定是不是真的"激活"输出。</li>
+</ul>
+<p>用数学公式表达就是：</p>
+<p>$$
+y = \text{ReLU}(w_1 x_1 + w_2 x_2 + \cdots + w_n x_n + b)
+$$</p>
+<p>或者用紧凑的向量形式：</p>
+<p>$$
+y = \text{ReLU}(\mathbf{w} \cdot \mathbf{x} + b)
+$$</p>
+<p>打个生活化的比方：</p>
+<ul>
+<li><strong>权重 <code>w</code></strong> 就像每位评委心中的"打分倾向"——有的偏爱才艺，有的偏爱外貌。</li>
+<li><strong>偏置 <code>b</code></strong> 就像评委的"基础情绪"——心情好时整体多给两分，心情差时少给两分。</li>
+<li><strong>ReLU 激活</strong> 就像一个"门槛"——总分大于 0 才会兴奋地举牌"通过"，否则就保持沉默（输出 0）。</li>
+</ul>
+<h2 id="neuron_1">三、看一眼 <code>Neuron</code> 的真身<a class="headerlink" href="#neuron_1" title="Permanent link">¶</a></h2>
+<p>让我们打开 <code>micrograd/nn.py</code>，看看 <code>Neuron</code> 长什么样。它的 <code>__init__</code> 部分非常短：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Neuron</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nin</span><span class="p">,</span> <span class="n">nonlin</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="p">[</span><span class="n">Value</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nin</span><span class="p">)]</span>
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">nonlin</span> <span class="o">=</span> <span class="n">nonlin</span>
+</code></pre></div>
+<p>逐行解读：</p>
+<ol>
+<li><strong><code>class Neuron(Module):</code></strong>：<code>Neuron</code> 继承自 <code>Module</code>，所以它自动拥有 <code>zero_grad()</code> 等通用能力。</li>
+<li><strong><code>self.w = [...]</code></strong>：创建 <code>nin</code> 个权重。每个权重是一个 <code>Value</code>，初始值是 <code>-1</code> 到 <code>1</code> 之间的随机数。</li>
+<li><strong><code>self.b = Value(0)</code></strong>：偏置初始化为 0。它也是一个 <code>Value</code>，意味着它可以参与反向传播。</li>
+<li><strong><code>self.nonlin</code></strong>：一个开关——决定要不要在末尾过 ReLU 激活。</li>
+</ol>
+<blockquote>
+<p>💡 <strong>为什么权重要随机初始化？</strong> 如果所有权重都设成 0，每个神经元的行为就一模一样，训练时也会朝同一方向更新——网络就退化成了"一个神经元"。随机初始化打破对称性，让每个神经元有自己的"个性"。</p>
+</blockquote>
+<h2 id="neuron-__call__">四、<code>Neuron</code> 如何"工作"——<code>__call__</code> 方法<a class="headerlink" href="#neuron-__call__" title="Permanent link">¶</a></h2>
+<p><code>Neuron</code> 的核心计算逻辑藏在 <code>__call__</code> 方法里：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>    <span class="n">act</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">wi</span><span class="o">*</span><span class="n">xi</span> <span class="k">for</span> <span class="n">wi</span><span class="p">,</span><span class="n">xi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="n">x</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+<a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>    <span class="k">return</span> <span class="n">act</span><span class="o">.</span><span class="n">relu</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonlin</span> <span class="k">else</span> <span class="n">act</span>
+</code></pre></div>
+<p>逐行拆解：</p>
+<ol>
+<li><strong><code>zip(self.w, x)</code></strong>：把权重和输入一一配对，得到 <code>[(w1,x1), (w2,x2), ...]</code>。</li>
+<li><strong><code>sum((wi*xi for ...), self.b)</code></strong>：把所有 <code>wi*xi</code> 加起来，<strong>起点是 <code>self.b</code></strong>（这是 Python <code>sum</code> 函数的第二个参数）。所以结果就是 <code>b + w1*x1 + w2*x2 + ...</code>。</li>
+<li><strong><code>act.relu() if self.nonlin else act</code></strong>：如果需要非线性激活，就调用 ReLU；否则直接返回。</li>
+</ol>
+<blockquote>
+<p>✨ <strong>关键观察</strong>：<code>wi</code>、<code>xi</code>、<code>self.b</code> 都是 <code>Value</code>，所以 <code>wi*xi</code>、<code>+</code> 这些运算都被自动重载——背后会<strong>自动构建计算图</strong>！这意味着 <code>__call__</code> 跑完之后，我们就得到了一棵以输出为根的 DAG，可以直接 <code>backward()</code> 了。</p>
+</blockquote>
+<p>那么 Python 中的 <code>__call__</code> 是什么？它让一个对象<strong>像函数一样被调用</strong>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">n</span> <span class="o">=</span> <span class="n">Neuron</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="n">y</span> <span class="o">=</span> <span class="n">n</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>   <span class="c1"># 看! 像函数一样调用</span>
+</code></pre></div>
+<p>这种用法非常优雅——让神经元用起来跟普通的数学函数一样自然。</p>
+<h2 id="neuron_2">五、亲手用一下 <code>Neuron</code><a class="headerlink" href="#neuron_2" title="Permanent link">¶</a></h2>
+<p>让我们从最简单的例子开始，看看 <code>Neuron</code> 在实际中是怎么用的。</p>
+<h3 id="1-2">例子 1：创建一个 2 输入的神经元<a class="headerlink" href="#1-2" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">micrograd.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Neuron</span>
+<a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>
+<a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="n">n</span> <span class="o">=</span> <span class="n">Neuron</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>        <span class="c1"># 2 个输入</span>
+<a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>             <span class="c1"># ReLUNeuron(2)</span>
+</code></pre></div>
+<p>我们创建了一个有 2 个输入的神经元。打印它时会看到 <code>ReLUNeuron(2)</code>——表示这是一个带 ReLU 激活的、接收 2 个输入的神经元。</p>
+<h3 id="2">例子 2：喂给它一些输入<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="n">y</span> <span class="o">=</span> <span class="n">n</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">])</span>   <span class="c1"># 喂两个数字进去</span>
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>             <span class="c1"># Value(data=..., grad=0)</span>
+</code></pre></div>
+<p>注意 <code>y</code> 不是普通的数字——它是一个 <code>Value</code>！这意味着它带着完整的计算图，可以直接做 <code>y.backward()</code>。</p>
+<h3 id="3">例子 3：查看它的参数<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">parameters</span><span class="p">()))</span>   <span class="c1"># 3 个参数: 2个权重 + 1个偏置</span>
+</code></pre></div>
+<p>输出是 <code>3</code>——正是 2 个权重 <code>w</code> 加上 1 个偏置 <code>b</code>。这个 <code>parameters()</code> 方法是 <code>Neuron</code> 自己实现的（不是从 <code>Module</code> 继承的默认空列表）：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">]</span>
+</code></pre></div>
+<p>简单到不能再简单——直接把权重列表和偏置拼起来返回。</p>
+<h2 id="nonlin">六、<code>nonlin</code> 开关有什么用？<a class="headerlink" href="#nonlin" title="Permanent link">¶</a></h2>
+<p>你可能好奇：为什么需要一个 <code>nonlin</code> 开关？什么时候要关掉 ReLU 激活？</p>
+<p>让我们对比一下两种神经元：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="n">n1</span> <span class="o">=</span> <span class="n">Neuron</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">nonlin</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>    <span class="c1"># 带 ReLU (默认)</span>
+<a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="n">n2</span> <span class="o">=</span> <span class="n">Neuron</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">nonlin</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>   <span class="c1"># 不带 ReLU (线性)</span>
+</code></pre></div>
+<ul>
+<li><strong><code>nonlin=True</code></strong>：经过 ReLU，负数变 0。适合<strong>网络中间层</strong>——非线性是神经网络能拟合复杂函数的关键。</li>
+<li><strong><code>nonlin=False</code></strong>：纯粹的线性输出 <code>w·x + b</code>。适合<strong>网络最后一层</strong>——比如做回归任务时，输出可能是任意实数（包括负数），不能被 ReLU 截断。</li>
+</ul>
+<p>打个比方：</p>
+<ul>
+<li>中间层的神经元像<strong>严格的中转站</strong>——负面信号一律压制为 0（"我不传递负能量"）。</li>
+<li>最后一层的神经元像<strong>忠实的传声筒</strong>——什么数都原样输出，不掺杂个人态度。</li>
+</ul>
+<p>我们将在 <a href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">多层感知机 (MLP)</a> 中看到这个开关是怎么被巧妙运用的。</p>
+<h2 id="_2">七、内部到底发生了什么？一次完整的前向过程<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<p>让我们用一个具体的例子，看看 <code>n([1.0, 2.0])</code> 这一行代码背后究竟发生了什么。</p>
+<p>假设我们有一个 2 输入的神经元，权重 <code>w = [0.5, -0.3]</code>，偏置 <code>b = 0.1</code>。当我们调用 <code>n([1.0, 2.0])</code> 时：</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant U as 用户代码
+    participant N as Neuron
+    participant V1 as 乘法节点
+    participant V2 as 加法节点
+    participant R as ReLU 节点
+
+    U-&gt;&gt;N: n([1.0, 2.0])
+    N-&gt;&gt;V1: w1*x1 = 0.5
+    N-&gt;&gt;V1: w2*x2 = -0.6
+    V1-&gt;&gt;V2: sum + b = 0.5 + (-0.6) + 0.1 = 0
+    V2-&gt;&gt;R: relu(0) = 0
+    R--&gt;&gt;U: 返回 Value(0)
+</code></pre>
+<p>关键观察：</p>
+<ol>
+<li><strong>每一步运算都创建一个新 <code>Value</code> 节点</strong>——<code>wi*xi</code>、累加、ReLU 都是。</li>
+<li><strong>整个过程构建了一棵小型 DAG</strong>——以输出为根，叶子是所有的 <code>w</code>、<code>x</code>、<code>b</code>。</li>
+<li><strong>没有任何梯度计算</strong>——前向只是"算值 + 记录图"，梯度等 <code>backward()</code> 时才算。</li>
+</ol>
+<h2 id="neuron_3">八、用一张图看 <code>Neuron</code> 内部的计算图<a class="headerlink" href="#neuron_3" title="Permanent link">¶</a></h2>
+<p>我们以一个有 2 个输入的 <code>Neuron</code> 为例，看看 <code>y = ReLU(w1*x1 + w2*x2 + b)</code> 在计算图里长什么样：</p>
+<pre class="mermaid"><code>graph LR
+    x1["x1"] --&gt; m1["* "]
+    w1["w1"] --&gt; m1
+    x2["x2"] --&gt; m2["* "]
+    w2["w2"] --&gt; m2
+    m1 --&gt; a1["+ "]
+    m2 --&gt; a1
+    b["b"] --&gt; a1
+    a1 --&gt; r["ReLU"]
+    r --&gt; y["y (输出)"]
+</code></pre>
+<p>注意一些重要细节：</p>
+<ul>
+<li><strong>每个权重、每个输入、偏置都是单独的 <code>Value</code> 节点</strong>——micrograd 是标量级别的自动微分，所以"乘法"不是一次完成的矩阵运算，而是被拆成一个个独立的标量乘法。</li>
+<li><strong>节点数量随输入数量线性增长</strong>——5 个输入的神经元就有 5 次乘法 + 4 次加法 + 1 次激活 ≈ 10 个节点。这就是为什么 README 里说 micrograd"虽然慢，但很直观"。</li>
+<li><strong>整个图自动连接起来</strong>——我们不需要手动构建任何图结构，所有连接都是 <code>Value</code> 在做加法和乘法时自动记录下来的（回顾 <a href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">动态计算图 (DAG)</a>）。</li>
+</ul>
+<h2 id="neuron_4">九、为什么说 <code>Neuron</code> 是"可学习"的？<a class="headerlink" href="#neuron_4" title="Permanent link">¶</a></h2>
+<p>这是 <code>Neuron</code> 最神奇的地方——它的权重和偏置都是 <code>Value</code>，所以它们可以<strong>被训练</strong>！</p>
+<p>让我们看一个迷你训练步骤：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="n">n</span> <span class="o">=</span> <span class="n">Neuron</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="n">y</span> <span class="o">=</span> <span class="n">n</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">])</span>    <span class="c1"># 前向计算</span>
+<a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="n">y</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>         <span class="c1"># 反向传播</span>
+<a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grad</span><span class="p">)</span>   <span class="c1"># 第一个权重的梯度!</span>
+</code></pre></div>
+<p>调用 <code>y.backward()</code> 后，每个权重和偏置的 <code>.grad</code> 都被自动填上了"它对输出 <code>y</code> 的影响有多大"。接下来训练时只需要：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+<a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a>    <span class="n">p</span><span class="o">.</span><span class="n">data</span> <span class="o">-=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span>   <span class="c1"># 朝梯度反方向走一小步</span>
+</code></pre></div>
+<p>这就是<strong>梯度下降</strong>——通过不断调整参数，让神经元的行为逐渐接近我们想要的目标。</p>
+<blockquote>
+<p>🎯 整个流程是不是很美？前向构建图 → 反向算梯度 → 调整参数 → 重新前向……循环往复，神经元就"学会"了。</p>
+</blockquote>
+<h2 id="_3">十、单个神经元能做什么？<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>一个孤零零的神经元能力有限，但它仍然能解决一些简单问题：</p>
+<ul>
+<li><strong>线性分类</strong>：比如判断一个点是在直线的哪一侧。</li>
+<li><strong>简单的逻辑函数</strong>：比如 AND、OR（但<strong>不能</strong>实现 XOR——这就是为什么单个神经元不够用）。</li>
+</ul>
+<p>要解决更复杂的问题，我们就需要把多个神经元<strong>横向并排</strong>组成一层，再把多层<strong>纵向堆叠</strong>起来——这就是接下来两章的主题。</p>
+<h2 id="_4">十一、常见疑问<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p><strong>Q1：为什么权重是 <code>-1</code> 到 <code>1</code> 的随机数？</strong></p>
+<p>这是一种简单的初始化策略。在工业级框架里有更精细的方案（如 Xavier、He 初始化），但 micrograd 为了简单只用 <code>random.uniform(-1, 1)</code>，效果在小网络上已经够用。</p>
+<p><strong>Q2：为什么偏置初始化为 0，而权重要随机？</strong></p>
+<p>偏置是"全局偏移"，初始为 0 不会破坏对称性（因为对所有输入都一视同仁）；而权重负责"区分输入"，必须随机才能让神经元有不同的"个性"。</p>
+<p><strong>Q3：<code>Neuron</code> 的 <code>__call__</code> 用了 <code>sum(..., self.b)</code>，这是什么写法？</strong></p>
+<p>Python 的 <code>sum</code> 函数有第二个可选参数叫"起点"。<code>sum(iter, start)</code> 表示"从 <code>start</code> 开始累加 <code>iter</code> 中的元素"。所以 <code>sum((wi*xi for ...), self.b)</code> 等价于 <code>self.b + w1*x1 + w2*x2 + ...</code>。</p>
+<p><strong>Q4：为什么用生成器表达式 <code>(wi*xi for ...)</code> 而不是列表 <code>[wi*xi for ...]</code>？</strong></p>
+<p>生成器是"懒"的，不需要把所有乘积一次性存在内存里——更节省空间。在这里两者效果一样，只是写法更优雅。</p>
+<p><strong>Q5：如果输入 <code>x</code> 里包含的是普通数字而不是 <code>Value</code>，能用吗？</strong></p>
+<p>完全可以！<code>Value.__mul__</code> 会自动把普通数字包装成 <code>Value</code>（回顾 <a href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">标量值与自动微分 (Value)</a> 里的运算符重载）。这就是为什么 <code>n([1.0, 2.0])</code> 写起来这么自然。</p>
+<h2 id="_5">十二、本章小结<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<p>我们这一章正式认识了神经网络的最小单元——<code>Neuron</code>：</p>
+<ul>
+<li><strong><code>Neuron</code> 是一个"小型投票器"</strong>：给每个输入分配权重，加上偏置，再可选地过 ReLU 激活。</li>
+<li><strong>数学公式很简洁</strong>：<code>y = ReLU(w·x + b)</code>，但 micrograd 是<strong>标量级</strong>实现，每次运算都拆成独立的 <code>Value</code> 节点。</li>
+<li><strong><code>Neuron</code> 继承自 <code>Module</code></strong>：自动拥有 <code>zero_grad()</code> 等通用能力，自己只需实现 <code>parameters()</code>。</li>
+<li><strong>权重和偏置都是 <code>Value</code></strong>：意味着它们可以参与自动微分，所以神经元是"可学习"的。</li>
+<li><strong><code>__call__</code> 让神经元像函数一样使用</strong>：<code>n([1.0, 2.0])</code> 自动构建计算图，结果可以直接 <code>backward()</code>。</li>
+<li><strong><code>nonlin</code> 开关</strong>控制是否过 ReLU——中间层一般打开（增加非线性），输出层一般关闭（保留任意实数输出）。</li>
+</ul>
+<p>简单回顾一下我们走过的路：前 4 章我们打好了引擎（<code>Value</code> + 自动微分）和组件契约（<code>Module</code>）的地基；这一章我们用它们搭出了第一个"砖块"——单个神经元。<strong>接下来我们要把多个神经元横向排成一行，形成神经网络中的"一层"。</strong></p>
+<p>让我们在 <a href="../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">神经网络层 (Layer)</a> 中继续探索吧！</p>
+<hr/>
+<p>Generated by <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

@@ -1,0 +1,694 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI-generated deep-teaching walkthrough of the micrograd codebase" name="description"/>
+<link href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/" rel="prev"/>
+<link href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Chapter 3: 反向传播与链式法则 (backward) - micrograd — 深度教学</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#chapter-3-backward">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="micrograd — 深度教学" class="md-header__button md-logo" data-md-component="logo" href=".." title="micrograd — 深度教学">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            micrograd — 深度教学
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Chapter 3: 反向传播与链式法则 (backward)
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  Tutorial: micrograd
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+        
+  
+  
+    
+  
+  Chapter 1: 标量值与自动微分 (Value)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+        
+  
+  
+    
+  
+  Chapter 2: 动态计算图 (DAG)
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
+        
+  
+  
+    
+  
+  Chapter 3: 反向传播与链式法则 (backward)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+        
+  
+  
+    
+  
+  Chapter 4: 模块基类 (Module)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+        
+  
+  
+    
+  
+  Chapter 5: 神经元 (Neuron)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+        
+  
+  
+    
+  
+  Chapter 6: 神经网络层 (Layer)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+        
+  
+  
+    
+  
+  Chapter 7: 多层感知机 (MLP)
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="micrograd — 深度教学" class="md-nav__button md-logo" data-md-component="logo" href=".." title="micrograd — 深度教学">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    micrograd — 深度教学
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    Tutorial: micrograd
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 1: 标量值与自动微分 (Value)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 2: 动态计算图 (DAG)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Chapter 3: 反向传播与链式法则 (backward)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Chapter 3: 反向传播与链式法则 (backward)
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        一、我们要解决什么问题？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        二、先准备一点基础：链式法则
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backward">
+<span class="md-ellipsis">
+      
+        三、backward() 的三步走
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        四、最小例子：手动验证一遍
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        五、稍微长一点的链子
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backward_1">
+<span class="md-ellipsis">
+      
+        六、backward() 内部到底做了什么？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_backward">
+<span class="md-ellipsis">
+      
+        七、_backward 闭包：每种运算的"局部规则"
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        八、为什么是 += 而不是 =？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        九、用时序图看一次完整的反向传播
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      
+        十、亲自体验一次完整流程
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      
+        十一、为什么必须先拓扑排序？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+<span class="md-ellipsis">
+      
+        十二、一些常见疑问
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+<span class="md-ellipsis">
+      
+        十三、本章小结
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 4: 模块基类 (Module)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 5: 神经元 (Neuron)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 6: 神经网络层 (Layer)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 7: 多层感知机 (MLP)
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="chapter-3-backward">Chapter 3: 反向传播与链式法则 (backward)<a class="headerlink" href="#chapter-3-backward" title="Permanent link">¶</a></h1>
+<p>在上一章 <a href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">动态计算图 (DAG)</a> 中，我们看到一连串的运算如何在背后悄悄拼出一张"家谱图"。我们也提到：这张图最重要的用途之一，就是为反向传播服务。</p>
+<p>那么，<strong>反向传播到底是什么？它如何沿着这张图把梯度算出来？</strong> 这一章我们就来彻底揭开这层神秘面纱。</p>
+<h2 id="_1">一、我们要解决什么问题？<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>让我们回到第 1 章那个有趣的问题。假设我写了几行代码：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">micrograd.engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Value</span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="n">a</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="n">b</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">)</span>
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="n">L</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>      <span class="c1"># L = -6.0</span>
+</code></pre></div>
+<p>现在我想问：</p>
+<blockquote>
+<p><strong>如果我把 <code>a</code> 调大一点点（比如从 2.0 变成 2.001），最后的 <code>L</code> 会怎么变？</strong></p>
+</blockquote>
+<p>凭中学微积分的知识我们知道：<code>∂L/∂a = b = -3.0</code>。也就是说 <code>a</code> 增加 0.001，<code>L</code> 大约会减少 0.003。</p>
+<p>但如果计算更复杂，比如 <code>L = ((a*b + b**3) * 2 - a).relu()</code> 呢？人工算偏导会让人头疼。</p>
+<p><strong><code>backward()</code> 就是来帮我们自动完成这件事的。</strong> 你只要调用一次 <code>L.backward()</code>，每个 <code>Value</code> 的 <code>.grad</code> 字段就会自动填上"我对 <code>L</code> 的影响有多大"。</p>
+<p>这一章我们的目标，就是搞清楚这个"魔法"背后到底发生了什么。</p>
+<h2 id="_2">二、先准备一点基础：链式法则<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<p>在动手之前，我们要先理解一个数学小道具——<strong>链式法则</strong>。别担心，它非常直观。</p>
+<p>想象一座工厂的"责任传递"：</p>
+<ul>
+<li>经理 <code>L</code> 决定了今年的总产值。</li>
+<li>经理依赖工人 <code>y</code> 的零件输出。</li>
+<li>工人 <code>y</code> 又依赖原材料 <code>x</code> 的供应。</li>
+</ul>
+<p>如果有人问："原材料 <code>x</code> 涨了 1 单位，总产值 <code>L</code> 会变多少？" 那答案就是：</p>
+<p>$$
+\frac{\partial L}{\partial x} = \frac{\partial L}{\partial y} \times \frac{\partial y}{\partial x}
+$$</p>
+<p>翻译成大白话：<strong>"<code>x</code> 对 <code>L</code> 的影响" = "<code>x</code> 对 <code>y</code> 的影响" × "<code>y</code> 对 <code>L</code> 的影响"</strong>。</p>
+<p>如果链条更长（<code>x → y → z → L</code>），就乘更多项，一路接力下去。这就是链式法则。</p>
+<blockquote>
+<p>形象一点：链式法则就像<strong>汇率换算</strong>。一杯咖啡卖 5 美元，1 美元换 7 块钱人民币——那么 1 杯咖啡 = 5 × 7 = 35 元。中间的"换算"层层相乘。</p>
+</blockquote>
+<h2 id="backward">三、<code>backward()</code> 的三步走<a class="headerlink" href="#backward" title="Permanent link">¶</a></h2>
+<p><code>micrograd</code> 的 <code>backward()</code> 做的事情可以总结成三步：</p>
+<ol>
+<li><strong>拓扑排序</strong>：把整张计算图的节点排好序，保证"先算完的"排在前面。</li>
+<li><strong>种下起点的梯度</strong>：把输出节点（也就是我们调用 <code>backward()</code> 的那个节点）的 <code>grad</code> 设为 1。</li>
+<li><strong>逆序调用每个节点的 <code>_backward</code></strong>：从输出节点一路往回走，把梯度传给父节点。</li>
+</ol>
+<p>打个比方：这就像是"溯源问责"——</p>
+<ul>
+<li>公司年终算了总利润 <code>L</code>，先给它打满分（梯度 = 1，意为"它对自己负 100% 的责")。</li>
+<li>然后按部门贡献，一层层往下分摊到每个员工头上。</li>
+<li>每个员工只需要知道"自己上游的总分配比例"，加上"自己这一步的贡献规则"，就能算出自己应得多少。</li>
+</ul>
+<h2 id="_3">四、最小例子：手动验证一遍<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>我们先用一个超级简单的例子，<strong>用手算的方式</strong>验证 <code>backward()</code> 的结果，让你看到这不是黑魔法。</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">micrograd.engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Value</span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="n">a</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="n">b</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">)</span>
+<a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="n">L</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>           <span class="c1"># L = -6.0</span>
+<a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="n">L</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">grad</span><span class="p">)</span>       <span class="c1"># 期望: ∂L/∂a = b = -3.0</span>
+<a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">grad</span><span class="p">)</span>       <span class="c1"># 期望: ∂L/∂b = a =  2.0</span>
+</code></pre></div>
+<p>数学上 <code>L = a * b</code>，所以 <code>∂L/∂a = b</code>，<code>∂L/∂b = a</code>。运行后你会看到 <code>a.grad</code> 是 <code>-3.0</code>、<code>b.grad</code> 是 <code>2.0</code>——完美对上！</p>
+<p><strong>这就是反向传播：你只写"前向算式"，框架自动帮你算梯度。</strong></p>
+<h2 id="_4">五、稍微长一点的链子<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p>我们让链子再长一点：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">a</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">b</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">)</span>
+<a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>           <span class="c1"># c = -6.0</span>
+<a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="n">L</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">10</span>          <span class="c1"># L = 4.0</span>
+<a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="n">L</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">grad</span><span class="p">)</span>       <span class="c1"># ∂L/∂a = ?</span>
+</code></pre></div>
+<p>让我们手算：
+- <code>∂L/∂c = 1</code>（加法对自己的偏导是 1）。
+- <code>∂c/∂a = b = -3.0</code>。
+- 链式法则：<code>∂L/∂a = ∂L/∂c × ∂c/∂a = 1 × (-3.0) = -3.0</code>。</p>
+<p>运行后 <code>a.grad</code> 果然是 <code>-3.0</code>。看，链条变长了，但每一段都按"局部规则"走，最后乘起来就是答案。</p>
+<h2 id="backward_1">六、<code>backward()</code> 内部到底做了什么？<a class="headerlink" href="#backward_1" title="Permanent link">¶</a></h2>
+<p>我们打开 <code>micrograd/engine.py</code>，看看 <code>backward()</code> 的全貌：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>    <span class="c1"># 第一步：拓扑排序</span>
+<a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>    <span class="n">topo</span> <span class="o">=</span> <span class="p">[]</span>
+<a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>    <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">build_topo</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+<a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a>        <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+<a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a>            <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a>            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">_prev</span><span class="p">:</span>
+<a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a>                <span class="n">build_topo</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+<a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a>            <span class="n">topo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<a href="#__codelineno-3-11" id="__codelineno-3-11" name="__codelineno-3-11"></a>    <span class="n">build_topo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</code></pre></div>
+<p>这一段做了什么？从 <code>self</code>（也就是终点）出发，递归往上爬遍整张图，把所有节点按"父亲先于儿子"的顺序收集到 <code>topo</code> 列表里。这叫<strong>拓扑排序</strong>。</p>
+<p>继续看后半段：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>    <span class="c1"># 第二步：种下起点的梯度</span>
+<a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span> <span class="o">=</span> <span class="mi">1</span>
+<a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>    <span class="c1"># 第三步：按逆序调用每个节点的 _backward</span>
+<a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a>    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">topo</span><span class="p">):</span>
+<a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>        <span class="n">v</span><span class="o">.</span><span class="n">_backward</span><span class="p">()</span>
+</code></pre></div>
+<p>简单清晰：
+- <code>self.grad = 1</code>：终点的梯度设为 1（"我对自己的导数当然是 1"）。
+- 然后<strong>倒着遍历</strong> <code>topo</code>（从终点开始，往源头走），依次调用每个节点的 <code>_backward()</code>。</p>
+<h2 id="_backward">七、<code>_backward</code> 闭包：每种运算的"局部规则"<a class="headerlink" href="#_backward" title="Permanent link">¶</a></h2>
+<p>每个 <code>Value</code> 都有一个挂在它身上的 <code>_backward</code> 函数。这个函数干的事就是："<strong>把我的梯度按链式法则传给我的父节点。</strong>"</p>
+<p>我们看加法的例子（来自 <code>micrograd/engine.py</code>）：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>    <span class="n">other</span> <span class="o">=</span> <span class="n">other</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Value</span><span class="p">)</span> <span class="k">else</span> <span class="n">Value</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+<a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>    <span class="n">out</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">),</span> <span class="s1">'+'</span><span class="p">)</span>
+<a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a>
+<a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_backward</span><span class="p">():</span>
+<a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grad</span>  <span class="o">+=</span> <span class="n">out</span><span class="o">.</span><span class="n">grad</span>   <span class="c1"># 加法：直接把梯度传下去</span>
+<a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a>        <span class="n">other</span><span class="o">.</span><span class="n">grad</span> <span class="o">+=</span> <span class="n">out</span><span class="o">.</span><span class="n">grad</span>
+<a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a>    <span class="n">out</span><span class="o">.</span><span class="n">_backward</span> <span class="o">=</span> <span class="n">_backward</span>
+<a href="#__codelineno-5-9" id="__codelineno-5-9" name="__codelineno-5-9"></a>    <span class="k">return</span> <span class="n">out</span>
+</code></pre></div>
+<p>数学上 <code>out = self + other</code>，所以 <code>∂out/∂self = 1</code>，<code>∂out/∂other = 1</code>。链式法则告诉我们：</p>
+<ul>
+<li><code>self.grad += 1 × out.grad</code></li>
+<li><code>other.grad += 1 × out.grad</code></li>
+</ul>
+<p>这正是 <code>_backward</code> 里写的。一句话：<strong>加法把"上游来的梯度"原封不动分给两个父亲</strong>。</p>
+<p>再看乘法：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_backward</span><span class="p">():</span>
+<a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span>  <span class="o">+=</span> <span class="n">other</span><span class="o">.</span><span class="n">data</span> <span class="o">*</span> <span class="n">out</span><span class="o">.</span><span class="n">grad</span>
+<a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a>    <span class="n">other</span><span class="o">.</span><span class="n">grad</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>  <span class="o">*</span> <span class="n">out</span><span class="o">.</span><span class="n">grad</span>
+</code></pre></div>
+<p>数学上 <code>out = self * other</code>，所以 <code>∂out/∂self = other</code>，<code>∂out/∂other = self</code>。乘以 <code>out.grad</code>（上游来的梯度）就是链式法则的体现。一句话：<strong>乘法把梯度按"对方的数值"加权后传给自己</strong>。</p>
+<p>幂运算：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_backward</span><span class="p">():</span>
+<a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>    <span class="c1"># 公式: d(x^n)/dx = n * x^(n-1)</span>
+<a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span> <span class="o">+=</span> <span class="p">(</span><span class="n">other</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">**</span><span class="p">(</span><span class="n">other</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">out</span><span class="o">.</span><span class="n">grad</span>
+</code></pre></div>
+<p>ReLU：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_backward</span><span class="p">():</span>
+<a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>    <span class="c1"># 正数照传，负数截断为 0</span>
+<a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span> <span class="o">+=</span> <span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">data</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">out</span><span class="o">.</span><span class="n">grad</span>
+</code></pre></div>
+<p><strong>每种运算只关心自己那一步的局部偏导</strong>——这就是 <code>micrograd</code> 的精妙之处：复杂的全局梯度，被拆成了一堆简单的局部规则。</p>
+<h2 id="_5">八、为什么是 <code>+=</code> 而不是 <code>=</code>？<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<p>你可能注意到所有 <code>_backward</code> 里都是 <code>self.grad += ...</code>，而不是 <code>self.grad = ...</code>。这是为什么？</p>
+<p>因为同一个 <code>Value</code> 可能在多个地方被用到：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="n">a</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>
+<a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="n">y</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">a</span>       <span class="c1"># a 用了两次！</span>
+</code></pre></div>
+<p><code>y</code> 对 <code>a</code> 的贡献来自两条路径——<code>a</code> 既是左乘数也是右乘数。两条路径的梯度<strong>必须累加</strong>，否则后一次会覆盖前一次。</p>
+<p><code>+=</code> 就是为了这个累加需求服务的。这也呼应了上一章我们提到的"DAG 中节点可以被多次引用"的设计。</p>
+<blockquote>
+<p>⚠️ <strong>小提示</strong>：如果你想再次调用 <code>backward()</code>（比如在训练循环中），需要先手动把所有节点的 <code>.grad</code> 清零，否则旧梯度会和新梯度叠加！</p>
+</blockquote>
+<h2 id="_6">九、用时序图看一次完整的反向传播<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<p>我们以 <code>L = a * b + c</code>（其中 <code>a=2, b=-3, c=10</code>）为例，看整个 <code>backward()</code> 的全过程：</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant U as 用户代码
+    participant L as L (= mul+c)
+    participant M as mul (= a*b)
+    participant A as a
+    participant B as b
+
+    U-&gt;&gt;L: L.backward()
+    L-&gt;&gt;L: 拓扑排序 → [a, b, mul, c, L]
+    L-&gt;&gt;L: self.grad = 1
+    L-&gt;&gt;L: L._backward()  传梯度给 mul, c
+    L-&gt;&gt;M: mul.grad = 1
+    L-&gt;&gt;M: mul._backward()  传梯度给 a, b
+    M-&gt;&gt;A: a.grad += b * 1 = -3
+    M-&gt;&gt;B: b.grad += a * 1 = 2
+</code></pre>
+<p>关键观察：
+1. 从 <code>L</code> 出发，梯度像"水"一样<strong>沿着箭头反向流动</strong>。
+2. 每经过一个节点，都用该节点的"局部规则"决定怎么分配。
+3. <strong>拓扑排序保证了流动顺序正确</strong>——一个节点的 <code>_backward</code> 被调用时，它的 <code>out.grad</code> 已经被所有"下游"贡献者填好了。</p>
+<h2 id="_7">十、亲自体验一次完整流程<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<p>让我们把第 1 章那个例子完整跑一遍：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">micrograd.engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Value</span>
+<a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a>
+<a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="n">a</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="o">-</span><span class="mf">4.0</span><span class="p">)</span>
+<a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="n">b</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="n">d</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">+</span> <span class="n">b</span> <span class="o">**</span> <span class="mi">3</span>      <span class="c1"># d = -8 + 8 = 0</span>
+<a href="#__codelineno-10-6" id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="n">d</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<a href="#__codelineno-10-7" id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">grad</span><span class="p">)</span>            <span class="c1"># 2.0</span>
+<a href="#__codelineno-10-8" id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">grad</span><span class="p">)</span>            <span class="c1"># 8.0</span>
+</code></pre></div>
+<p>我们来手算验证一下 <code>b.grad</code>：</p>
+<ul>
+<li><code>d</code> 由两条路径依赖 <code>b</code>：通过 <code>a*b</code>（贡献 <code>a = -4</code>）和通过 <code>b**3</code>（贡献 <code>3*b**2 = 12</code>）。</li>
+<li>两条路径相加：<code>-4 + 12 = 8</code>。✅</li>
+</ul>
+<p>是不是非常神奇？你只写了一行前向公式，所有偏导自动算好。</p>
+<h2 id="_8">十一、为什么必须先拓扑排序？<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<p>你可能想：<strong>为什么不能直接随便顺序调用所有 <code>_backward</code>？</strong></p>
+<p>考虑这种情况：</p>
+<pre class="mermaid"><code>graph LR
+    a --&gt; mul["* "]
+    b --&gt; mul
+    mul --&gt; add["+ "]
+    c --&gt; add
+    add --&gt; L
+</code></pre>
+<p>如果你<strong>先</strong>调用 <code>mul._backward()</code>，但此时 <code>mul.grad</code> 还是 0（<code>add._backward()</code> 还没把梯度传下来），那 <code>mul._backward()</code> 就只能把 0 传给 <code>a</code> 和 <code>b</code>——结果就错了！</p>
+<p>所以必须保证：<strong>调用一个节点的 <code>_backward</code> 之前，所有依赖它的下游节点都已经处理完</strong>。拓扑排序的逆序遍历恰恰保证了这一点。</p>
+<h2 id="_9">十二、一些常见疑问<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<p><strong>Q1：调用两次 <code>backward()</code> 结果对吗？</strong></p>
+<p>不对！因为 <code>_backward</code> 用的是 <code>+=</code>，第二次调用会把新梯度叠加到旧梯度上。在训练循环中，你需要手动把 <code>.grad</code> 清零（通常会写一个 <code>zero_grad()</code> 方法，我们将在 <a href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">模块基类 (Module)</a> 中看到）。</p>
+<p><strong>Q2：起点为什么要把 <code>grad</code> 设成 1？</strong></p>
+<p>因为我们要算的是 <code>∂L/∂(各个变量)</code>。"<code>L</code> 对自己的导数"就是 1。这个 <code>1</code> 是"梯度之水"流出来的源头。</p>
+<p><strong>Q3：为什么这种方法叫"反向模式"自动微分？</strong></p>
+<p>因为我们是从输出节点开始，<strong>逆着箭头方向</strong>传播梯度。它的对偶——"正向模式"——是从输入往输出推。在神经网络这种"输出少、输入多"的场景，反向模式效率高得多。</p>
+<h2 id="_10">十三、本章小结<a class="headerlink" href="#_10" title="Permanent link">¶</a></h2>
+<p>我们终于把"自动微分"的全部秘密揭开了：</p>
+<ul>
+<li><strong>链式法则</strong> 是一切的数学基础：复合函数的偏导 = 各段局部偏导的乘积。</li>
+<li><strong><code>backward()</code> 三步走</strong>：拓扑排序 → 起点梯度设为 1 → 逆序调用每个 <code>_backward</code>。</li>
+<li><strong>每种运算定义自己的 <code>_backward</code></strong>：只负责一段局部偏导，整体由链式法则串起来。</li>
+<li><strong><code>+=</code> 而不是 <code>=</code></strong>：保证同一节点被多次引用时梯度能正确累加。</li>
+<li><strong>拓扑排序保证顺序正确</strong>：先处理下游，再处理上游，梯度才能正确接力。</li>
+</ul>
+<p>让我们用一句话回顾全章：<strong><code>backward()</code> 沿着第 2 章构建的那张 DAG 倒着走，每一步按链式法则把梯度从儿子传给父亲，直到所有 <code>Value</code> 都知道"自己对最终结果的影响有多大"。</strong></p>
+<p>现在我们已经掌握了 <code>micrograd</code> 引擎的全部核心机制。从下一章开始，我们要爬上一个新台阶——<strong>用 <code>Value</code> 搭建神经网络</strong>。第一步是认识所有神经网络组件的共同祖先：<a href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">模块基类 (Module)</a>。我们下章见！</p>
+<hr/>
+<p>Generated by <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

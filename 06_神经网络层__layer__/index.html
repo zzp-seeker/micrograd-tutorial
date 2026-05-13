@@ -1,0 +1,715 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI-generated deep-teaching walkthrough of the micrograd codebase" name="description"/>
+<link href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/" rel="prev"/>
+<link href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Chapter 6: 神经网络层 (Layer) - micrograd — 深度教学</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#chapter-6-layer">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="micrograd — 深度教学" class="md-header__button md-logo" data-md-component="logo" href=".." title="micrograd — 深度教学">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            micrograd — 深度教学
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Chapter 6: 神经网络层 (Layer)
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  Tutorial: micrograd
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+        
+  
+  
+    
+  
+  Chapter 1: 标量值与自动微分 (Value)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+        
+  
+  
+    
+  
+  Chapter 2: 动态计算图 (DAG)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+        
+  
+  
+    
+  
+  Chapter 3: 反向传播与链式法则 (backward)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+        
+  
+  
+    
+  
+  Chapter 4: 模块基类 (Module)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+        
+  
+  
+    
+  
+  Chapter 5: 神经元 (Neuron)
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
+        
+  
+  
+    
+  
+  Chapter 6: 神经网络层 (Layer)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+        
+  
+  
+    
+  
+  Chapter 7: 多层感知机 (MLP)
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="micrograd — 深度教学" class="md-nav__button md-logo" data-md-component="logo" href=".." title="micrograd — 深度教学">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    micrograd — 深度教学
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    Tutorial: micrograd
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 1: 标量值与自动微分 (Value)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 2: 动态计算图 (DAG)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 3: 反向传播与链式法则 (backward)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 4: 模块基类 (Module)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 5: 神经元 (Neuron)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Chapter 6: 神经网络层 (Layer)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Chapter 6: 神经网络层 (Layer)
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        一、我们要解决什么问题？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#layer">
+<span class="md-ellipsis">
+      
+        二、Layer 是什么？一排并排的投票器
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#layer_1">
+<span class="md-ellipsis">
+      
+        三、看一眼 Layer 的真身
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#layer-__call__">
+<span class="md-ellipsis">
+      
+        四、Layer 如何"工作"——__call__ 方法
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#layer_2">
+<span class="md-ellipsis">
+      
+        五、亲手用一下 Layer
+      
+    </span>
+</a>
+<nav aria-label="五、亲手用一下 Layer" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#13-4">
+<span class="md-ellipsis">
+      
+        例子 1：创建一个"3 输入、4 输出"的层
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        例子 2：喂给它一份输入
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3">
+<span class="md-ellipsis">
+      
+        例子 3：查看这层的参数
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4">
+<span class="md-ellipsis">
+      
+        例子 4：一键清零所有参数的梯度
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#kwargs">
+<span class="md-ellipsis">
+      
+        六、**kwargs 透传是怎么回事？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        七、内部到底发生了什么？一次完整的前向过程
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#layer_3">
+<span class="md-ellipsis">
+      
+        八、用一张图看 Layer 内部的计算图
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        九、为什么需要"层"这个抽象？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#layer_4">
+<span class="md-ellipsis">
+      
+        十、用 Layer 解决我们的"招聘委员会"问题
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        十一、常见疑问
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        十二、本章小结
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 7: 多层感知机 (MLP)
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="chapter-6-layer">Chapter 6: 神经网络层 (Layer)<a class="headerlink" href="#chapter-6-layer" title="Permanent link">¶</a></h1>
+<p>在上一章 <a href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">神经元 (Neuron)</a> 中，我们认识了神经网络的最小单元——一个会"加权打分 + 激活决策"的小投票器。我们已经知道一个孤零零的神经元可以做简单的线性分类。</p>
+<p>但真实世界的问题远比"判断点在直线哪一侧"复杂。想要让网络解决更难的问题，我们需要把神经元<strong>横向并排</strong>组合起来——这就是这一章要登场的 <code>Layer</code>（神经网络层）。</p>
+<h2 id="_1">一、我们要解决什么问题？<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>让我们回到上一章那个招聘的例子。假设你不再是一个孤独的招聘经理，而是一家公司的<strong>招聘委员会主席</strong>。委员会里有 4 位评委，每位评委都会独立地看同一份简历（同样的 <code>x1, x2, x3</code>），但每个人心里的"权重"完全不同：</p>
+<ul>
+<li>评委 A 偏爱学历高的人。</li>
+<li>评委 B 偏爱工作经验丰富的人。</li>
+<li>评委 C 偏爱面试表现好的人。</li>
+<li>评委 D 综合考虑一切。</li>
+</ul>
+<p>每位评委独立打一个分，最终你拿到 4 个分数：<code>[0.79, 0.62, 0.85, 0.71]</code>。这 4 个分数会一起送给"下一轮的决策者"。</p>
+<blockquote>
+<p><strong>恭喜你！你刚刚手动模拟了一个"神经网络层"的工作流程。</strong></p>
+</blockquote>
+<p><code>Layer</code> 就是把这种"一排并排的神经元，各自独立处理同一份输入"的模式自动化封装起来。我们这一章的目标就是搞清楚：</p>
+<ul>
+<li><code>Layer</code> 内部到底有什么？</li>
+<li>它怎么把一份输入"广播"给所有神经元？</li>
+<li>它和我们前面学的 <code>Neuron</code>、<code>Module</code> 怎么串到一起？</li>
+</ul>
+<h2 id="layer">二、<code>Layer</code> 是什么？一排并排的投票器<a class="headerlink" href="#layer" title="Permanent link">¶</a></h2>
+<p>你可以把 <code>Layer</code> 想象成一排<strong>并排站立的投票器</strong>：</p>
+<ul>
+<li>每个投票器（神经元）看到的是<strong>同一份输入</strong> <code>x</code>。</li>
+<li>但每个投票器内部有自己<strong>独特</strong>的权重和偏置——所以会给出不同的判断。</li>
+<li>它们的输出<strong>并列摆放</strong>，形成一个向量，作为下一层的输入。</li>
+</ul>
+<p>打个生活化的比方：</p>
+<ul>
+<li>想象一支<strong>乐队</strong>面对同一段旋律。每位乐手用不同的乐器（不同的权重）演奏，最终合成出丰富的和声（一组输出）。</li>
+<li>又像<strong>多角度摄影</strong>——同一个物体从前、后、左、右各拍一张照片，每张照片捕捉到的细节不一样，合在一起才能完整地呈现物体。</li>
+</ul>
+<p>数学上，如果一个 <code>Layer</code> 有 <code>nout</code> 个神经元，每个神经元接收 <code>nin</code> 个输入：</p>
+<p>$$
+\mathbf{y} = \big[ \text{Neuron}<em nout="nout">1(\mathbf{x}),\ \text{Neuron}_2(\mathbf{x}),\ \ldots,\ \text{Neuron}</em>) \big]
+$$}(\mathbf{x</p>
+<p>注意——<strong>所有神经元都看同一个 <code>x</code>，但每个神经元内部有自己的 <code>w</code> 和 <code>b</code></strong>。</p>
+<h2 id="layer_1">三、看一眼 <code>Layer</code> 的真身<a class="headerlink" href="#layer_1" title="Permanent link">¶</a></h2>
+<p>让我们打开 <code>micrograd/nn.py</code>，看看 <code>Layer</code> 长什么样。它的 <code>__init__</code> 非常简洁：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Layer</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nin</span><span class="p">,</span> <span class="n">nout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">neurons</span> <span class="o">=</span> <span class="p">[</span><span class="n">Neuron</span><span class="p">(</span><span class="n">nin</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nout</span><span class="p">)]</span>
+</code></pre></div>
+<p>逐行解读：</p>
+<ol>
+<li><strong><code>class Layer(Module):</code></strong>：<code>Layer</code> 继承自 <code>Module</code>，所以它自动拥有 <code>zero_grad()</code> 等通用能力。</li>
+<li><strong><code>nin</code></strong>：每个神经元接收多少个输入。</li>
+<li><strong><code>nout</code></strong>：这一层要有多少个神经元（也就是输出的维度）。</li>
+<li><strong><code>self.neurons = [...]</code></strong>：用列表推导式创建 <code>nout</code> 个 <code>Neuron</code>，每个都接收 <code>nin</code> 个输入。</li>
+<li><strong><code>**kwargs</code></strong>：把额外的参数（比如 <code>nonlin=False</code>）<strong>透传</strong>给每个 <code>Neuron</code>——这样我们可以一次性配置整层的"激活开关"。</li>
+</ol>
+<blockquote>
+<p>💡 <strong>关键观察</strong>：<code>Layer</code> 自己<strong>完全不存储</strong>任何权重——它只是一个"神经元的容器"。所有真正的参数都藏在 <code>self.neurons</code> 里的每个 <code>Neuron</code> 中。</p>
+</blockquote>
+<h2 id="layer-__call__">四、<code>Layer</code> 如何"工作"——<code>__call__</code> 方法<a class="headerlink" href="#layer-__call__" title="Permanent link">¶</a></h2>
+<p><code>Layer</code> 的核心计算逻辑藏在 <code>__call__</code> 方法里：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>    <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">neurons</span><span class="p">]</span>
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>    <span class="k">return</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">out</span>
+</code></pre></div>
+<p>逐行拆解：</p>
+<ol>
+<li><strong><code>[n(x) for n in self.neurons]</code></strong>：对每个神经元，把<strong>同一份</strong> <code>x</code> 喂进去，收集所有输出到一个列表。</li>
+<li><strong><code>out[0] if len(out) == 1 else out</code></strong>：一个小贴心——如果这一层只有 1 个神经元，直接返回那个标量；否则返回整个列表。</li>
+</ol>
+<blockquote>
+<p>✨ <strong>为什么有这个 "if 只有 1 个就直接返回" 的特殊处理？</strong> 因为神经网络的<strong>最后一层</strong>经常只有 1 个输出（比如回归任务预测一个房价、二分类任务预测一个概率）。返回单独的 <code>Value</code> 比返回 <code>[Value]</code> 用起来更自然——可以直接 <code>loss.backward()</code>，不用先 <code>loss[0].backward()</code>。</p>
+</blockquote>
+<h2 id="layer_2">五、亲手用一下 <code>Layer</code><a class="headerlink" href="#layer_2" title="Permanent link">¶</a></h2>
+<p>让我们从最简单的例子开始，看看 <code>Layer</code> 在实际中是怎么用的。</p>
+<h3 id="13-4">例子 1：创建一个"3 输入、4 输出"的层<a class="headerlink" href="#13-4" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">micrograd.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Layer</span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>
+<a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="n">L</span> <span class="o">=</span> <span class="n">Layer</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>        <span class="c1"># 3 个输入, 4 个神经元</span>
+<a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>               <span class="c1"># Layer of [ReLUNeuron(3), ...]</span>
+</code></pre></div>
+<p>我们创建了一个层，它接收 3 个输入、产出 4 个输出。打印它会看到 4 个 <code>ReLUNeuron(3)</code> 排在一起——正是这一层的 4 个神经元。</p>
+<h3 id="2">例子 2：喂给它一份输入<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">y</span> <span class="o">=</span> <span class="n">L</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>    <span class="c1"># 喂入一个 3 维输入</span>
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>             <span class="c1"># 4 (4 个输出)</span>
+<a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>               <span class="c1"># Value(data=..., grad=0)</span>
+</code></pre></div>
+<p>注意 <code>y</code> 是一个<strong>列表</strong>，长度是 4——正好对应 4 个神经元的输出。每个元素都是一个 <code>Value</code>，带着完整的计算图。</p>
+<h3 id="3">例子 3：查看这层的参数<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">parameters</span><span class="p">()))</span>   <span class="c1"># 3*4 + 4 = 16</span>
+</code></pre></div>
+<p>每个神经元有 <code>3 个权重 + 1 个偏置 = 4 个参数</code>，4 个神经元加起来就是 <code>4 × 4 = 16</code> 个参数。<code>Layer.parameters()</code> 把所有这些参数收集起来一并返回：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">neurons</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">parameters</span><span class="p">()]</span>
+</code></pre></div>
+<p>简单到只有一行——遍历每个神经元，把它们的参数全部"摊平"成一个大列表。这就是我们在 <a href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">模块基类 (Module)</a> 里讲过的<strong>层层委托</strong>：<code>Layer</code> 自己不直接管理参数，而是去问每个 <code>Neuron</code> 要。</p>
+<h3 id="4">例子 4：一键清零所有参数的梯度<a class="headerlink" href="#4" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="n">L</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>    <span class="c1"># 16 个参数的 grad 全部清零</span>
+</code></pre></div>
+<p>我们<strong>没有</strong>给 <code>Layer</code> 写 <code>zero_grad()</code> 方法——它直接继承自 <code>Module</code>，因为 <code>Module.zero_grad()</code> 会自动调用 <code>self.parameters()</code>，所以一切都"刚刚好"地串起来了。</p>
+<h2 id="kwargs">六、<code>**kwargs</code> 透传是怎么回事？<a class="headerlink" href="#kwargs" title="Permanent link">¶</a></h2>
+<p>让我们看一个稍微进阶的用法——创建一个"纯线性"的层（不带 ReLU）：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="n">L_linear</span> <span class="o">=</span> <span class="n">Layer</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">nonlin</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>   <span class="c1"># 4 个线性神经元</span>
+</code></pre></div>
+<p><code>Layer</code> 的 <code>__init__</code> 收到 <code>nonlin=False</code> 后，会通过 <code>**kwargs</code> 把它<strong>透传</strong>给每个 <code>Neuron</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="bp">self</span><span class="o">.</span><span class="n">neurons</span> <span class="o">=</span> <span class="p">[</span><span class="n">Neuron</span><span class="p">(</span><span class="n">nin</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nout</span><span class="p">)]</span>
+<a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="c1"># 等价于: Neuron(3, nonlin=False)</span>
+</code></pre></div>
+<p>打个比方：<code>Layer</code> 像一个<strong>贴心的快递员</strong>——你交给它一个包裹（额外参数），它不打开看，而是原封不动地分发给每个神经元。这种设计让 <code>Layer</code> 不需要事先知道 <code>Neuron</code> 有什么配置选项——未来 <code>Neuron</code> 加新参数，<code>Layer</code> 也无需改动。</p>
+<h2 id="_2">七、内部到底发生了什么？一次完整的前向过程<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<p>让我们用一个时序图，看看 <code>L([1.0, 2.0])</code> 这一行代码（假设 <code>L = Layer(2, 3)</code>）背后究竟发生了什么：</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant U as 用户代码
+    participant L as Layer
+    participant N1 as 神经元 1
+    participant N2 as 神经元 2
+    participant N3 as 神经元 3
+
+    U-&gt;&gt;L: L([1.0, 2.0])
+    L-&gt;&gt;N1: n1([1.0, 2.0])
+    N1--&gt;&gt;L: Value(y1)
+    L-&gt;&gt;N2: n2([1.0, 2.0])
+    N2--&gt;&gt;L: Value(y2)
+    L-&gt;&gt;N3: n3([1.0, 2.0])
+    N3--&gt;&gt;L: Value(y3)
+    L--&gt;&gt;U: [y1, y2, y3]
+</code></pre>
+<p>关键观察：</p>
+<ol>
+<li><strong>同一份 <code>x</code> 被喂给所有神经元</strong>——每个神经元都看到 <code>[1.0, 2.0]</code>。</li>
+<li><strong>每个神经元独立计算</strong>——它们之间没有任何信息交换，谁也不知道谁在想什么。</li>
+<li><strong>输出按顺序收集成列表</strong>——最后整齐地返回给用户。</li>
+</ol>
+<h2 id="layer_3">八、用一张图看 <code>Layer</code> 内部的计算图<a class="headerlink" href="#layer_3" title="Permanent link">¶</a></h2>
+<p>我们以一个 <code>Layer(2, 3)</code> 为例（2 个输入、3 个神经元），看看它构建出的计算图：</p>
+<pre class="mermaid"><code>graph LR
+    x1["x1"] --&gt; N1["神经元 1"]
+    x2["x2"] --&gt; N1
+    x1 --&gt; N2["神经元 2"]
+    x2 --&gt; N2
+    x1 --&gt; N3["神经元 3"]
+    x2 --&gt; N3
+    N1 --&gt; y1["y1"]
+    N2 --&gt; y2["y2"]
+    N3 --&gt; y3["y3"]
+</code></pre>
+<p>注意几个重要细节：</p>
+<ul>
+<li><strong>输入是共享的</strong>：<code>x1</code> 和 <code>x2</code> 同时连接到 3 个神经元——但每个神经元用它们的方式完全独立。</li>
+<li><strong>3 条独立路径</strong>：从输入到 3 个输出，是 3 条互不相干的"小图"。</li>
+<li><strong>整张图自动连接</strong>——我们没有手动建任何图结构，所有连接都是 <code>Value</code> 在做加法和乘法时自动记录下来的（回顾 <a href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">动态计算图 (DAG)</a>）。</li>
+</ul>
+<blockquote>
+<p>🎨 <strong>形象化理解</strong>：<code>Layer</code> 就像一个<strong>"扇出 + 扇入"</strong> 的结构——输入信号<strong>扇出</strong>复制给每个神经元，每个神经元<strong>独立处理</strong>后，输出再<strong>并列摆放</strong>。这种结构在数学上等价于一次"矩阵乘向量"运算（<code>y = W·x + b</code>），只不过 micrograd 把它拆成了一个个独立的标量运算。</p>
+</blockquote>
+<h2 id="_3">九、为什么需要"层"这个抽象？<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>你可能会问：既然 <code>Layer</code> 只是把一堆 <code>Neuron</code> 装在一起，那为什么不直接用一个 <code>Neuron</code> 列表呢？</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="c1"># 没有 Layer 的写法</span>
+<a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="n">neurons</span> <span class="o">=</span> <span class="p">[</span><span class="n">Neuron</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+<a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">neurons</span><span class="p">]</span>
+<a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="c1"># 收集参数也要自己写</span>
+<a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="n">all_params</span> <span class="o">=</span> <span class="p">[]</span>
+<a href="#__codelineno-9-6" id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">neurons</span><span class="p">:</span>
+<a href="#__codelineno-9-7" id="__codelineno-9-7" name="__codelineno-9-7"></a>    <span class="n">all_params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+</code></pre></div>
+<p>而有了 <code>Layer</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="c1"># 有 Layer 的写法</span>
+<a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="n">L</span> <span class="o">=</span> <span class="n">Layer</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="n">outputs</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>               <span class="c1"># 一行搞定前向</span>
+<a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="n">all_params</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>  <span class="c1"># 一行搞定参数收集</span>
+<a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="n">L</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>                <span class="c1"># 一行搞定清零</span>
+</code></pre></div>
+<p>差别一目了然——<code>Layer</code> 把这些零碎操作<strong>封装成了一个统一的接口</strong>。这种封装的好处有三个：</p>
+<ol>
+<li><strong>代码更简洁</strong>：少写 N 行循环。</li>
+<li><strong>抽象层级清晰</strong>：<code>Layer</code> 是一个"整体"，可以像积木一样和其他 <code>Layer</code> 拼接起来（这就是下一章 <code>MLP</code> 要做的事）。</li>
+<li><strong>一致的 <code>Module</code> 接口</strong>：<code>Layer</code> 也是 <code>Module</code>，所以它和 <code>Neuron</code>、<code>MLP</code> 共享同一套 API——<code>__call__</code>、<code>parameters</code>、<code>zero_grad</code>。</li>
+</ol>
+<h2 id="layer_4">十、用 <code>Layer</code> 解决我们的"招聘委员会"问题<a class="headerlink" href="#layer_4" title="Permanent link">¶</a></h2>
+<p>让我们回到本章开头的例子，用 <code>Layer</code> 把"4 位评委独立打分"的场景写出来：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">micrograd.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Layer</span>
+<a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a>
+<a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="n">committee</span> <span class="o">=</span> <span class="n">Layer</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>            <span class="c1"># 3 个指标, 4 位评委</span>
+<a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="n">candidate</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]</span>        <span class="c1"># 简历指标</span>
+<a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="n">scores</span> <span class="o">=</span> <span class="n">committee</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>      <span class="c1"># 4 位评委的打分</span>
+<a href="#__codelineno-11-6" id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>                 <span class="c1"># 4</span>
+</code></pre></div>
+<p>这 4 个分数（<code>scores</code>）现在可以作为输入，喂给"下一轮的决策者"——而那个决策者本身又是另一个 <code>Layer</code>。把多层这样首尾相连，就组成了真正的神经网络。</p>
+<h2 id="_4">十一、常见疑问<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p><strong>Q1：<code>Layer</code> 里的神经元为什么不互相通信？</strong></p>
+<p>这是神经网络层的<strong>核心设计</strong>——同一层的神经元是<strong>并列</strong>关系，不互通信号。它们的"协作"通过<strong>下一层</strong>来实现：下一层的神经元会同时看到这一层所有神经元的输出。这种"并联 + 串联"的组合让网络可以表达极其复杂的函数。</p>
+<p><strong>Q2：<code>nout</code> 怎么选？是越多越好吗？</strong></p>
+<p>不是。<code>nout</code> 太小可能学不到足够的特征（"欠拟合"），太大可能让网络过分记住训练数据的噪声（"过拟合"），还会增加计算量。实际中通常根据问题复杂度试出来——小问题用几个就够，复杂问题可能要几百上千。</p>
+<p><strong>Q3：<code>Layer</code> 输出的列表能直接拿去做 <code>backward()</code> 吗？</strong></p>
+<p>不能！<code>backward()</code> 必须从<strong>单个</strong> <code>Value</code> 出发（一个标量损失）。如果输出是列表，需要先把它合并成一个标量（比如求和、求平均、或算损失函数）。看下一章 <a href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">多层感知机 (MLP)</a> 时你会看到完整的流程。</p>
+<p><strong>Q4：为什么 <code>out[0] if len(out) == 1 else out</code> 这种特殊处理只对长度 1 做？长度 2、3 怎么不简化？</strong></p>
+<p>长度 1 是个"语义特例"——它本质上就是一个标量，包装成列表反而别扭。而长度 ≥ 2 的列表本来就是"向量"，保持列表形式更自然。这个小细节体现了 micrograd 对"易用性"的细心考量。</p>
+<p><strong>Q5：<code>Layer</code> 里每个神经元的权重初始化都不一样吗？</strong></p>
+<p>是的！回顾 <a href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">神经元 (Neuron)</a> 我们知道每个 <code>Neuron</code> 创建时权重都是 <code>random.uniform(-1,1)</code> 随机生成的。所以同一层的不同神经元，<strong>初始时就有不同的"个性"</strong>——这是它们能学到不同特征的根本前提。如果初始权重一样，训练时它们会朝完全相同的方向更新，整层就退化成"一个神经元"了。</p>
+<h2 id="_5">十二、本章小结<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<p>我们这一章正式认识了神经网络的"中间层级"——<code>Layer</code>：</p>
+<ul>
+<li><strong><code>Layer</code> 是一排并排的神经元</strong>：每个神经元独立看同一份输入，输出共同组成一个向量。</li>
+<li><strong><code>Layer</code> 继承自 <code>Module</code></strong>：自动拥有 <code>zero_grad()</code>，自己只需实现 <code>parameters()</code>。</li>
+<li><strong><code>Layer</code> 自己不存参数</strong>：所有参数都在内部的 <code>Neuron</code> 列表里，通过"层层委托"收集起来。</li>
+<li><strong><code>__call__</code> 让 <code>Layer</code> 像函数一样使用</strong>：<code>L(x)</code> 会把 <code>x</code> 广播给所有神经元，并收集它们的输出。</li>
+<li><strong><code>**kwargs</code> 透传</strong>让我们可以一次性配置整层的"激活开关"——为下一章 <code>MLP</code> 的"最后一层用线性"埋下伏笔。</li>
+<li><strong>单输出特殊处理</strong>：当一层只有 1 个神经元时，直接返回标量而不是单元素列表——这让"回归 / 二分类"等场景的用法更自然。</li>
+</ul>
+<p>简单回顾一下我们走过的路：第 5 章我们造出了"一块砖"（<code>Neuron</code>）；这一章我们把砖<strong>横向</strong>码成了"一排"（<code>Layer</code>）。<strong>下一步自然就是把多排砖</strong>纵向<strong>堆叠起来，搭出整面墙——也就是真正可用的神经网络。</strong></p>
+<p>让我们在 <a href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">多层感知机 (MLP)</a> 中见证这最后一步！</p>
+<hr/>
+<p>Generated by <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

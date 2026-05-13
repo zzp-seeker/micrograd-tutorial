@@ -1,0 +1,613 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI-generated deep-teaching walkthrough of the micrograd codebase" name="description"/>
+<link href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/" rel="prev"/>
+<link href="../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Chapter 2: 动态计算图 (DAG) - micrograd — 深度教学</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#chapter-2-dag">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="micrograd — 深度教学" class="md-header__button md-logo" data-md-component="logo" href=".." title="micrograd — 深度教学">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            micrograd — 深度教学
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Chapter 2: 动态计算图 (DAG)
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  Tutorial: micrograd
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+        
+  
+  
+    
+  
+  Chapter 1: 标量值与自动微分 (Value)
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
+        
+  
+  
+    
+  
+  Chapter 2: 动态计算图 (DAG)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+        
+  
+  
+    
+  
+  Chapter 3: 反向传播与链式法则 (backward)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+        
+  
+  
+    
+  
+  Chapter 4: 模块基类 (Module)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+        
+  
+  
+    
+  
+  Chapter 5: 神经元 (Neuron)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+        
+  
+  
+    
+  
+  Chapter 6: 神经网络层 (Layer)
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+        
+  
+  
+    
+  
+  Chapter 7: 多层感知机 (MLP)
+
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="micrograd — 深度教学" class="md-nav__button md-logo" data-md-component="logo" href=".." title="micrograd — 深度教学">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    micrograd — 深度教学
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    Tutorial: micrograd
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 1: 标量值与自动微分 (Value)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Chapter 2: 动态计算图 (DAG)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Chapter 2: 动态计算图 (DAG)
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        一、我们要解决什么问题？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dag">
+<span class="md-ellipsis">
+      
+        二、什么是 DAG？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dag_1">
+<span class="md-ellipsis">
+      
+        三、用最简单的例子看 DAG 长什么样
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        四、"动态"二字的含义
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#value">
+<span class="md-ellipsis">
+      
+        五、回顾：每个 Value 是怎么"接上图"的？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        六、亲手"遍历"一下这张图
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backward">
+<span class="md-ellipsis">
+      
+        七、backward() 是怎么用这张图的？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        八、用时序图看一次完整的图构建
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        九、几个常见疑问
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        十、本章小结
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 3: 反向传播与链式法则 (backward)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 4: 模块基类 (Module)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 5: 神经元 (Neuron)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 6: 神经网络层 (Layer)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    Chapter 7: 多层感知机 (MLP)
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="chapter-2-dag">Chapter 2: 动态计算图 (DAG)<a class="headerlink" href="#chapter-2-dag" title="Permanent link">¶</a></h1>
+<p>在上一章 <a href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">标量值与自动微分 (Value)</a> 中，我们认识了 <code>Value</code> 这个"带记忆的数字"。我们已经知道：每次做运算时，<code>Value</code> 会偷偷记下自己的"父节点"和"运算类型"。</p>
+<p>那么问题来了——<strong>这些零散的"记忆"加在一起到底变成了什么？它们如何串起来发挥作用？</strong></p>
+<p>这一章我们就来揭开谜底：所有这些记忆，自动拼成了一张叫做 <strong>DAG（有向无环图）</strong> 的东西。</p>
+<h2 id="_1">一、我们要解决什么问题？<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>让我们先看一个具体的小例子，假设你写了这样几行代码：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">micrograd.engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Value</span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="n">a</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="n">b</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">)</span>
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>        <span class="c1"># c = -6.0</span>
+<a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="n">d</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">10</span>       <span class="c1"># d = 4.0</span>
+</code></pre></div>
+<p>最后你拿到了 <code>d</code>，值是 <code>4.0</code>。但请你想一想：</p>
+<blockquote>
+<p><strong>如果有人只把 <code>d</code> 交给我，我能不能"顺藤摸瓜"找回 <code>c</code>、<code>a</code>、<code>b</code>？能不能知道它们之间是怎么连接的？</strong></p>
+</blockquote>
+<p>这个能力非常重要！因为只有掌握了这种"顺藤摸瓜"的能力，才能让 <code>d.backward()</code> 沿着每一步运算反向计算梯度。</p>
+<p><strong>DAG 就是这条"藤"</strong>——它记录着每一个 <code>Value</code> 节点之间的依赖关系，让我们能从结果出发，一路回溯到所有源头。</p>
+<h2 id="dag">二、什么是 DAG？<a class="headerlink" href="#dag" title="Permanent link">¶</a></h2>
+<p>DAG 是 <strong>Directed Acyclic Graph</strong> 的缩写，翻译过来叫"有向无环图"。这个名字听起来很学术，但拆开看其实非常直观：</p>
+<ul>
+<li><strong>图（Graph）</strong>：一些点（节点）和点之间的连线（边）。</li>
+<li><strong>有向（Directed）</strong>：每条线有方向，就像箭头一样，从 A 指向 B。</li>
+<li><strong>无环（Acyclic）</strong>：沿着箭头走，永远不会绕回起点（不会形成圈）。</li>
+</ul>
+<p>打个比方：你的<strong>家谱</strong>就是一张 DAG。父母指向你，你指向孩子，但孩子绝不可能反过来"生出"自己的祖辈——这就是"无环"。</p>
+<p>在 <code>micrograd</code> 里，DAG 就是 <code>Value</code> 们的"家谱"：
+- 每个 <code>Value</code> 是一个<strong>节点</strong>。
+- 每次运算产生的"我从谁来"的关系，是一条<strong>有向边</strong>。</p>
+<h2 id="dag_1">三、用最简单的例子看 DAG 长什么样<a class="headerlink" href="#dag_1" title="Permanent link">¶</a></h2>
+<p>回到我们一开始的例子：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">a</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="n">b</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">)</span>
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>        <span class="c1"># c 记得它的父亲是 a 和 b</span>
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="n">d</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">10</span>       <span class="c1"># d 记得它的父亲是 c 和那个被包装的 10</span>
+</code></pre></div>
+<p>这几行代码"在背后"自动构建出了下面这张图：</p>
+<pre class="mermaid"><code>graph LR
+    a["a (data=2.0)"] --&gt; mul["* "]
+    b["b (data=-3.0)"] --&gt; mul
+    mul --&gt; c["c (data=-6.0)"]
+    c --&gt; add["+ "]
+    ten["Value(10)"] --&gt; add
+    add --&gt; d["d (data=4.0)"]
+</code></pre>
+<p>注意几个关键点：</p>
+<ol>
+<li><strong>边从父节点指向子节点</strong>：<code>a</code> 和 <code>b</code> 是 <code>c</code> 的父亲，所以箭头从它们指向 <code>c</code>。</li>
+<li><strong>每次运算自动生成新节点</strong>：<code>10</code> 这个普通数字在加法时也被自动包装成了一个 <code>Value</code> 节点。</li>
+<li><strong>整张图是"动态"生成的</strong>：我们没有事先告诉 micrograd"我要算什么"，是它边运算边帮我们画图。</li>
+</ol>
+<h2 id="_2">四、"动态"二字的含义<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<p>为什么强调"动态"？因为有些深度学习框架（早期的 TensorFlow 1.x）需要<strong>先定义整张图，再喂数据进去运行</strong>——这叫"静态图"。</p>
+<p>而 <code>micrograd</code>（以及现代的 PyTorch）是<strong>写一行代码，图就长一点</strong>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">x</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span>          <span class="c1"># 图：x -&gt; + -&gt; y</span>
+<a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="n">z</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">3</span>          <span class="c1"># 图变长：x -&gt; + -&gt; y -&gt; * -&gt; z</span>
+</code></pre></div>
+<p>打个生活化的比方：</p>
+<ul>
+<li><strong>静态图</strong>像是<strong>预先画好的菜谱</strong>：你必须先把"先切菜、再翻炒、最后调味"画成流程图，再按图做饭。</li>
+<li><strong>动态图</strong>像是<strong>边做边记的厨房日记</strong>：你切完一刀就在本子上记一笔，做到哪记到哪，菜做完了流程图也自然成形了。</li>
+</ul>
+<p>动态图的好处是：你可以在中间用 <code>if</code>、<code>for</code> 等普通 Python 语法，图会自然跟着你的代码走，<strong>无比灵活</strong>。</p>
+<h2 id="value">五、回顾：每个 <code>Value</code> 是怎么"接上图"的？<a class="headerlink" href="#value" title="Permanent link">¶</a></h2>
+<p>我们在上一章已经见过这段代码，现在我们换个角度来看——只关注"图是怎么构建的"这件事：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>    <span class="n">other</span> <span class="o">=</span> <span class="n">other</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Value</span><span class="p">)</span> <span class="k">else</span> <span class="n">Value</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+<a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>    <span class="n">out</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">),</span> <span class="s1">'+'</span><span class="p">)</span>
+<a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>    <span class="c1"># ... 省略 _backward 设置 ...</span>
+<a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>    <span class="k">return</span> <span class="n">out</span>
+</code></pre></div>
+<p>注意第 3 行：创建新 <code>Value</code> 时，传入了 <code>(self, other)</code> 作为 <code>_children</code>。再回头看 <code>Value</code> 的构造函数：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">_children</span><span class="o">=</span><span class="p">(),</span> <span class="n">_op</span><span class="o">=</span><span class="s1">''</span><span class="p">):</span>
+<a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+<a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_prev</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">_children</span><span class="p">)</span>   <span class="c1"># 父节点保存在 _prev 里</span>
+<a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_op</span> <span class="o">=</span> <span class="n">_op</span>                <span class="c1"># 运算类型保存在 _op 里</span>
+</code></pre></div>
+<p>所以每个 <code>Value</code> 都自带两条"信息":
+- <code>_prev</code>：一个集合，存放它的父节点。
+- <code>_op</code>：一个字符串，记录运算名（'+'、'*'、'ReLU' 等）。</p>
+<p><strong>这两条信息合在一起，就是 DAG 的边和节点标签。</strong> 整张图不需要任何额外的数据结构去维护——它隐藏在每个 <code>Value</code> 自己的属性里。</p>
+<h2 id="_3">六、亲手"遍历"一下这张图<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>既然图就藏在 <code>_prev</code> 里，我们就能写几行代码"看见"它：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="n">a</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="n">b</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">)</span>
+<a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="n">d</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">10</span>
+<a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a>
+<a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">_prev</span><span class="p">)</span>   <span class="c1"># 它的父节点们</span>
+<a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">_op</span><span class="p">)</span>     <span class="c1"># 它是怎么产生的</span>
+</code></pre></div>
+<p>输出大致是这样的（顺序可能不同）：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a>{Value(data=-6.0, grad=0), Value(data=10, grad=0)}
+<a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>+
+</code></pre></div>
+<p>看！<code>d</code> 知道它的父亲是 <code>c</code>（也就是 <code>a*b</code> 的结果，data=-6.0）和那个被自动包装的 <code>Value(10)</code>，并且它是通过 <code>+</code> 运算产生的。</p>
+<p>我们还可以<strong>递归</strong>地往上爬：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">walk</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"  "</span> <span class="o">*</span> <span class="n">depth</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">_op</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">'leaf'</span><span class="si">}</span><span class="s2">: data=</span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a>    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">_prev</span><span class="p">:</span>
+<a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a>        <span class="n">walk</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a>
+<a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="n">walk</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</code></pre></div>
+<p>这段小工具沿着 <code>_prev</code> 一路往上走，每个节点的运算和值都被打印出来。这其实就是 DAG 遍历的雏形——<code>backward()</code> 内部干的也是类似的事。</p>
+<h2 id="backward">七、<code>backward()</code> 是怎么用这张图的？<a class="headerlink" href="#backward" title="Permanent link">¶</a></h2>
+<p>说了这么多"图怎么搭起来"，那它有什么用呢？最关键的用途就是：<strong>让反向传播按正确的顺序进行</strong>。</p>
+<p>来看 <code>backward()</code> 的核心片段（在 <a href="../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">反向传播与链式法则 (backward)</a> 中我们会更详细讲解）：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>    <span class="n">topo</span> <span class="o">=</span> <span class="p">[]</span>
+<a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>    <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">build_topo</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+<a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a>        <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+<a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a>            <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a>            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">_prev</span><span class="p">:</span>    <span class="c1"># 顺着图往上爬</span>
+<a href="#__codelineno-8-8" id="__codelineno-8-8" name="__codelineno-8-8"></a>                <span class="n">build_topo</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+<a href="#__codelineno-8-9" id="__codelineno-8-9" name="__codelineno-8-9"></a>            <span class="n">topo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<a href="#__codelineno-8-10" id="__codelineno-8-10" name="__codelineno-8-10"></a>    <span class="n">build_topo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<a href="#__codelineno-8-11" id="__codelineno-8-11" name="__codelineno-8-11"></a>    <span class="c1"># ... 后面按 topo 倒序处理每个节点 ...</span>
+</code></pre></div>
+<p>这段代码做了一件事：从 <code>self</code>（也就是终点 <code>d</code>）出发，沿着 <code>_prev</code> 把整张 DAG 走了一遍，并按"拓扑顺序"把所有节点收集起来。</p>
+<p><strong>拓扑排序</strong>是 DAG 上的经典操作，简单说就是：保证"父节点排在子节点前面"。这样从尾巴往前处理时，每处理一个节点，它的"下游"梯度都已经准备好了，链式法则才能正确地传下去。</p>
+<h2 id="_4">八、用时序图看一次完整的图构建<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p>下面这张时序图，展示了 <code>d = a * b + 10</code> 这一行代码背后整张 DAG 是如何"长"出来的：</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant U as 用户代码
+    participant A as a
+    participant B as b
+    participant C as c (a*b)
+    participant D as d (c+10)
+
+    U-&gt;&gt;A: a * b
+    A-&gt;&gt;C: 创建 c, _prev={a,b}, _op='*'
+    C--&gt;&gt;U: 返回 c
+    U-&gt;&gt;C: c + 10
+    C-&gt;&gt;D: 创建 d, _prev={c, Value(10)}, _op='+'
+    D--&gt;&gt;U: 返回 d
+</code></pre>
+<p>注意每一步：
+1. <strong>运算时图就长大</strong>：每做一次运算，就有一个新节点诞生并自动连上父节点。
+2. <strong>节点不会消失</strong>：即使你没用变量接住中间结果（比如 <code>Value(10)</code> 是匿名的），它仍然被新节点的 <code>_prev</code> 引用着。
+3. <strong>整张图是"懒"的</strong>：构建图时<strong>完全不算梯度</strong>——梯度等到 <code>backward()</code> 才计算。</p>
+<h2 id="_5">九、几个常见疑问<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<p><strong>Q1：如果我多次用同一个 <code>Value</code>，图会不会出问题？</strong></p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="n">a</span> <span class="o">=</span> <span class="n">Value</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>
+<a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span>          <span class="c1"># a 被用了两次</span>
+</code></pre></div>
+<p>完全不会！<code>b._prev</code> 是个<strong>集合</strong>（<code>set</code>），里面会有一份 <code>a</code> 的引用。后续 <code>backward()</code> 的梯度规则也会正确地把"两份贡献"累加给 <code>a</code>（这就是为什么所有 <code>_backward</code> 里都用 <code>+=</code> 而不是 <code>=</code>）。</p>
+<p><strong>Q2：DAG 真的不会有环吗？</strong></p>
+<p>不会。因为每次运算都<strong>创建新的</strong> <code>Value</code>，新节点指向旧节点，旧节点对新节点一无所知——所以箭头永远是单向的，绝不可能"绕回去"。</p>
+<p><strong>Q3：图占内存吗？要不要手动清理？</strong></p>
+<p>会占一些内存（每个中间 <code>Value</code> 都要保留）。在小项目里完全不用管；在更大的框架里（如 PyTorch），通常一次 <code>backward()</code> 之后图就可以被回收了。</p>
+<h2 id="_6">十、本章小结<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<p>我们这一章揭开了 <code>Value</code> 们背后那张"看不见的图"：</p>
+<ul>
+<li><strong>DAG = 有向无环图</strong>：节点是 <code>Value</code>，边是"父子依赖"，方向从父指向子。</li>
+<li><strong>图存在哪？</strong>：完全藏在每个 <code>Value</code> 自己的 <code>_prev</code> 和 <code>_op</code> 里——不需要任何额外结构。</li>
+<li><strong>为什么叫"动态"？</strong>：图是边写代码边构建出来的，写一行长一点，灵活到可以配合任意 Python 控制流。</li>
+<li><strong>图有什么用？</strong>：它是 <code>backward()</code> 进行<strong>拓扑排序、链式法则反向传播</strong>的基础设施。</li>
+</ul>
+<p>简单回顾一下我们走过的路：第 1 章我们认识了"带记忆的数字" <code>Value</code>；这一章我们发现这些"记忆"其实在悄悄拼出一张图。下一步自然就是：<strong>这张图究竟是怎么把梯度一步步算出来的？</strong></p>
+<p>让我们在 <a href="../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">反向传播与链式法则 (backward)</a> 中一探究竟！</p>
+<hr/>
+<p>Generated by <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>
