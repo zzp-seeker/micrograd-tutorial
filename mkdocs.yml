@@ -1,7 +1,28 @@
-site_name: micrograd — 深度教学
-site_description: AI-generated deep-teaching walkthrough of the micrograd codebase
+site_name: 深度教学（GitHub 仓库 + 论文）
+site_description: AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解
 docs_dir: docs
 site_dir: site
+
+nav:
+  - 首页: index.md
+  - GitHub 仓库:
+    - micrograd:
+      - 概览: micrograd_overview.md
+      - 1. 标量值与自动微分: 01_标量值与自动微分__value__.md
+      - 2. 动态计算图: 02_动态计算图__dag__.md
+      - 3. 反向传播与链式法则: 03_反向传播与链式法则__backward__.md
+      - 4. 模块基类: 04_模块基类__module__.md
+      - 5. 神经元: 05_神经元__neuron__.md
+      - 6. 神经网络层: 06_神经网络层__layer__.md
+      - 7. 多层感知机: 07_多层感知机__mlp__.md
+  - 论文:
+    - Tree of Thoughts (NeurIPS 2023):
+      - 论文速览: papers/2305.10601/index.md
+      - 1. 背景与前置知识: papers/2305.10601/01_背景与前置知识.md
+      - 2. 方法详解: papers/2305.10601/02_方法详解.md
+      - 3. 实验与结果: papers/2305.10601/03_实验与结果.md
+      - 4. 源码分析: papers/2305.10601/04_源码分析.md
+      - 5. 见解与扩展: papers/2305.10601/05_见解与扩展.md
 
 theme:
   name: material
