@@ -1,0 +1,1071 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解" name="description"/>
+<link href="../04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="prev"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>5. 见解与扩展 - 深度教学（GitHub 仓库 + 论文）</title>
+<link href="../../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#5">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            深度教学（GitHub 仓库 + 论文）
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              5. 见解与扩展
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../micrograd_overview/">
+          
+  
+  
+  GitHub 仓库
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../">
+          
+  
+  
+  论文
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    深度教学（GitHub 仓库 + 论文）
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    GitHub 仓库
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    GitHub 仓库
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    micrograd
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    micrograd
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    1. 标量值与自动微分
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    2. 动态计算图
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    3. 反向传播与链式法则
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    4. 模块基类
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    5. 神经元
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    6. 神经网络层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    7. 多层感知机
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_3_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../">
+<span class="md-ellipsis">
+    
+  
+    论文速览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/">
+<span class="md-ellipsis">
+    
+  
+    1. 背景与前置知识
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+<span class="md-ellipsis">
+    
+  
+    2. 方法详解
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../03_%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C/">
+<span class="md-ellipsis">
+    
+  
+    3. 实验与结果
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+<span class="md-ellipsis">
+    
+  
+    4. 源码分析
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    5. 见解与扩展
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    5. 见解与扩展
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#51">
+<span class="md-ellipsis">
+      
+        5.1 真正的创新点（按重要性排序）
+      
+    </span>
+</a>
+<nav aria-label="5.1 真正的创新点（按重要性排序）" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-llm">
+<span class="md-ellipsis">
+      
+        ① ⭐⭐⭐⭐⭐ "LLM 自评估 + 经典搜索"的统一框架
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2-4">
+<span class="md-ellipsis">
+      
+        ② ⭐⭐⭐⭐ "4 个钩子"的设计空间
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3-crosswords-backtrack">
+<span class="md-ellipsis">
+      
+        ③ ⭐⭐⭐ Crosswords 上 backtrack 的消融
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4-lookahead-prompt">
+<span class="md-ellipsis">
+      
+        ④ ⭐⭐ Lookahead 嵌入 prompt 的小技巧
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5_1">
+<span class="md-ellipsis">
+      
+        ⑤ ⭐ 工程包装（不算创新）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#52">
+<span class="md-ellipsis">
+      
+        5.2 跟相关工作的关系
+      
+    </span>
+</a>
+<nav aria-label="5.2 跟相关工作的关系" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#521-cot-cot-sc">
+<span class="md-ellipsis">
+      
+        5.2.1 与 CoT / CoT-SC
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#522-rap">
+<span class="md-ellipsis">
+      
+        5.2.2 与 RAP（同期）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#523-reflexion-self-refine">
+<span class="md-ellipsis">
+      
+        5.2.3 与 Reflexion / Self-Refine
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#524-neurologic-aesque-decoding">
+<span class="md-ellipsis">
+      
+        5.2.4 与 NeuroLogic A*esque Decoding
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#53-vs">
+<span class="md-ellipsis">
+      
+        5.3 适合 vs 不适合的场景
+      
+    </span>
+</a>
+<nav aria-label="5.3 适合 vs 不适合的场景" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tot">
+<span class="md-ellipsis">
+      
+        ✅ ToT 是首选的场景
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tot_1">
+<span class="md-ellipsis">
+      
+        ❌ ToT 不适合的场景
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#54">
+<span class="md-ellipsis">
+      
+        5.4 没回答的问题（开放问题）
+      
+    </span>
+</a>
+<nav aria-label="5.4 没回答的问题（开放问题）" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#q1tot">
+<span class="md-ellipsis">
+      
+        Q1：ToT 在规模上稳定吗？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#q2">
+<span class="md-ellipsis">
+      
+        Q2：评估器自信度可信吗？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#q3-fine-tune">
+<span class="md-ellipsis">
+      
+        Q3：能不能 fine-tune？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#q4">
+<span class="md-ellipsis">
+      
+        Q4：树结构是否真的"贴近"人类思维？
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#55">
+<span class="md-ellipsis">
+      
+        5.5 我会怎么扩展
+      
+    </span>
+</a>
+<nav aria-label="5.5 我会怎么扩展" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#a-tot-lite-for-cost-aware-inference">
+<span class="md-ellipsis">
+      
+        A. ToT-Lite for cost-aware inference
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#b-tot">
+<span class="md-ellipsis">
+      
+        B. 把 ToT 套到代码生成
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#c-verifier">
+<span class="md-ellipsis">
+      
+        C. 评估器换成 verifier
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#d-tot-tools">
+<span class="md-ellipsis">
+      
+        D. ToT × Tools
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#56">
+<span class="md-ellipsis">
+      
+        5.6 三句话总结（给不同读者）
+      
+    </span>
+</a>
+<nav aria-label="5.6 三句话总结（给不同读者）" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        给研究者
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        给工程师
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        给学生
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#57">
+<span class="md-ellipsis">
+      
+        5.7 个人最后评价
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        站点元信息
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="导航栏" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../../..">
+<span class="md-ellipsis">
+    首页
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../">
+<span class="md-ellipsis">
+    论文
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../">
+<span class="md-ellipsis">
+    Tree of Thoughts (NeurIPS 2023)
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="5">5. 见解与扩展<a class="headerlink" href="#5" title="Permanent link">¶</a></h1>
+<blockquote>
+<p>本章是作为深度读者的主观评价。<strong>不是论文复述</strong>，是真正读完论文 + 源码后的判断。</p>
+</blockquote>
+<h2 id="51">5.1 真正的创新点（按重要性排序）<a class="headerlink" href="#51" title="Permanent link">¶</a></h2>
+<h3 id="1-llm">① ⭐⭐⭐⭐⭐ "LLM 自评估 + 经典搜索"的统一框架<a class="headerlink" href="#1-llm" title="Permanent link">¶</a></h3>
+<p><strong>真正改变格局的地方</strong>：把 LLM 当成搜索算法里的<strong>两个角色</strong>（generator + heuristic evaluator）同时使用，<strong>无需任何额外训练</strong>。这是 2023 年 prompting 时代最重要的一个范式概念。</p>
+<p><strong>为什么这是真创新</strong>：</p>
+<ul>
+<li>AlphaGo 用 MCTS + 神经网络 → 需要训练价值网络</li>
+<li>AlphaZero 自博弈 → 需要环境模拟器</li>
+<li>ToT 用 BFS/DFS + 预训练 LLM → <strong>零训练成本</strong></li>
+</ul>
+<p>把"经典搜索 + 学习模型"组合需要的训练成本，被"LLM zero-shot value"消除了。这是搜索算法历史上第一次出现"评估器免训练"的可能。</p>
+<h3 id="2-4">② ⭐⭐⭐⭐ "4 个钩子"的设计空间<a class="headerlink" href="#2-4" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>{ thought decomposition,
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  generator (sample | propose),
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>  evaluator (value | vote),
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>  search (BFS | DFS) }
+</code></pre></div>
+<p>把"如何让 LLM 做规划"这个模糊问题压缩成一个<strong>4 维配置空间</strong>。每个任务都是这 4 个选项的一组取值。这种<strong>形式化</strong>比"74% on Game of 24"这个数字重要得多。</p>
+<p>这个 abstraction 是后续工作（<a href="https://arxiv.org/abs/2310.04406">LATS</a>、<a href="https://arxiv.org/abs/2305.14992">RAP</a>、<a href="https://arxiv.org/abs/2309.10814">ToT-improvers</a>）的起点。</p>
+<h3 id="3-crosswords-backtrack">③ ⭐⭐⭐ Crosswords 上 backtrack 的消融<a class="headerlink" href="#3-crosswords-backtrack" title="Permanent link">¶</a></h3>
+<p><strong>消融实验显示</strong>：去掉 backtrack，Mini Crosswords 性能砍半（字母正确率 78 → 54.6%）。这是论文里<strong>经验证据最强</strong>的发现——它从数据上证明了"LLM 推理需要回头"。</p>
+<p>在 ToT 之前没有任何工作展示过这点；之后所有"agentic LLM"方向都开始把 backtrack 当一等公民。</p>
+<h3 id="4-lookahead-prompt">④ ⭐⭐ Lookahead 嵌入 prompt 的小技巧<a class="headerlink" href="#4-lookahead-prompt" title="Permanent link">¶</a></h3>
+<p><code>value prompt</code> 里 8 个示例每个都包含 "尝试 2-3 种运算后再判断" 的过程。这是 <strong>prompt-encoded planning</strong>，论文没专门讨论。</p>
+<h3 id="5_1">⑤ ⭐ 工程包装（不算创新）<a class="headerlink" href="#5_1" title="Permanent link">¶</a></h3>
+<ul>
+<li>用 <code>value_map = {0.001, 1, 20}</code> 把分类标签映射到数字 —— 是 hack</li>
+<li>用 <code>sympy.simplify</code> 自动校验 Game of 24 答案 —— 是工程</li>
+<li>BFS 配 greedy top-b —— 是教科书内容</li>
+</ul>
+<h2 id="52">5.2 跟相关工作的关系<a class="headerlink" href="#52" title="Permanent link">¶</a></h2>
+<pre class="mermaid"><code>graph LR
+    subgraph "前置 (2022-23 初)"
+        CoT[Chain-of-Thought<br/>Wei et al. 2022]
+        CoTSC[CoT-Self-Consistency<br/>Wang et al. 2022]
+        Refine[Self-Refine<br/>Madaan et al. 2023]
+        Reflexion[Reflexion<br/>Shinn et al. 2023]
+    end
+
+    subgraph "同期 (2023 春)"
+        ToT[Tree of Thoughts<br/>Yao et al. 2023]
+        RAP[RAP<br/>Hao et al. 2023]
+        SelfEval[Self-Eval Decoding<br/>Xie et al. 2023]
+    end
+
+    subgraph "后续 (2023 秋起)"
+        LATS[LATS<br/>Zhou et al. 2023]
+        FoT[Forest of Thought<br/>2024]
+        AoT[Algorithm of Thoughts<br/>Sel et al. 2024]
+    end
+
+    CoT --&gt; CoTSC
+    CoT --&gt; ToT
+    CoTSC --&gt; ToT
+    Refine --&gt; ToT
+
+    ToT --&gt; LATS
+    RAP --&gt; LATS
+    ToT --&gt; FoT
+    ToT --&gt; AoT
+    SelfEval -.同期.- ToT
+</code></pre>
+<h3 id="521-cot-cot-sc">5.2.1 与 CoT / CoT-SC<a class="headerlink" href="#521-cot-cot-sc" title="Permanent link">¶</a></h3>
+<p>ToT <strong>泛化</strong> CoT —— CoT 是 ToT 的特例（深度=任意，宽度=1，无评估）。CoT-SC 是 ToT 的另一个特例（深度=完整，宽度=<span class="arithmatex">\(k\)</span>，无中间评估，最后多数投票）。</p>
+<h3 id="522-rap">5.2.2 与 RAP（同期）<a class="headerlink" href="#522-rap" title="Permanent link">¶</a></h3>
+<p><a href="https://arxiv.org/abs/2305.14992">RAP (Hao et al. 2023)</a> 与 ToT <strong>几乎同期</strong>（arXiv 差 1 周），独立提出"LLM as world model"。<strong>差异</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>ToT</th>
+<th>RAP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>搜索算法</td>
+<td>BFS / DFS</td>
+<td><strong>MCTS</strong></td>
+</tr>
+<tr>
+<td>评估器</td>
+<td>LLM 直接打分</td>
+<td>reward + value 两层</td>
+</tr>
+<tr>
+<td>模块化</td>
+<td>"4 个钩子"</td>
+<td>"WorldModel + Agent"</td>
+</tr>
+</tbody>
+</table>
+<p>实际选择：<strong>RAP 的 MCTS 框架更通用</strong>，ToT 的"4 钩子"更具教学价值。两篇可以一起读。</p>
+<h3 id="523-reflexion-self-refine">5.2.3 与 Reflexion / Self-Refine<a class="headerlink" href="#523-reflexion-self-refine" title="Permanent link">¶</a></h3>
+<p>Reflexion / Self-Refine 是<strong>线性迭代</strong>（在同一条解上反复改），ToT 是<strong>树状探索</strong>。两者<strong>正交</strong>——论文里 +Refine 在 ToT 上仍然有提升（7.56 → 7.91），证明可以叠加。</p>
+<h3 id="524-neurologic-aesque-decoding">5.2.4 与 NeuroLogic A*esque Decoding<a class="headerlink" href="#524-neurologic-aesque-decoding" title="Permanent link">¶</a></h3>
+<p><a href="https://arxiv.org/abs/2112.08726">NeuroLogic A*esque</a> 在 ToT 之前就用 A<em> + lookahead 做约束生成，但只针对</em><em>短的 token-level 序列</em><em>。ToT 把这条线扩展到</em><em>段落级别 + 任意任务</em>*。</p>
+<h2 id="53-vs">5.3 适合 vs 不适合的场景<a class="headerlink" href="#53-vs" title="Permanent link">¶</a></h2>
+<h3 id="tot">✅ ToT 是首选的场景<a class="headerlink" href="#tot" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐度</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数学 / 组合优化 / 算术（如 Game of 24）</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>思维粒度天然清晰，state evaluator 准</td>
+</tr>
+<tr>
+<td>约束满足问题（如 Crosswords、规划）</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>需要回溯，DFS 是唯一选项</td>
+</tr>
+<tr>
+<td>多步符号推理（GSM8K-hard、ARC）</td>
+<td>⭐⭐⭐⭐</td>
+<td>thought = 一个推理步</td>
+</tr>
+<tr>
+<td>创意写作（需要先 plan 再写）</td>
+<td>⭐⭐⭐</td>
+<td>plan 可枚举，evaluator 用 vote</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tot_1">❌ ToT 不适合的场景<a class="headerlink" href="#tot_1" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐度</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>简单事实问答</td>
+<td>⭐</td>
+<td>CoT 就够，ToT 是杀鸡用牛刀（100× 成本）</td>
+</tr>
+<tr>
+<td>单 token 输出（分类、回归）</td>
+<td>✗</td>
+<td>没有"树"</td>
+</tr>
+<tr>
+<td>在线 / 低延迟（聊天）</td>
+<td>✗</td>
+<td>100× 调用，延迟 30 秒+</td>
+</tr>
+<tr>
+<td>用 GPT-3.5 或更弱模型</td>
+<td>⭐⭐</td>
+<td>论文附录 B.2 显示 GPT-3.5 上 ToT 提升微弱（evaluator 不够准）</td>
+</tr>
+<tr>
+<td><strong>没法定义清晰 thought 粒度的任务</strong>（如纯自由对话）</td>
+<td>✗</td>
+<td>Q1 答不上来，整套垮</td>
+</tr>
+</tbody>
+</table>
+<h2 id="54">5.4 没回答的问题（开放问题）<a class="headerlink" href="#54" title="Permanent link">¶</a></h2>
+<h3 id="q1tot">Q1：ToT 在规模上稳定吗？<a class="headerlink" href="#q1tot" title="Permanent link">¶</a></h3>
+<p>论文只跑了 Game of 24 (100 题)、Creative Writing (100 题)、Crosswords (20 题)。<strong>数据集都很小</strong>。
+- 在 GSM8K (1k+)、MATH (5k+) 上呢？
+- 在 SWE-bench 这类长时编程任务呢？
+- ToT 跑大数据集时，<strong>累积的 LLM 评估误差</strong>是否会让收益消失？</p>
+<p>后续 LATS、AoT 部分回答了这个，但<strong>没有完整对照实验</strong>。</p>
+<h3 id="q2">Q2：评估器自信度可信吗？<a class="headerlink" href="#q2" title="Permanent link">¶</a></h3>
+<p><code>value_outputs_unwrap</code> 是采样 3 次取众数。但 GPT-4 在边缘案例的 calibration 很差——经常<strong>自信地说错</strong>。这部分误差被 BFS 放大（一个错误评估导致整个高分支被丢）。
+- 是否需要 ensemble 多个评估器？
+- 是否应该用 reward model 而不是同一个 LLM？</p>
+<h3 id="q3-fine-tune">Q3：能不能 fine-tune？<a class="headerlink" href="#q3-fine-tune" title="Permanent link">¶</a></h3>
+<p>论文 Discussion 提到 "fine-tuning LMs using a ToT-style high-level counterfactual decision making"。这条路两年过去几乎<strong>没人走通</strong>——可能是因为 ToT 数据<strong>难收集</strong>（要每个中间节点的 ground-truth value）。</p>
+<h3 id="q4">Q4：树结构是否真的"贴近"人类思维？<a class="headerlink" href="#q4" title="Permanent link">¶</a></h3>
+<p>论文反复用 System 1 / System 2 类比，但<strong>人类实际不画树</strong>——人类更像是<strong>懒计算 + 经验剪枝</strong>。树是给计算机看的，类比可能过度。</p>
+<h2 id="55">5.5 我会怎么扩展<a class="headerlink" href="#55" title="Permanent link">¶</a></h2>
+<p>如果接着这篇做研究，我的优先级：</p>
+<h3 id="a-tot-lite-for-cost-aware-inference">A. ToT-Lite for cost-aware inference<a class="headerlink" href="#a-tot-lite-for-cost-aware-inference" title="Permanent link">¶</a></h3>
+<p>ToT (b=5) 的 100× 成本是它最大硬伤。可以：
+1. 用<strong>小模型做 evaluator</strong>，大模型只做 generator
+2. <strong>动态 budget</strong>：评估器置信度高时直接走单分支，置信度低时再展开树
+3. <strong>缓存重用</strong>：跨题目复用 value prompt 的中间状态（很多结构相似题目其实评估结果一样）</p>
+<h3 id="b-tot">B. 把 ToT 套到代码生成<a class="headerlink" href="#b-tot" title="Permanent link">¶</a></h3>
+<p>代码 token 量大，但 thought 粒度可以是<strong>一个函数定义</strong> / 一个 commit message。
+- thought decomposition: 用 AST 分割
+- generator: propose 候选函数签名
+- evaluator: LLM 看 docstring 和 type signature 评分（无需运行）
+- search: DFS（编程是深而窄的）</p>
+<h3 id="c-verifier">C. 评估器换成 verifier<a class="headerlink" href="#c-verifier" title="Permanent link">¶</a></h3>
+<p>现在 evaluator 是 LLM 主观打分。可以换成：
+- <strong>数学</strong>：sympy / Lean / Coq 实际验证
+- <strong>代码</strong>：unittest / type checker
+- <strong>常识</strong>：retrieval-augmented fact checker</p>
+<p>这其实是 ToT 论文 Section 6 提到的方向，2024 年的 <a href="https://arxiv.org/abs/2305.20050">Process Reward Model</a> 走的就是这条线。</p>
+<h3 id="d-tot-tools">D. ToT × Tools<a class="headerlink" href="#d-tot-tools" title="Permanent link">¶</a></h3>
+<p>ToT 是单纯的"LLM 自评估"——但很多任务需要<strong>外部工具</strong>（搜索、计算器、代码执行器）。把 ToT 的 search loop 与 ReAct / Toolformer 结合是个明显方向，但工程量大。</p>
+<h2 id="56">5.6 三句话总结（给不同读者）<a class="headerlink" href="#56" title="Permanent link">¶</a></h2>
+<h3 id="_1">给研究者<a class="headerlink" href="#_1" title="Permanent link">¶</a></h3>
+<blockquote>
+<p>ToT 是 2023 prompting 时代的代表作之一——它的核心贡献不是 "74% on Game of 24"，而是把"LLM 自评估 + 经典搜索"形式化成一个 4 维设计空间。这个抽象比数字重要 10 倍。</p>
+</blockquote>
+<h3 id="_2">给工程师<a class="headerlink" href="#_2" title="Permanent link">¶</a></h3>
+<blockquote>
+<p>想要 ToT 的效果，<strong>复制不只算法，连 <code>value_map = {0.001, 1, 20}</code> 和 value prompt 里的 lookahead demos 都要照搬</strong>。在 GPT-3.5 上慎用——评估器不准就垮。预算单题 &lt; $0.1 就别用，CoT 性价比更高。</p>
+</blockquote>
+<h3 id="_3">给学生<a class="headerlink" href="#_3" title="Permanent link">¶</a></h3>
+<blockquote>
+<p>这是理解"prompting 到 agentic LLM"过渡期的最好入口。读完后接着读 <a href="https://arxiv.org/abs/2305.14992">RAP</a>（同期 MCTS 版本）、<a href="https://arxiv.org/abs/2310.04406">LATS</a>（统一框架）、<a href="https://arxiv.org/abs/2303.11366">Reflexion</a>（反思机制），就能完整看到"让 LLM 想清楚再答"这条线的演化。</p>
+</blockquote>
+<h2 id="57">5.7 个人最后评价<a class="headerlink" href="#57" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>评分</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>概念贡献</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>"4 钩子"框架 + LLM 自评估范式</td>
+</tr>
+<tr>
+<td>实证强度</td>
+<td>⭐⭐⭐⭐</td>
+<td>Game24 数字漂亮；Crosswords 消融极强；但数据集小</td>
+</tr>
+<tr>
+<td>写作清晰度</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>算法 1/2 简洁，公式记号干净</td>
+</tr>
+<tr>
+<td>工程完成度</td>
+<td>⭐⭐</td>
+<td>BFS 模块化好，DFS 是 notebook，复现存在隐含 hack</td>
+</tr>
+<tr>
+<td>长期影响</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>NeurIPS 2023 高引用，是后续整个 agentic LLM 方向的起点之一</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最终一句话</strong>：值得读，值得复现，但<strong>别期待它 plug-and-play</strong> 解决你的任务——<code>value_map</code> 那种工程细节会反复劝退你。</p>
+<hr/>
+<h2 id="_4">站点元信息<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<ul>
+<li>教学站点生成器：<a href="https://github.com/zzp-seeker/">paper-to-tutorial skill</a> (本地 skill)</li>
+<li>论文 commit 引用：<a href="https://github.com/princeton-nlp/tree-of-thought-llm/tree/8050e67d0e3a0fddc424d7fa5801538722a4c4cc"><code>8050e67d</code></a></li>
+<li>生成日期：2026-05-13</li>
+</ul>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../../javascripts/mathjax.js"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

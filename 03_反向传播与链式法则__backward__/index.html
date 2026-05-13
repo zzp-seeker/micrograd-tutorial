@@ -5,12 +5,12 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="AI-generated deep-teaching walkthrough of the micrograd codebase" name="description"/>
+<meta content="AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解" name="description"/>
 <link href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/" rel="prev"/>
 <link href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/" rel="next"/>
 <link href="../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
-<title>Chapter 3: 反向传播与链式法则 (backward) - micrograd — 深度教学</title>
+<title>3. 反向传播与链式法则 - 深度教学（GitHub 仓库 + 论文）</title>
 <link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
 <link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -31,7 +31,7 @@
 </div>
 <header class="md-header" data-md-component="header">
 <nav aria-label="页眉" class="md-header__inner md-grid">
-<a aria-label="micrograd — 深度教学" class="md-header__button md-logo" data-md-component="logo" href=".." title="micrograd — 深度教学">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" data-md-component="logo" href=".." title="深度教学（GitHub 仓库 + 论文）">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
 </a>
 <label class="md-header__button md-icon" for="__drawer">
@@ -41,13 +41,13 @@
 <div class="md-header__ellipsis">
 <div class="md-header__topic">
 <span class="md-ellipsis">
-            micrograd — 深度教学
+            深度教学（GitHub 仓库 + 论文）
           </span>
 </div>
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Chapter 3: 反向传播与链式法则 (backward)
+              3. 反向传播与链式法则
             
           </span>
 </div>
@@ -108,86 +108,27 @@
   
     
   
-  Tutorial: micrograd
-
-      </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
-        
-  
-  
-    
-  
-  Chapter 1: 标量值与自动微分 (Value)
-
-      </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
-        
-  
-  
-    
-  
-  Chapter 2: 动态计算图 (DAG)
+  首页
 
       </a>
 </li>
 <li class="md-tabs__item md-tabs__item--active">
-<a class="md-tabs__link" href="./">
-        
+<a class="md-tabs__link" href="../micrograd_overview/">
+          
   
   
-    
-  
-  Chapter 3: 反向传播与链式法则 (backward)
+  GitHub 仓库
 
-      </a>
+        </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
-        
+<a class="md-tabs__link" href="../papers/2305.10601/">
+          
   
   
-    
-  
-  Chapter 4: 模块基类 (Module)
+  论文
 
-      </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
-        
-  
-  
-    
-  
-  Chapter 5: 神经元 (Neuron)
-
-      </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
-        
-  
-  
-    
-  
-  Chapter 6: 神经网络层 (Layer)
-
-      </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
-        
-  
-  
-    
-  
-  Chapter 7: 多层感知机 (MLP)
-
-      </a>
+        </a>
 </li>
 </ul>
 </div>
@@ -199,10 +140,10 @@
 <div class="md-sidebar__inner">
 <nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="micrograd — 深度教学" class="md-nav__button md-logo" data-md-component="logo" href=".." title="micrograd — 深度教学">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" data-md-component="logo" href=".." title="深度教学（GitHub 仓库 + 论文）">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
 </a>
-    micrograd — 深度教学
+    深度教学（GitHub 仓库 + 论文）
   </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
@@ -210,7 +151,65 @@
 <span class="md-ellipsis">
     
   
-    Tutorial: micrograd
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    GitHub 仓库
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    GitHub 仓库
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    micrograd
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    micrograd
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../micrograd_overview/">
+<span class="md-ellipsis">
+    
+  
+    概览
   
 
     
@@ -222,7 +221,7 @@
 <span class="md-ellipsis">
     
   
-    Chapter 1: 标量值与自动微分 (Value)
+    1. 标量值与自动微分
   
 
     
@@ -234,7 +233,7 @@
 <span class="md-ellipsis">
     
   
-    Chapter 2: 动态计算图 (DAG)
+    2. 动态计算图
   
 
     
@@ -247,7 +246,7 @@
 <span class="md-ellipsis">
     
   
-    Chapter 3: 反向传播与链式法则 (backward)
+    3. 反向传播与链式法则
   
 
     
@@ -258,7 +257,7 @@
 <span class="md-ellipsis">
     
   
-    Chapter 3: 反向传播与链式法则 (backward)
+    3. 反向传播与链式法则
   
 
     
@@ -395,7 +394,7 @@
 <span class="md-ellipsis">
     
   
-    Chapter 4: 模块基类 (Module)
+    4. 模块基类
   
 
     
@@ -407,7 +406,7 @@
 <span class="md-ellipsis">
     
   
-    Chapter 5: 神经元 (Neuron)
+    5. 神经元
   
 
     
@@ -419,7 +418,7 @@
 <span class="md-ellipsis">
     
   
-    Chapter 6: 神经网络层 (Layer)
+    6. 神经网络层
   
 
     
@@ -431,7 +430,7 @@
 <span class="md-ellipsis">
     
   
-    Chapter 7: 多层感知机 (MLP)
+    7. 多层感知机
   
 
     
@@ -440,10 +439,165 @@
 </li>
 </ul>
 </nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_3_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../papers/2305.10601/">
+<span class="md-ellipsis">
+    
+  
+    论文速览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../papers/2305.10601/01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/">
+<span class="md-ellipsis">
+    
+  
+    1. 背景与前置知识
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../papers/2305.10601/02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+<span class="md-ellipsis">
+    
+  
+    2. 方法详解
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../papers/2305.10601/03_%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C/">
+<span class="md-ellipsis">
+    
+  
+    3. 实验与结果
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../papers/2305.10601/04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+<span class="md-ellipsis">
+    
+  
+    4. 源码分析
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../papers/2305.10601/05_%E8%A7%81%E8%A7%A3%E4%B8%8E%E6%89%A9%E5%B1%95/">
+<span class="md-ellipsis">
+    
+  
+    5. 见解与扩展
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
 </div>
 </div>
 </div>
 <div class="md-content" data-md-component="content">
+<nav aria-label="导航栏" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="..">
+<span class="md-ellipsis">
+    首页
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../micrograd_overview/">
+<span class="md-ellipsis">
+    GitHub 仓库
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../micrograd_overview/">
+<span class="md-ellipsis">
+    micrograd
+  </span>
+</a>
+</li>
+</ol>
+</nav>
 <article class="md-content__inner md-typeset">
 <h1 id="chapter-3-backward">Chapter 3: 反向传播与链式法则 (backward)<a class="headerlink" href="#chapter-3-backward" title="Permanent link">¶</a></h1>
 <p>在上一章 <a href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">动态计算图 (DAG)</a> 中，我们看到一连串的运算如何在背后悄悄拼出一张"家谱图"。我们也提到：这张图最重要的用途之一，就是为反向传播服务。</p>

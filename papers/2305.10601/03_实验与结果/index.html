@@ -1,0 +1,1670 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解">
+      
+      
+      
+      
+        <link rel="prev" href="../02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+      
+      
+        <link rel="next" href="../04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>3. 实验与结果 - 深度教学（GitHub 仓库 + 论文）</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#3" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" aria-label="深度教学（GitHub 仓库 + 论文）" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            深度教学（GitHub 仓库 + 论文）
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              3. 实验与结果
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../micrograd_overview/" class="md-tabs__link">
+          
+  
+  
+  GitHub 仓库
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  论文
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" aria-label="深度教学（GitHub 仓库 + 论文）" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    深度教学（GitHub 仓库 + 论文）
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub 仓库
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GitHub 仓库
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    micrograd
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    micrograd
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../micrograd_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. 标量值与自动微分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. 动态计算图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. 反向传播与链式法则
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. 模块基类
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. 神经元
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. 神经网络层
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. 多层感知机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文速览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. 背景与前置知识
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. 方法详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. 实验与结果
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. 实验与结果
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 实验设置概览
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32-1game-of-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 任务 1：Game of 24
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 任务 1：Game of 24">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#321" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.1 主结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#table-1-game-of-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 1: Game of 24 成功率对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#322" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2 规模分析（重要）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#323" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.3 错误分析
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#33-2creative-writing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 任务 2：Creative Writing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 任务 2：Creative Writing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#331" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.1 结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#table-2-creative-writing-gpt-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 2: Creative Writing — GPT-4 自动评分 + 人工偏好
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#34-3mini-crosswords-55" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 任务 3：Mini Crosswords (5×5)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 任务 3：Mini Crosswords (5×5)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#341" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.1 结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#table-3-mini-crosswords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table 3: Mini Crosswords 结果（成功率 %）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#342" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.2 消融的核心信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 跨任务总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#36-b3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 成本与效率（附录 B.3）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. 源码分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_%E8%A7%81%E8%A7%A3%E4%B8%8E%E6%89%A9%E5%B1%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. 见解与扩展
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="导航栏" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    首页
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    论文
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Tree of Thoughts (NeurIPS 2023)
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="3">3. 实验与结果<a class="headerlink" href="#3" title="Permanent link">&para;</a></h1>
+<p>ToT 在 3 个任务上做了完整实验。<strong>关键 takeaway</strong>：在结构化、需要规划的任务上 ToT 大幅超越 CoT；在开放生成任务上 ToT 也胜出但优势变小。</p>
+<h2 id="31">3.1 实验设置概览<a class="headerlink" href="#31" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>底层模型</strong>：GPT-4（Chat Completion 模式），temperature <code>0.7</code></li>
+<li><strong>采样</strong>：每个 prompt 默认采 5 次（除特别说明）</li>
+<li><strong>实验时间</strong>：2023 年 5 月 5-16 日（重要！GPT-4 在不同时间会有差异）</li>
+</ul>
+<h2 id="32-1game-of-24">3.2 任务 1：Game of 24<a class="headerlink" href="#32-1game-of-24" title="Permanent link">&para;</a></h2>
+<p><strong>任务</strong>：给定 4 个数，用 <code>+ - * /</code> 和括号组合成 24，每个数恰用一次。</p>
+<p><strong>例</strong>：<code>4 9 10 13</code> → <code>(10 - 4) * (13 - 9) = 24</code></p>
+<p><strong>ToT 设置</strong>：
+- <span class="arithmatex">\(k=8\)</span> 个 propose 候选 / 步
+- 评估器：3 次采样投票（<code>sure</code> × 20 + <code>likely</code> × 1 + <code>impossible</code> × 0.001）
+- BFS，<span class="arithmatex">\(b=5\)</span>，深度 <span class="arithmatex">\(T=3\)</span>
+- 数据：4nums.com 的 100 个测试题（按难度排序，取 #901-1000，硬题）</p>
+<h3 id="321">3.2.1 主结果<a class="headerlink" href="#321" title="Permanent link">&para;</a></h3>
+<p>来自论文 <a href="https://arxiv.org/pdf/2305.10601">Table 2</a>：</p>
+<h3 id="table-1-game-of-24">Table 1: Game of 24 成功率对比<a class="headerlink" href="#table-1-game-of-24" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Success ↑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IO prompt</td>
+<td>7.3%</td>
+</tr>
+<tr>
+<td>CoT prompt</td>
+<td>4.0%</td>
+</tr>
+<tr>
+<td>CoT-SC (k=100)</td>
+<td>9.0%</td>
+</tr>
+<tr>
+<td><strong>ToT (ours) b=1</strong></td>
+<td>45%</td>
+</tr>
+<tr>
+<td><strong>ToT (ours) b=5</strong></td>
+<td><strong>74%</strong></td>
+</tr>
+<tr>
+<td>IO + Refine (k=10)</td>
+<td>27%</td>
+</tr>
+<tr>
+<td>IO (best of 100)</td>
+<td>33%</td>
+</tr>
+<tr>
+<td>CoT (best of 100)</td>
+<td>49%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>说明</strong>：
+- ToT (b=5) 是 CoT 的 <strong>18.5 倍</strong>，CoT-SC 的 8.2 倍
+- 注意 <strong>CoT 比 IO 更差</strong>（4.0% vs 7.3%）—— CoT 让模型说"先算 4+9=13"反而把自己锁死
+- ToT (b=1) 已经 45%，说明<strong>评估器本身就贡献了大头</strong>，b 增大主要是边际改进</p>
+<p><img alt="Figure 2: ToT 在 Game of 24 的工作流程" src="https://arxiv.org/html/2305.10601v2/x2.png" /></p>
+<p><strong>解读</strong>：图 2 展示一次 ToT 推理的具体过程。左侧是 propose prompt 让 LLM 生成所有可能的"下一步算术"，右侧是 value prompt 让 LLM 判断每个中间状态能不能继续凑到 24。</p>
+<h3 id="322">3.2.2 规模分析（重要）<a class="headerlink" href="#322" title="Permanent link">&para;</a></h3>
+<p><img alt="Figure 3a: 节点访问数 vs 成功率" src="https://arxiv.org/html/2305.10601v2/x3.png" /></p>
+<p><strong>解读</strong>：把 ToT 不同 <span class="arithmatex">\(b\)</span> 设置的节点访问数（即 LLM 调用数）作为横轴，IO 和 CoT 的 best-of-<span class="arithmatex">\(k\)</span> 也按访问数对齐。<strong>ToT 曲线全程在 IO/CoT 之上</strong>——说明 ToT 不只是"花更多算力"，而是<strong>算力的边际效益更高</strong>。</p>
+<blockquote>
+<p>💡 <strong>个人见解</strong>：</p>
+<p><strong>观察</strong>：CoT best-of-100 (49%) 已经跟 ToT b=5 (74%) 在同一量级，差 25 个百分点。这意味着——<strong>如果你愿意烧 100× 算力</strong>，CoT 也能逼近 ToT。</p>
+<p><strong>判断</strong>：ToT 的优势是<strong>算力效率</strong>（同 <span class="arithmatex">\(k\)</span> 下成绩好），不是"绝对天花板"。论文不强调这点，但实战意义重大——<strong>有钱多采样的人，CoT 也凑合</strong>；<strong>预算紧的人</strong>才真正需要 ToT 的结构化探索。</p>
+<p><strong>延伸</strong>：实际部署时，先看你的"sample budget"。如果一次能采 100 次，CoT-SC 简单可靠；如果只能采 5-10 次，ToT 性价比碾压。</p>
+</blockquote>
+<h3 id="323">3.2.3 错误分析<a class="headerlink" href="#323" title="Permanent link">&para;</a></h3>
+<p><img alt="Figure 3b: 哪一步开始失败" src="https://arxiv.org/html/2305.10601v2/x4.png" /></p>
+<p><strong>解读</strong>：横轴是"在第几步首次进入死胡同"。结果显示——</p>
+<ul>
+<li><strong>CoT 约 60% 的失败发生在 step 1</strong>（即生成前 3 个 token 就已经走错路）</li>
+<li>ToT 因为有评估器，能在 step 1 就剪掉死分支，<strong>错误集中到 step 2-3</strong>（更深的位置）</li>
+</ul>
+<p>这是 ToT 价值的<strong>本质证据</strong>：左到右生成的核心问题就是"无法早期回头"。</p>
+<h2 id="33-2creative-writing">3.3 任务 2：Creative Writing<a class="headerlink" href="#33-2creative-writing" title="Permanent link">&para;</a></h2>
+<p><strong>任务</strong>：给 4 句话，写一段 4 段落散文，<strong>每段必须以给定的一句话结尾</strong>。开放性强，没有 ground truth。</p>
+<p><strong>ToT 设置</strong>：
+- thought：先写一个写作 plan
+- generator：<strong>Sample</strong> <span class="arithmatex">\(k=5\)</span>（plan 多样化更有意义）
+- evaluator：<strong>Vote</strong>（让 LLM 比较 5 个 plan，选最连贯的）
+- BFS，<span class="arithmatex">\(b=1\)</span>，<span class="arithmatex">\(T=2\)</span>（先选 plan，再选 passage）</p>
+<p><img alt="Figure 4: Creative Writing 中的 deliberate search 步骤" src="https://arxiv.org/html/2305.10601v2/x5.png" /></p>
+<p><strong>解读</strong>：图 4 是一个真实样例。给定 4 个奇怪的句子（如"她开始用手语避免不必要的关注"），模型先生成 5 个候选 plan，然后用 vote prompt 让自己挑出最连贯的一个（Plan 2），再基于这个 plan 写 5 段，再 vote 出最好的最终输出。</p>
+<h3 id="331">3.3.1 结果<a class="headerlink" href="#331" title="Permanent link">&para;</a></h3>
+<h3 id="table-2-creative-writing-gpt-4">Table 2: Creative Writing — GPT-4 自动评分 + 人工偏好<a class="headerlink" href="#table-2-creative-writing-gpt-4" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>评估方式</th>
+<th>IO</th>
+<th>CoT</th>
+<th><strong>ToT</strong></th>
+<th>IO+Refine</th>
+<th>ToT+Refine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-4 平均分 (1-10)</td>
+<td>6.19</td>
+<td>6.93</td>
+<td><strong>7.56</strong></td>
+<td>7.67</td>
+<td><strong>7.91</strong></td>
+</tr>
+<tr>
+<td>人类偏好 (100 对)</td>
+<td>—</td>
+<td>CoT 胜 21</td>
+<td><strong>ToT 胜 41</strong></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>说明</strong>：
+- ToT 比 CoT 提升约 0.6 分（GPT-4 评判）
+- 人类偏好上 ToT 胜出比 ≈ <strong>2:1</strong>（41 vs 21；剩余 38 对"差不多"）
+- <strong>+Refine 在两者上都有用</strong>——这暗示 Refine 是个<strong>正交的优化</strong>，与 ToT 可以叠加</p>
+<p><img alt="Figure 5: Creative Writing 详细结果" src="https://arxiv.org/html/2305.10601v2/x6.png" /></p>
+<p><strong>解读</strong>：箱线图展示 GPT-4 评分的分布。ToT 的中位数明显高，且分布更紧（方差小）。</p>
+<p><img alt="Figure 5b: 人类偏好对比" src="https://arxiv.org/html/2305.10601v2/x7.png" /></p>
+<blockquote>
+<p>💡 <strong>个人见解</strong>：</p>
+<p><strong>观察</strong>：Creative Writing 的人工偏好 41 vs 21 看起来好，但<strong>38% "差不多"</strong> 是个大数字。</p>
+<p><strong>判断</strong>：ToT 在创意任务上的<strong>实质胜利</strong>比数字看起来弱。原因：vote prompt 本质是让 GPT-4 评判 GPT-4，<strong>评估器和生成器是同一个模型，存在显著的偏好同源问题</strong>。让 Claude 或人类评估再做一次对比，差距可能会缩小。</p>
+<p><strong>延伸</strong>：用 ToT 做开放生成，<strong>评估器的多样性</strong>（用不同模型 / 不同 temperature / 用 reward model）是值得探索的方向。</p>
+</blockquote>
+<h2 id="34-3mini-crosswords-55">3.4 任务 3：Mini Crosswords (5×5)<a class="headerlink" href="#34-3mini-crosswords-55" title="Permanent link">&para;</a></h2>
+<p><strong>任务</strong>：5×5 字谜，5 条横向 clue + 5 条纵向 clue，填出 25 个字母。</p>
+<p><strong>ToT 设置</strong>：
+- thought：给某个 clue 填一个单词
+- generator：<strong>Propose</strong>（候选单词）
+- evaluator：<strong>Value over remaining clues</strong>（每个剩余 clue 都问"还能填吗"）
+- <strong>DFS</strong> + 剪枝 + 回溯（深度可达 10）</p>
+<p><img alt="Figure 6: Crosswords 的 thought 提议和评估" src="https://arxiv.org/html/2305.10601v2/x8.png" /></p>
+<p><strong>解读</strong>：图 6(a) 显示如何把当前状态翻译成"剩余 clue 的字母约束"（如 "v1.To heap: tm_s_"），让 LLM 提议候选词。(b) 则展示如果某个剩余 clue 被判为 <code>impossible</code>，整个子树就被剪枝并 DFS 回退。</p>
+<h3 id="341">3.4.1 结果<a class="headerlink" href="#341" title="Permanent link">&para;</a></h3>
+<h3 id="table-3-mini-crosswords">Table 3: Mini Crosswords 结果（成功率 %）<a class="headerlink" href="#table-3-mini-crosswords" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Letter ↑</th>
+<th>Word ↑</th>
+<th>Game ↑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IO</td>
+<td>38.7</td>
+<td>14</td>
+<td>0</td>
+</tr>
+<tr>
+<td>CoT</td>
+<td>40.6</td>
+<td>15.6</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>ToT (ours)</strong></td>
+<td><strong>78</strong></td>
+<td><strong>60</strong></td>
+<td><strong>20</strong></td>
+</tr>
+<tr>
+<td>+best state (oracle)</td>
+<td>82.4</td>
+<td>67.5</td>
+<td>35</td>
+</tr>
+<tr>
+<td>−prune (ablation)</td>
+<td>65.4</td>
+<td>41.5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>−backtrack (ablation)</td>
+<td>54.6</td>
+<td>20</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>说明</strong>（这张表信息量最大）：</p>
+<ul>
+<li>ToT 把"游戏级正确率"从 ~0% 拉到 20%，<strong>字母级</strong>从 ~40% 拉到 78%</li>
+<li><strong>+best state</strong>（oracle 选择最好的状态而非启发式）说明 ToT 的"输出选择策略"还有 15 个百分点的提升空间</li>
+<li><strong>-prune</strong>（去掉剪枝）：letter 78 → 65.4，<strong>剪枝贡献 12.6 分</strong></li>
+<li><strong>-backtrack</strong>（不回溯）：letter 78 → 54.6，<strong>回溯贡献 23.4 分</strong> ⭐</li>
+</ul>
+<h3 id="342">3.4.2 消融的核心信息<a class="headerlink" href="#342" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>回溯（backtrack）是 Crosswords 任务上 ToT 最重要的组件</strong>——比剪枝重要 2 倍。</p>
+</blockquote>
+<p>这就是为什么 Crosswords 用 DFS 而不是 BFS：BFS 没有"回头"概念，每层全保留，无法从死胡同退出。DFS + backtrack = 真正的搜索语义。</p>
+<blockquote>
+<p>💡 <strong>个人见解</strong>：</p>
+<p><strong>观察</strong>：消融实验显示 <strong>-backtrack 让性能下跌一半</strong>（字母 78 → 54.6，词 60 → 20）。</p>
+<p><strong>判断</strong>：这是这篇论文<strong>最 underrated 的发现</strong>——它从经验上证明了"LLM 推理需要回溯能力"。在 ToT 之前，几乎所有 LLM 推理工作都是"前向一遍式"的（CoT、Self-Refine、Self-Consistency）。ToT 是第一次清楚展示<strong>回溯</strong>这个经典搜索概念在 LLM 上的实际价值。</p>
+<p><strong>延伸</strong>：2024 年起的工作（如 LATS, RAP, ToolFormer 的 reflection）开始把 backtrack 当一等公民设计——这条线的源头就是这张消融表。</p>
+</blockquote>
+<h2 id="35">3.5 跨任务总结<a class="headerlink" href="#35" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>主要提升</th>
+<th>关键组件</th>
+<th><span class="arithmatex">\(b\)</span>/<span class="arithmatex">\(T\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Game of 24</td>
+<td>4% → 74% (18×)</td>
+<td><strong>State Evaluator</strong> (value w/ sure/likely/impossible)</td>
+<td><span class="arithmatex">\(b=5, T=3\)</span></td>
+</tr>
+<tr>
+<td>Creative Writing</td>
+<td>6.93 → 7.56</td>
+<td><strong>Vote</strong>（评估多样化 plan）</td>
+<td><span class="arithmatex">\(b=1, T=2\)</span></td>
+</tr>
+<tr>
+<td>Crosswords</td>
+<td>0% → 20% (game-level)</td>
+<td><strong>DFS + Backtrack</strong>（消融 -23.4）</td>
+<td>DFS, 100 steps</td>
+</tr>
+</tbody>
+</table>
+<p>每个任务<strong>真正的胜负手不同</strong>：G24 靠精准评估，Creative Writing 靠 plan 多样化，Crosswords 靠回溯。这也是 ToT 框架"4 个钩子"设计的合理性证明——单一组件不够，需要根据任务<strong>配置</strong>。</p>
+<h2 id="36-b3">3.6 成本与效率（附录 B.3）<a class="headerlink" href="#36-b3" title="Permanent link">&para;</a></h2>
+<p>论文附录给的 GPT-4 API 成本：</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>tokens / task (Game24)</th>
+<th>相对成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IO</td>
+<td>~700</td>
+<td>1×</td>
+</tr>
+<tr>
+<td>CoT</td>
+<td>~1000</td>
+<td>1.4×</td>
+</tr>
+<tr>
+<td>CoT-SC (k=100)</td>
+<td>~100,000</td>
+<td>142×</td>
+</tr>
+<tr>
+<td><strong>ToT (b=5)</strong></td>
+<td>~70,000</td>
+<td><strong>100×</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>注</strong>：ToT 的成本与 CoT-SC 同量级，<strong>不是"免费提升"</strong>。</p>
+<blockquote>
+<p>💡 <strong>个人见解</strong>：</p>
+<p><strong>观察</strong>：100× token 成本对应<strong>74% vs 4%</strong>（vs CoT）—— 算下来每多花 1 美元，把成功率从 0.04 提升到 0.74，<strong>单位钱效益约 7×</strong>。</p>
+<p><strong>判断</strong>：但<strong>vs CoT-SC（49% best of 100）</strong>只多 25 个百分点，成本基本同量级。所以工程决策点是：
+- 单题成本 $1 以下：用 CoT
+- 单题成本 $10 量级、容忍长延迟：用 CoT-SC（best-of-100）或 ToT
+- <strong>需要可解释的中间步骤、需要回溯</strong>：ToT 是唯一选择</p>
+<p><strong>延伸</strong>：把 ToT 用到 GPT-3.5 几乎不亮（附录 B.2），所以它实际上是一个 <strong>"GPT-4 / Claude 级模型才值得用"</strong> 的方法。</p>
+</blockquote>
+<p>下一章 → <a href="../04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">源码分析</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
