@@ -15,6 +15,18 @@ nav:
       - 5. 神经元: 05_神经元__neuron__.md
       - 6. 神经网络层: 06_神经网络层__layer__.md
       - 7. 多层感知机: 07_多层感知机__mlp__.md
+    - nousresearch/hermes-agent:
+      - 概览: repos/hermes-agent/index.md
+      - 1. Provider 档案: repos/hermes-agent/01_provider_档案_provider_profiles__.md
+      - 2. Provider 传输层: repos/hermes-agent/02_provider_传输层_provider_transports__.md
+      - 3. 上下文引擎: repos/hermes-agent/03_上下文引擎_context_engine__.md
+      - 4. 记忆提供方: repos/hermes-agent/04_记忆提供方_memory_provider__.md
+      - 5. 工具产物预算系统: repos/hermes-agent/05_工具产物预算系统_tool_result_budget__.md
+      - 6. 执行环境: repos/hermes-agent/06_执行环境_execution_environments__.md
+      - 7. LSP 集成服务: repos/hermes-agent/07_lsp_集成服务_lsp_service__.md
+      - 8. 云服务可插拔后端: repos/hermes-agent/08_云服务可插拔后端_cloud_service_providers__.md
+      - 9. 安全与同意护栏: repos/hermes-agent/09_安全与同意护栏_safety___consent_guardrails__.md
+      - 10. 速率限制与重试治理: repos/hermes-agent/10_速率限制与重试治理_rate_limit_tracker___guard__.md
   - 论文:
     - Tree of Thoughts (NeurIPS 2023):
       - 论文速览: papers/2305.10601/index.md

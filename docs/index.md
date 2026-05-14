@@ -9,6 +9,7 @@
 | 项目 | 简介 | 深度 |
 |---|---|---|
 | **[karpathy/micrograd](micrograd_overview.md)** | 极简自动微分引擎 + 神经网络库（100 行 + 50 行）。理解 PyTorch 底层原理的最佳入门 | 7 章 |
+| **[nousresearch/hermes-agent](repos/hermes-agent/index.md)** | Nous Research 自演化 AI agent 框架：上下文引擎 / 记忆 / 工具调度 / 安全护栏 / 多 Provider 适配 | 10 章 |
 
 ### 📄 论文深度讲解
 
