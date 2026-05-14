@@ -1,0 +1,1176 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解" name="description"/>
+<link href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/" rel="prev"/>
+<link href="../06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/" rel="next"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>5. 工具产物预算系统 - 深度教学（GitHub 仓库 + 论文）</title>
+<link href="../../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#chapter-5-tool-result-budget">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            深度教学（GitHub 仓库 + 论文）
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              5. 工具产物预算系统
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../../../micrograd_overview/">
+          
+  
+  
+  GitHub 仓库
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../papers/2305.10601/">
+          
+  
+  
+  论文
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    深度教学（GitHub 仓库 + 论文）
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    GitHub 仓库
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    GitHub 仓库
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    micrograd
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    micrograd
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    1. 标量值与自动微分
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    2. 动态计算图
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    3. 反向传播与链式法则
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    4. 模块基类
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    5. 神经元
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    6. 神经网络层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    7. 多层感知机
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    nousresearch/hermes-agent
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_2_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    nousresearch/hermes-agent
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">
+<span class="md-ellipsis">
+    
+  
+    1. Provider 档案
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">
+<span class="md-ellipsis">
+    
+  
+    2. Provider 传输层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">
+<span class="md-ellipsis">
+    
+  
+    3. 上下文引擎
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">
+<span class="md-ellipsis">
+    
+  
+    4. 记忆提供方
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    5. 工具产物预算系统
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    5. 工具产物预算系统
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        一、问题从哪里来？一个快递公司的小故事
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        二、本章的核心用例
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        三、三层防御长什么样？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        四、关键概念一个个看
+      
+    </span>
+</a>
+<nav aria-label="四、关键概念一个个看" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#41-1">
+<span class="md-ellipsis">
+      
+        4.1 第 1 层：工具自己的"预截断"
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#42-2">
+<span class="md-ellipsis">
+      
+        4.2 第 2 层：单条结果的"自提柜"
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#43-3">
+<span class="md-ellipsis">
+      
+        4.3 第 3 层：一轮的"总预算"
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#44-budgetconfig">
+<span class="md-ellipsis">
+      
+        4.4 BudgetConfig：你的总调节器
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#45">
+<span class="md-ellipsis">
+      
+        4.5 一个特殊的"豁免名单"
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        五、动手用一下！跟着核心用例走一遍
+      
+    </span>
+</a>
+<nav aria-label="五、动手用一下！跟着核心用例走一遍" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-2">
+<span class="md-ellipsis">
+      
+        步骤 1：工具返回后调用第 2 层
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2-3">
+<span class="md-ellipsis">
+      
+        步骤 2：一轮所有结果收齐后，调用第 3 层
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3">
+<span class="md-ellipsis">
+      
+        步骤 3：模型想看全部时
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        六、内部是怎么运转的？
+      
+    </span>
+</a>
+<nav aria-label="六、内部是怎么运转的？" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#61">
+<span class="md-ellipsis">
+      
+        6.1 一段直白的流程描述
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#62">
+<span class="md-ellipsis">
+      
+        6.2 用图来理解
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      
+        七、再深入一点：关键源码片段
+      
+    </span>
+</a>
+<nav aria-label="七、再深入一点：关键源码片段" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#71-tool_result_storagepy">
+<span class="md-ellipsis">
+      
+        7.1 写入沙箱（来自 tool_result_storage.py）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#72">
+<span class="md-ellipsis">
+      
+        7.2 单条持久化（核心逻辑简化版）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#73">
+<span class="md-ellipsis">
+      
+        7.3 一轮预算执行（关键算法）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#74-budget_configpy">
+<span class="md-ellipsis">
+      
+        7.4 阈值解析顺序（来自 budget_config.py）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      
+        八、自提柜的位置：沙箱友好
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+<span class="md-ellipsis">
+      
+        九、本章小结
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">
+<span class="md-ellipsis">
+    
+  
+    6. 执行环境
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">
+<span class="md-ellipsis">
+    
+  
+    7. LSP 集成服务
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/">
+<span class="md-ellipsis">
+    
+  
+    8. 云服务可插拔后端
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">
+<span class="md-ellipsis">
+    
+  
+    9. 安全与同意护栏
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../10_%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E6%B2%BB%E7%90%86_rate_limit_tracker___guard__/">
+<span class="md-ellipsis">
+    
+  
+    10. 速率限制与重试治理
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_3_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/">
+<span class="md-ellipsis">
+    
+  
+    论文速览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/">
+<span class="md-ellipsis">
+    
+  
+    1. 背景与前置知识
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+<span class="md-ellipsis">
+    
+  
+    2. 方法详解
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/03_%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C/">
+<span class="md-ellipsis">
+    
+  
+    3. 实验与结果
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+<span class="md-ellipsis">
+    
+  
+    4. 源码分析
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/05_%E8%A7%81%E8%A7%A3%E4%B8%8E%E6%89%A9%E5%B1%95/">
+<span class="md-ellipsis">
+    
+  
+    5. 见解与扩展
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="导航栏" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../../..">
+<span class="md-ellipsis">
+    首页
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    GitHub 仓库
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../">
+<span class="md-ellipsis">
+    nousresearch/hermes-agent
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="chapter-5-tool-result-budget">Chapter 5: 工具产物预算系统（Tool Result Budget）<a class="headerlink" href="#chapter-5-tool-result-budget" title="Permanent link">¶</a></h1>
+<p>在上一章 <a href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">记忆提供方（Memory Provider）</a> 里，我们让 agent 拥有了"私人秘书"，能跨会话记住客户的偏好。但秘书再厉害也救不了一种突发状况：<strong>agent 调用了一个工具（比如 <code>bash</code> 跑了一句 <code>cat huge.log</code>），结果工具一口气吐出 5 MB 文本</strong>，这一下就能把上下文窗口撑爆。</p>
+<p>这一章我们要认识 <code>hermes-agent</code> 里<strong>最像"快递分拣中心"</strong>的那一套机制——<strong>工具产物预算系统（Tool Result Budget）</strong>。</p>
+<hr/>
+<h2 id="_1">一、问题从哪里来？一个快递公司的小故事<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>想象你住在一间客厅只有 20 平米的小公寓，每天都会有快递送上门：</p>
+<ul>
+<li><strong>小件</strong>（一封信、一个手机壳）——直接抱进客厅，没问题。</li>
+<li><strong>中件</strong>（一个微波炉）——勉强能堆进客厅，但已经有点拥挤了。</li>
+<li><strong>超大件</strong>（一台冰箱、一个沙发）——直接搬进客厅？客厅就废了。</li>
+</ul>
+<p>聪明的快递公司会怎么做？</p>
+<ol>
+<li><strong>小件</strong>：照常送进客厅。</li>
+<li><strong>超大件</strong>：先放在街角的"自提柜"里，给你一张<strong>取件码</strong>："您要时去 23 号柜取。"</li>
+<li>万一某天你一次性收了 <strong>30 件中等大小的快递</strong>，加起来也能撑爆客厅——这时候快递公司会再次把<strong>最大的几件</strong>搬去自提柜，确保你的客厅永远走得动人。</li>
+</ol>
+<p><code>hermes-agent</code> 面临的情况一模一样：</p>
+<ul>
+<li><strong>客厅</strong> = LLM 的 context window（比如 200,000 tokens）。</li>
+<li><strong>每个快递</strong> = 一次工具调用的产物（<code>read_file</code> / <code>bash</code> / <code>web_fetch</code> 的返回）。</li>
+<li><strong>取件码</strong> = 一个文件路径，agent 想看时再调用 <code>read_file</code> 自取。</li>
+</ul>
+<p>这套"分拣 + 自提柜"机制就是 <strong>工具产物预算系统</strong>。</p>
+<hr/>
+<h2 id="_2">二、本章的核心用例<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<blockquote>
+<p>agent 在一轮对话里调用了 5 个工具，其中一个 <code>bash</code> 命令输出了 800,000 个字符的日志，另外几个工具加起来又有 300,000 字符。我们想知道：<code>hermes-agent</code> 是如何<strong>自动</strong>把超大输出转存到沙箱临时文件、在对话里只留下预览和路径，让一轮工具总量仍然落在预算之内的？同时——<strong>如何通过 <code>BudgetConfig</code> 调整阈值</strong>？</p>
+</blockquote>
+<p>读完本章你就能理解三层防御的全部细节，并知道在哪里改阈值。</p>
+<hr/>
+<h2 id="_3">三、三层防御长什么样？<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>整个预算系统是<strong>三层叠加</strong>的，每一层都能独立兜底。我们用"快递分拣中心"的角色来对应：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>在哪里发生</th>
+<th>干什么</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>第 1 层</strong></td>
+<td>工具内部</td>
+<td>工具自己先把输出截到一个上限（比如 50KB）</td>
+<td>快递公司<strong>装箱</strong>前就把蓬松填充物压实</td>
+</tr>
+<tr>
+<td><strong>第 2 层</strong></td>
+<td>工具返回后</td>
+<td>单条结果超过阈值 → 写入沙箱临时文件，对话里只留<strong>预览 + 路径</strong></td>
+<td><strong>超大件直接进自提柜</strong>，客户拿"取件码"</td>
+</tr>
+<tr>
+<td><strong>第 3 层</strong></td>
+<td>一轮的所有结果收齐后</td>
+<td>累计仍超预算 → 把<strong>最大的几条</strong>继续溢出</td>
+<td><strong>客厅还是太挤</strong> → 把最大那几件再搬一次</td>
+</tr>
+</tbody>
+</table>
+<p>任何一层都拦不住，下一层就接着拦——三道闸门，几乎不可能漏。</p>
+<hr/>
+<h2 id="_4">四、关键概念一个个看<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<h3 id="41-1">4.1 第 1 层：工具自己的"预截断"<a class="headerlink" href="#41-1" title="Permanent link">¶</a></h3>
+<p>最简单的一层，没有什么"魔法"——每个工具的作者自己负责。比如 <code>bash</code> 工具会在返回前看自己的输出长不长，长了就掐掉：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1"># 来自 tools/tool_output_limits.py</span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="n">DEFAULT_MAX_BYTES</span> <span class="o">=</span> <span class="mi">50_000</span>       <span class="c1"># 终端输出上限（字符）</span>
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="n">DEFAULT_MAX_LINES</span> <span class="o">=</span> <span class="mi">2000</span>         <span class="c1"># read_file 分页上限</span>
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="n">DEFAULT_MAX_LINE_LENGTH</span> <span class="o">=</span> <span class="mi">2000</span>   <span class="c1"># 单行长度上限</span>
+</code></pre></div>
+<p>这些数字写在 <code>tool_output_limits.py</code> 里，并且<strong>可以在 <code>config.yaml</code> 里覆盖</strong>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nt">tool_output</span><span class="p">:</span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="nt">max_bytes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span><span class="w">        </span><span class="c1"># 我想看更长的终端输出</span>
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span><span class="nt">max_lines</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
+</code></pre></div>
+<blockquote>
+<p>💡 这层是"快递员的良心"——靠每个工具自觉。但如果工具忘了截，没关系，下面还有两层。</p>
+</blockquote>
+<h3 id="42-2">4.2 第 2 层：单条结果的"自提柜"<a class="headerlink" href="#42-2" title="Permanent link">¶</a></h3>
+<p>这才是预算系统的<strong>核心创新</strong>。当一个工具返回结果时，主循环会问：</p>
+<blockquote>
+<p>"这次返回多长？超过你这个工具注册时声明的阈值了吗？"</p>
+</blockquote>
+<ul>
+<li><strong>没超</strong> → 原样塞进对话。</li>
+<li><strong>超了</strong> → 把<strong>全文</strong>写到沙箱里的一个临时文件（比如 <code>/tmp/hermes-results/abc123.txt</code>），对话里只放一个<strong>预览 + 文件路径</strong>，并加一段提示："你想看完整的就用 <code>read_file</code> 来取"。</li>
+</ul>
+<p>默认阈值是 <strong>100,000 字符</strong>（约 25K tokens），来自：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># 来自 tools/budget_config.py</span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">DEFAULT_RESULT_SIZE_CHARS</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100_000</span>
+<a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="n">DEFAULT_TURN_BUDGET_CHARS</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200_000</span>
+<a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="n">DEFAULT_PREVIEW_SIZE_CHARS</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1_500</span>
+</code></pre></div>
+<p>最妙的是：<strong>模型并没有"丢失"信息</strong>——它只是改用 <code>read_file(path, offset=..., limit=...)</code> 按需取，需要哪页翻哪页。</p>
+<h3 id="43-3">4.3 第 3 层：一轮的"总预算"<a class="headerlink" href="#43-3" title="Permanent link">¶</a></h3>
+<p>第 2 层已经管住了"单件超大"。但如果一轮里有 10 个 80KB 的结果（每个都不超阈值），加起来 800KB——同样会撑爆。</p>
+<p>第 3 层就是为这种"群殴"准备的：</p>
+<ol>
+<li>收齐这一轮所有工具结果后，把它们的字符数加起来。</li>
+<li>如果<strong>总和</strong> &gt; <code>turn_budget</code>（默认 200,000），就按结果大小<strong>从大到小</strong>排序。</li>
+<li>把最大的那几条<strong>再扔进自提柜</strong>，直到总和回到预算内。</li>
+</ol>
+<blockquote>
+<p>💡 类比："客厅装不下了，先把最占地的沙发搬走，再不行就搬冰箱，直到能走人为止。"</p>
+</blockquote>
+<h3 id="44-budgetconfig">4.4 <code>BudgetConfig</code>：你的总调节器<a class="headerlink" href="#44-budgetconfig" title="Permanent link">¶</a></h3>
+<p>三层的所有阈值都集中在一个 <code>dataclass</code> 里：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">BudgetConfig</span><span class="p">:</span>
+<a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>    <span class="n">default_result_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100_000</span>   <span class="c1"># 单条阈值</span>
+<a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>    <span class="n">turn_budget</span><span class="p">:</span>         <span class="nb">int</span> <span class="o">=</span> <span class="mi">200_000</span>   <span class="c1"># 一轮总预算</span>
+<a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>    <span class="n">preview_size</span><span class="p">:</span>        <span class="nb">int</span> <span class="o">=</span> <span class="mi">1_500</span>     <span class="c1"># 预览长度</span>
+<a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a>    <span class="n">tool_overrides</span><span class="p">:</span>      <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>   <span class="c1"># 特定工具的覆盖</span>
+</code></pre></div>
+<p>想让某个工具更"宽松"或更"苛刻"？用 <code>tool_overrides</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="n">cfg</span> <span class="o">=</span> <span class="n">BudgetConfig</span><span class="p">(</span><span class="n">tool_overrides</span><span class="o">=</span><span class="p">{</span><span class="s2">"web_fetch"</span><span class="p">:</span> <span class="mi">50_000</span><span class="p">})</span>
+</code></pre></div>
+<p>意思是："<code>web_fetch</code> 的结果只要超过 50KB 就送自提柜，比默认的 100KB 还严格。"</p>
+<h3 id="45">4.5 一个特殊的"豁免名单"<a class="headerlink" href="#45" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="n">PINNED_THRESHOLDS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>    <span class="s2">"read_file"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"inf"</span><span class="p">),</span>   <span class="c1"># 永远不持久化</span>
+<a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="p">}</span>
+</code></pre></div>
+<p><code>read_file</code> 被设成<strong>无限大</strong>——为什么？因为它本身就是用来从自提柜取件的。如果 <code>read_file</code> 的输出也被送回自提柜，agent 想看完整日志时就会陷入"持久化 → 读取 → 又被持久化 → 又读取"的死循环。这条"钉死的"规则保护了系统的根基。</p>
+<hr/>
+<h2 id="_5">五、动手用一下！跟着核心用例走一遍<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<p>假设 agent 这一轮调用了一个 <code>bash</code> 命令：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="n">bash_output</span> <span class="o">=</span> <span class="s2">"ERROR ...</span><span class="se">\n</span><span class="s2">"</span> <span class="o">*</span> <span class="mi">50000</span>   <span class="c1"># 大概 800KB</span>
+</code></pre></div>
+<h3 id="1-2">步骤 1：工具返回后调用第 2 层<a class="headerlink" href="#1-2" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tools.tool_result_storage</span><span class="w"> </span><span class="kn">import</span> <span class="n">maybe_persist_tool_result</span>
+<a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>
+<a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="n">new_content</span> <span class="o">=</span> <span class="n">maybe_persist_tool_result</span><span class="p">(</span>
+<a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a>    <span class="n">content</span><span class="o">=</span><span class="n">bash_output</span><span class="p">,</span>
+<a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a>    <span class="n">tool_name</span><span class="o">=</span><span class="s2">"bash"</span><span class="p">,</span>
+<a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a>    <span class="n">tool_use_id</span><span class="o">=</span><span class="s2">"call_007"</span><span class="p">,</span>
+<a href="#__codelineno-7-7" id="__codelineno-7-7" name="__codelineno-7-7"></a>    <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+<a href="#__codelineno-7-8" id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>输入</strong>：原始 800KB 字符串。
+<strong>输出</strong>：一个短得多的字符串，长这样——</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a>&lt;persisted-output&gt;
+<a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>This tool result was too large (819,200 characters, 800.0 KB).
+<a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>Full output saved to: /tmp/hermes-results/call_007.txt
+<a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a>Use the read_file tool with offset and limit to access specific sections...
+<a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a>
+<a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a>Preview (first 1500 chars):
+<a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a>ERROR ...
+<a href="#__codelineno-8-8" id="__codelineno-8-8" name="__codelineno-8-8"></a>ERROR ...
+<a href="#__codelineno-8-9" id="__codelineno-8-9" name="__codelineno-8-9"></a>...
+<a href="#__codelineno-8-10" id="__codelineno-8-10" name="__codelineno-8-10"></a>&lt;/persisted-output&gt;
+</code></pre></div>
+<p>完整的 800KB 已经写到 <code>/tmp/hermes-results/call_007.txt</code>，对话里只有 ~1.5KB 的预览。</p>
+<h3 id="2-3">步骤 2：一轮所有结果收齐后，调用第 3 层<a class="headerlink" href="#2-3" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tools.tool_result_storage</span><span class="w"> </span><span class="kn">import</span> <span class="n">enforce_turn_budget</span>
+<a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a>
+<a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="n">tool_messages</span> <span class="o">=</span> <span class="n">enforce_turn_budget</span><span class="p">(</span><span class="n">tool_messages</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>输入</strong>：本轮所有的 tool message（一个列表）。
+<strong>输出</strong>：同一个列表，但如果总字符 &gt; 200,000，最大的几条会被原地替换成"自提柜引用"。</p>
+<p>主循环就用这个清理后的列表继续下一轮——模型从此只看到精简版。</p>
+<h3 id="3">步骤 3：模型想看全部时<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<p>模型会在下一轮主动调用：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="n">read_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"/tmp/hermes-results/call_007.txt"</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>输出</strong>：拿到那 800KB 文件里的前 200 行。它可以按需翻页，<strong>不需要一次性吞下整个日志</strong>。</p>
+<hr/>
+<h2 id="_6">六、内部是怎么运转的？<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<h3 id="61">6.1 一段直白的流程描述<a class="headerlink" href="#61" title="Permanent link">¶</a></h3>
+<p>一轮 agent 工作流大致是这样：</p>
+<ol>
+<li>模型生成一组工具调用。</li>
+<li>主循环把它们交给 <a href="../06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">执行环境（Execution Environments）</a> 跑。</li>
+<li>每个工具返回字符串——主循环对每个调用一次 <code>maybe_persist_tool_result()</code>。</li>
+<li>没超阈值 → 原样保留。</li>
+<li>超了 → 写沙箱临时文件、换成预览 + 路径。</li>
+<li>把所有 tool message 收成一个列表，调用 <code>enforce_turn_budget()</code>。</li>
+<li>总和不超 → 直接返回。</li>
+<li>总和超了 → 按大小排序，把最大的几条继续送进自提柜。</li>
+<li>主循环把清理后的 tool messages 追加到对话里，下一轮发给模型。</li>
+</ol>
+<h3 id="62">6.2 用图来理解<a class="headerlink" href="#62" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant L as 主循环
+    participant T as 工具
+    participant P as 持久化模块
+    participant S as 沙箱文件系统
+    participant M as 模型
+
+    T--&gt;&gt;L: 返回 800KB 字符串
+    L-&gt;&gt;P: maybe_persist_tool_result(...)
+    P-&gt;&gt;S: 写入 /tmp/hermes-results/xxx.txt
+    P--&gt;&gt;L: 预览 + 路径
+    L-&gt;&gt;P: enforce_turn_budget(全部 tool 结果)
+    P--&gt;&gt;L: 已修剪的列表
+    L-&gt;&gt;M: 发请求(含精简结果)
+</code></pre>
+<p>注意：<strong>模型从头到尾不知道这些细节</strong>——它只看到"这个工具说结果太大，存在文件 X 里，你想看就 read_file"。预算系统对模型是<strong>透明的</strong>。</p>
+<hr/>
+<h2 id="_7">七、再深入一点：关键源码片段<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<h3 id="71-tool_result_storagepy">7.1 写入沙箱（来自 <code>tool_result_storage.py</code>）<a class="headerlink" href="#71-tool_result_storagepy" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_write_to_sandbox</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">remote_path</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a>    <span class="n">storage_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">remote_path</span><span class="p">)</span>
+<a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a>    <span class="n">cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"mkdir -p </span><span class="si">{</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">storage_dir</span><span class="p">)</span><span class="si">}</span><span class="s2"> &amp;&amp; cat &gt; </span><span class="si">{</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">remote_path</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+<a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">stdin_data</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+<a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a>    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"returncode"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+</code></pre></div>
+<p>为什么用 <code>cat &gt; file</code> 加 <code>stdin_data</code>，而不是直接写命令？因为 Linux 限制单个 argv 元素最长 128KB——把 800KB 当命令参数传进去会直接报错。改成"用 stdin 喂"就没有这个上限。</p>
+<h3 id="72">7.2 单条持久化（核心逻辑简化版）<a class="headerlink" href="#72" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">maybe_persist_tool_result</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">tool_name</span><span class="p">,</span> <span class="n">tool_use_id</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">DEFAULT_BUDGET</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+<a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>    <span class="n">threshold</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">resolve_threshold</span><span class="p">(</span><span class="n">tool_name</span><span class="p">)</span>
+<a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">threshold</span><span class="p">:</span>
+<a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a>        <span class="k">return</span> <span class="n">content</span>                         <span class="c1"># 没超，原样返回</span>
+<a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a>    <span class="n">preview</span><span class="p">,</span> <span class="n">has_more</span> <span class="o">=</span> <span class="n">generate_preview</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">max_chars</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">preview_size</span><span class="p">)</span>
+<a href="#__codelineno-12-6" id="__codelineno-12-6" name="__codelineno-12-6"></a>    <span class="n">remote_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_resolve_storage_dir</span><span class="p">(</span><span class="n">env</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">tool_use_id</span><span class="si">}</span><span class="s2">.txt"</span>
+<a href="#__codelineno-12-7" id="__codelineno-12-7" name="__codelineno-12-7"></a>    <span class="k">if</span> <span class="n">env</span> <span class="ow">and</span> <span class="n">_write_to_sandbox</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">remote_path</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+<a href="#__codelineno-12-8" id="__codelineno-12-8" name="__codelineno-12-8"></a>        <span class="k">return</span> <span class="n">_build_persisted_message</span><span class="p">(</span><span class="n">preview</span><span class="p">,</span> <span class="n">has_more</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">),</span> <span class="n">remote_path</span><span class="p">)</span>
+<a href="#__codelineno-12-9" id="__codelineno-12-9" name="__codelineno-12-9"></a>    <span class="k">return</span> <span class="n">preview</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">[Truncated...]"</span>     <span class="c1"># 写失败 → 退化为简单截断</span>
+</code></pre></div>
+<p>逻辑像三个连续的"if"：能跳过就跳过、能写盘就写盘、写不动就退化截断。一切尽量降级，保证不报错。</p>
+<h3 id="73">7.3 一轮预算执行（关键算法）<a class="headerlink" href="#73" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">enforce_turn_budget</span><span class="p">(</span><span class="n">tool_messages</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">DEFAULT_BUDGET</span><span class="p">):</span>
+<a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a>    <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s2">"content"</span><span class="p">])</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">tool_messages</span><span class="p">)</span>
+<a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a>    <span class="k">if</span> <span class="n">total</span> <span class="o">&lt;=</span> <span class="n">config</span><span class="o">.</span><span class="n">turn_budget</span><span class="p">:</span>
+<a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a>        <span class="k">return</span> <span class="n">tool_messages</span>
+<a href="#__codelineno-13-5" id="__codelineno-13-5" name="__codelineno-13-5"></a>    <span class="c1"># 找出"还没被持久化"的、按大小从大到小排</span>
+<a href="#__codelineno-13-6" id="__codelineno-13-6" name="__codelineno-13-6"></a>    <span class="n">candidates</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<a href="#__codelineno-13-7" id="__codelineno-13-7" name="__codelineno-13-7"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+<a href="#__codelineno-13-8" id="__codelineno-13-8" name="__codelineno-13-8"></a>        <span class="k">if</span> <span class="n">total</span> <span class="o">&lt;=</span> <span class="n">config</span><span class="o">.</span><span class="n">turn_budget</span><span class="p">:</span> <span class="k">break</span>
+<a href="#__codelineno-13-9" id="__codelineno-13-9" name="__codelineno-13-9"></a>        <span class="c1"># 用 threshold=0 强制持久化</span>
+<a href="#__codelineno-13-10" id="__codelineno-13-10" name="__codelineno-13-10"></a>        <span class="n">tool_messages</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">"content"</span><span class="p">]</span> <span class="o">=</span> <span class="n">maybe_persist_tool_result</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+<p>注意 <code>threshold=0</code>——这意味着"无论多大都持久化"。第 3 层比第 2 层更激进，因为这时候是"客厅真挤不下了"，必须搬。</p>
+<h3 id="74-budget_configpy">7.4 阈值解析顺序（来自 <code>budget_config.py</code>）<a class="headerlink" href="#74-budget_configpy" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">resolve_threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tool_name</span><span class="p">):</span>
+<a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a>    <span class="k">if</span> <span class="n">tool_name</span> <span class="ow">in</span> <span class="n">PINNED_THRESHOLDS</span><span class="p">:</span>          <span class="c1"># 1. 钉死名单（read_file）</span>
+<a href="#__codelineno-14-3" id="__codelineno-14-3" name="__codelineno-14-3"></a>        <span class="k">return</span> <span class="n">PINNED_THRESHOLDS</span><span class="p">[</span><span class="n">tool_name</span><span class="p">]</span>
+<a href="#__codelineno-14-4" id="__codelineno-14-4" name="__codelineno-14-4"></a>    <span class="k">if</span> <span class="n">tool_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tool_overrides</span><span class="p">:</span>        <span class="c1"># 2. 用户的覆盖</span>
+<a href="#__codelineno-14-5" id="__codelineno-14-5" name="__codelineno-14-5"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tool_overrides</span><span class="p">[</span><span class="n">tool_name</span><span class="p">]</span>
+<a href="#__codelineno-14-6" id="__codelineno-14-6" name="__codelineno-14-6"></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">tools.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">registry</span>
+<a href="#__codelineno-14-7" id="__codelineno-14-7" name="__codelineno-14-7"></a>    <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_max_result_size</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="c1"># 3. 注册表 / 默认</span>
+</code></pre></div>
+<p>优先级一目了然：<strong>钉死名单 &gt; 用户覆盖 &gt; 工具自己声明 &gt; 全局默认</strong>。改阈值时只需要往 <code>tool_overrides</code> 里加一行。</p>
+<hr/>
+<h2 id="_8">八、自提柜的位置：沙箱友好<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_resolve_storage_dir</span><span class="p">(</span><span class="n">env</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a>    <span class="k">if</span> <span class="n">env</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s2">"get_temp_dir"</span><span class="p">):</span>
+<a href="#__codelineno-15-3" id="__codelineno-15-3" name="__codelineno-15-3"></a>        <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_temp_dir</span><span class="p">()</span>
+<a href="#__codelineno-15-4" id="__codelineno-15-4" name="__codelineno-15-4"></a>        <span class="k">if</span> <span class="n">temp_dir</span><span class="p">:</span>
+<a href="#__codelineno-15-5" id="__codelineno-15-5" name="__codelineno-15-5"></a>            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">temp_dir</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span><span class="si">}</span><span class="s2">/hermes-results"</span>
+<a href="#__codelineno-15-6" id="__codelineno-15-6" name="__codelineno-15-6"></a>    <span class="k">return</span> <span class="s2">"/tmp/hermes-results"</span>
+</code></pre></div>
+<p>很关键的一点是——<strong>写文件用的是 <code>env.execute()</code>，不是 Python 直接的 <code>open()</code></strong>。原因：agent 可能跑在 Docker、SSH、Modal、Termux 等各种环境里，<strong>这些环境里的 <code>/tmp</code> 跟主程序的 <code>/tmp</code> 不是同一个</strong>。必须经过执行环境（下一章详细介绍），文件才会落在和工具同一个沙箱里，<code>read_file</code> 才能取到。</p>
+<pre class="mermaid"><code>flowchart LR
+    A[工具产物 800KB] --&gt; B[持久化模块]
+    B --&gt; C[env.execute<br/>cat &gt; file]
+    C --&gt; D[(沙箱 /tmp)]
+    B --&gt; E[对话里只留<br/>预览 + 路径]
+    D -.read_file.- E
+</code></pre>
+<p>这也是为什么 <a href="../06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">执行环境（Execution Environments）</a> 是下一章的主题——预算系统必须依赖它才能把"自提柜"真正搭在正确的地方。</p>
+<hr/>
+<h2 id="_9">九、本章小结<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<p>恭喜！你已经掌握了 <code>hermes-agent</code> 的第五个核心抽象：</p>
+<ul>
+<li><strong>工具产物预算系统</strong>是一个<strong>三层防御</strong>机制，专门防止超大工具输出撑爆上下文窗口。</li>
+<li><strong>第 1 层</strong>：工具内部自己预截断（如 <code>bash</code> 输出截到 50KB）。</li>
+<li><strong>第 2 层</strong>：单条结果超阈值 → 写到沙箱临时文件，对话里只留预览 + 路径。</li>
+<li><strong>第 3 层</strong>：一轮所有结果加总仍超预算 → 把最大的几条继续溢出。</li>
+<li>所有阈值集中在 <code>BudgetConfig</code> 里，可以<strong>按工具单独调</strong>；<code>read_file</code> 被钉死为"永不持久化"，防止死循环。</li>
+<li>这套机制对<strong>模型完全透明</strong>——它只是看到"结果太大，存在文件 X 里"，需要时主动 <code>read_file</code> 自取。</li>
+</ul>
+<hr/>
+<p>预算系统能正常工作的前提，是要能<strong>把文件可靠地写进 agent 真正使用的那个文件系统</strong>——本地、Docker、SSH、Modal……它们的"文件系统"各不相同。我们需要一个统一的"执行环境"抽象，让 <code>env.execute(...)</code> 一行代码就能跨所有后端工作。</p>
+<p>那就是下一章的主角——<strong>执行环境</strong>。</p>
+<p>👉 继续学习：<a href="06_执行环境_执行环境_execution_environments__.md">执行环境（Execution Environments）</a></p>
+<hr/>
+<p>Generated by <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../../javascripts/mathjax.js"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

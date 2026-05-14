@@ -1,0 +1,1337 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解" name="description"/>
+<link href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/" rel="prev"/>
+<link href="../09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/" rel="next"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>8. 云服务可插拔后端 - 深度教学（GitHub 仓库 + 论文）</title>
+<link href="../../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#chapter-8-cloud-service-providers">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            深度教学（GitHub 仓库 + 论文）
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              8. 云服务可插拔后端
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../../../micrograd_overview/">
+          
+  
+  
+  GitHub 仓库
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../papers/2305.10601/">
+          
+  
+  
+  论文
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    深度教学（GitHub 仓库 + 论文）
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    GitHub 仓库
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    GitHub 仓库
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    micrograd
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    micrograd
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    1. 标量值与自动微分
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    2. 动态计算图
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    3. 反向传播与链式法则
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    4. 模块基类
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    5. 神经元
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    6. 神经网络层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    7. 多层感知机
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    nousresearch/hermes-agent
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_2_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    nousresearch/hermes-agent
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">
+<span class="md-ellipsis">
+    
+  
+    1. Provider 档案
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">
+<span class="md-ellipsis">
+    
+  
+    2. Provider 传输层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">
+<span class="md-ellipsis">
+    
+  
+    3. 上下文引擎
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">
+<span class="md-ellipsis">
+    
+  
+    4. 记忆提供方
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">
+<span class="md-ellipsis">
+    
+  
+    5. 工具产物预算系统
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">
+<span class="md-ellipsis">
+    
+  
+    6. 执行环境
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">
+<span class="md-ellipsis">
+    
+  
+    7. LSP 集成服务
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    8. 云服务可插拔后端
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    8. 云服务可插拔后端
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        一、问题从哪里来？一个"万能遥控器"的故事
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        二、本章的核心用例
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        三、关键概念逐个看
+      
+    </span>
+</a>
+<nav aria-label="三、关键概念逐个看" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#31-abc">
+<span class="md-ellipsis">
+      
+        3.1 "ABC + 注册表"双层结构
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#32">
+<span class="md-ellipsis">
+      
+        3.2 三个核心动作
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#33">
+<span class="md-ellipsis">
+      
+        3.3 标准化的返回格式
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#34-vs">
+<span class="md-ellipsis">
+      
+        3.4 "搜索" vs "抓取"——两个独立的遥控器
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        四、动手用一下！解决我们的用例
+      
+    </span>
+</a>
+<nav aria-label="四、动手用一下！解决我们的用例" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1">
+<span class="md-ellipsis">
+      
+        步骤 1：抽象基类长什么样
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2searxng">
+<span class="md-ellipsis">
+      
+        步骤 2：一个最简单的实现——SearXNG
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3brave">
+<span class="md-ellipsis">
+      
+        步骤 3：换一家——Brave
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4">
+<span class="md-ellipsis">
+      
+        步骤 4：在配置文件里换台
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5agent">
+<span class="md-ellipsis">
+      
+        步骤 5：agent 怎么调用？
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        五、内部是怎么运转的？
+      
+    </span>
+</a>
+<nav aria-label="五、内部是怎么运转的？" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#51">
+<span class="md-ellipsis">
+      
+        5.1 一段直白的流程描述
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#52">
+<span class="md-ellipsis">
+      
+        5.2 用图来理解
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        六、再深入一点：注册表的核心代码
+      
+    </span>
+</a>
+<nav aria-label="六、再深入一点：注册表的核心代码" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#61">
+<span class="md-ellipsis">
+      
+        6.1 注册一家选手
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#62">
+<span class="md-ellipsis">
+      
+        6.2 解析"当前激活的"是哪家
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#63">
+<span class="md-ellipsis">
+      
+        6.3 用同一套模板拷一份——视频版本
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      
+        七、各家"遥控器"长什么样？一张全家福
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      
+        八、看一眼"云浏览器"是怎么照着这套思路写的
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+<span class="md-ellipsis">
+      
+        九、想自己加一家新的搜索服务商？三步走
+      
+    </span>
+</a>
+<nav aria-label="九、想自己加一家新的搜索服务商？三步走" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1_1">
+<span class="md-ellipsis">
+      
+        步骤 1：建一个新文件
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        步骤 2：继承基类，实现三个方法
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3">
+<span class="md-ellipsis">
+      
+        步骤 3：在配置里启用
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+<span class="md-ellipsis">
+      
+        十、和前面章节的联系
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+<span class="md-ellipsis">
+      
+        十一、本章小结
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">
+<span class="md-ellipsis">
+    
+  
+    9. 安全与同意护栏
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../10_%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E6%B2%BB%E7%90%86_rate_limit_tracker___guard__/">
+<span class="md-ellipsis">
+    
+  
+    10. 速率限制与重试治理
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_3_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/">
+<span class="md-ellipsis">
+    
+  
+    论文速览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/">
+<span class="md-ellipsis">
+    
+  
+    1. 背景与前置知识
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+<span class="md-ellipsis">
+    
+  
+    2. 方法详解
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/03_%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C/">
+<span class="md-ellipsis">
+    
+  
+    3. 实验与结果
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+<span class="md-ellipsis">
+    
+  
+    4. 源码分析
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/05_%E8%A7%81%E8%A7%A3%E4%B8%8E%E6%89%A9%E5%B1%95/">
+<span class="md-ellipsis">
+    
+  
+    5. 见解与扩展
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="导航栏" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../../..">
+<span class="md-ellipsis">
+    首页
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    GitHub 仓库
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../">
+<span class="md-ellipsis">
+    nousresearch/hermes-agent
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="chapter-8-cloud-service-providers">Chapter 8: 云服务可插拔后端（Cloud Service Providers）<a class="headerlink" href="#chapter-8-cloud-service-providers" title="Permanent link">¶</a></h1>
+<p>在上一章 <a href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">LSP 集成服务（LSP Service）</a> 里，我们让 agent 拥有了一位"贴身代码审稿人"，可以在每次写完文件后立刻看到诊断红线。到现在为止，agent 已经能写代码、跑命令、记忆用户偏好、压缩长对话、跨 8 种环境作业、看代码诊断——这些都是<strong>编码相关</strong>的能力。</p>
+<p>但 agent 经常还要做一些"不在本地"的事：</p>
+<ul>
+<li>搜一下"今天北京天气怎么样"——得调一个<strong>搜索引擎</strong>。</li>
+<li>把某个网页内容抓回来分析——得调一个<strong>网页抓取服务</strong>。</li>
+<li>打开一个真实浏览器去填一张表单——得用一个<strong>云浏览器</strong>。</li>
+<li>根据描述生成一张配图——得调一个<strong>图像生成 API</strong>。</li>
+</ul>
+<p>每一类需求都有<strong>好多家厂商</strong>在抢生意：搜索有 Brave、SearXNG、DDGS；云浏览器有 Browserbase、Browser Use、Firecrawl；图像有 FAL、xAI……价格不一、限速不一、可用区不一。</p>
+<p>如果让 agent 把这些差异都背在身上，那是噩梦。本章主角——<strong>云服务可插拔后端（Cloud Service Providers）</strong>——就是用来把这一切藏在统一接口背后的"万能遥控器"。</p>
+<hr/>
+<h2 id="_1">一、问题从哪里来？一个"万能遥控器"的故事<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>想象你家客厅里有 5 台不同品牌的电视：索尼、LG、三星、TCL、小米。每台都附一只专属遥控器——5 只遥控器堆在茶几上，光找音量键就要翻三遍。</p>
+<p>聪明做法：买一只<strong>万能遥控器</strong>。</p>
+<ul>
+<li>你按"音量+"——它会自动用当前那台电视的协议发信号。</li>
+<li>你按"换台"——同理。</li>
+<li>哪天你换了一台新电视，只要"对一下码"就接上了。</li>
+</ul>
+<p><strong>遥控器的按键永远是那几个</strong>，对接的电视品牌可以随时换。这就是"接口与实现分离"的精髓。</p>
+<p><code>hermes-agent</code> 的云服务也是这样组织的：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>搜索遥控器  ──按下"搜索"键──┐
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>                          ├── 背后实际可以接 Brave / SearXNG / DDGS / Tavily ...
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>网页抓取遥控器 ──按下"抓取"键──┘
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>云浏览器遥控器 ──按下"开浏览器"键── 背后可以接 Browserbase / Browser Use / Firecrawl
+<a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>图像遥控器 ──按下"生成"键── 背后可以接 FAL / OpenAI / Replicate
+<a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>视频遥控器 ──按下"生成"键── 背后可以接 FAL / xAI / Google Veo
+</code></pre></div>
+<p>每一类都是"<strong>ABC（抽象基类） + 注册表</strong>"的双层结构。</p>
+<hr/>
+<h2 id="_2">二、本章的核心用例<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<blockquote>
+<p>用户想让 agent 用"网页搜索"工具找一下今天的新闻。我们想知道：</p>
+<ol>
+<li>agent 怎么"按下搜索键"？</li>
+<li><strong>不修改任何主代码</strong>，怎么从"用 Brave"切换到"用自己内网的 SearXNG"？</li>
+<li>想新加一家搜索服务商（比如 <code>Kagi</code>），需要做哪些事？</li>
+</ol>
+</blockquote>
+<p>读完本章，你就能回答这三个问题，并能照葫芦画瓢理解云浏览器、图像/视频生成这些"同款结构"的兄弟模块。</p>
+<hr/>
+<h2 id="_3">三、关键概念逐个看<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="31-abc">3.1 "ABC + 注册表"双层结构<a class="headerlink" href="#31-abc" title="Permanent link">¶</a></h3>
+<p>每一类云服务都长这副样子：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>┌──────────────────────────────────────┐
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>│ 抽象基类 (ABC)                       │
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>│   规定"每位选手必须会的动作"          │
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>│   例：search() / extract()           │
+<a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>└──────────────────────────────────────┘
+<a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>              ▲
+<a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>              │ 继承
+<a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a>   ┌──────────┼──────────┐
+<a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a>   │          │          │
+<a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a>┌─────┐   ┌──────┐   ┌──────┐
+<a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a>│Brave│   │SearXNG│  │ DDGS │
+<a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a>└─────┘   └──────┘   └──────┘
+<a href="#__codelineno-1-13" id="__codelineno-1-13" name="__codelineno-1-13"></a>   ▲          ▲          ▲
+<a href="#__codelineno-1-14" id="__codelineno-1-14" name="__codelineno-1-14"></a>   └──────────┴──────────┘
+<a href="#__codelineno-1-15" id="__codelineno-1-15" name="__codelineno-1-15"></a>              │ 注册
+<a href="#__codelineno-1-16" id="__codelineno-1-16" name="__codelineno-1-16"></a>        ┌─────────────┐
+<a href="#__codelineno-1-17" id="__codelineno-1-17" name="__codelineno-1-17"></a>        │   注册表    │  ← 主程序通过名字查表
+<a href="#__codelineno-1-18" id="__codelineno-1-18" name="__codelineno-1-18"></a>        └─────────────┘
+</code></pre></div>
+<p><strong>抽象基类</strong>说："想做搜索的，都必须实现 <code>search(query, limit)</code> 方法。"
+<strong>注册表</strong>说："谁注册了我就让谁上岗。"
+<strong>主程序</strong>说："给我现在配置里那一家就行，我不管你是谁。"</p>
+<h3 id="32">3.2 三个核心动作<a class="headerlink" href="#32" title="Permanent link">¶</a></h3>
+<p>任何"云服务可插拔后端"对外只暴露 3 个动作：</p>
+<table>
+<thead>
+<tr>
+<th>动作</th>
+<th>干什么</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>provider_name()</code> / <code>name</code></td>
+<td>报名</td>
+<td><code>"brave-free"</code> / <code>"searxng"</code></td>
+</tr>
+<tr>
+<td><code>is_configured()</code> / <code>is_available()</code></td>
+<td>自报"我能不能用"</td>
+<td>检查环境变量是否齐全</td>
+</tr>
+<tr>
+<td><code>search()</code> / <code>create_session()</code> / <code>generate()</code></td>
+<td>真正干活</td>
+<td>发请求、返回标准化结果</td>
+</tr>
+</tbody>
+</table>
+<p>注意第二个动作——<strong>自报家门</strong>。这是"插拔"的关键：注册表会问每位选手"你能不能上场"，没配 API Key 的就跳过，不会让你看到一个能选但一点都没用的选项。</p>
+<h3 id="33">3.3 标准化的返回格式<a class="headerlink" href="#33" title="Permanent link">¶</a></h3>
+<p>无论你选哪家搜索服务商，搜索结果<strong>永远长这样</strong>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="p">{</span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>    <span class="s2">"success"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>    <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span>
+<a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>        <span class="s2">"web"</span><span class="p">:</span> <span class="p">[</span>
+<a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>            <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span> <span class="s2">"url"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span> <span class="s2">"position"</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+<a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a>            <span class="o">...</span>
+<a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a>        <span class="p">]</span>
+<a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a>    <span class="p">}</span>
+<a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="p">}</span>
+</code></pre></div>
+<p>失败时也永远长这样：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="p">{</span><span class="s2">"success"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"error"</span><span class="p">:</span> <span class="s2">"为什么失败的说明"</span><span class="p">}</span>
+</code></pre></div>
+<p>这种"统一普通话"和前面 <a href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">Provider 传输层（Provider Transports）</a> 的 <code>NormalizedResponse</code> 是同一种哲学——<strong>调用方</strong>永远只学一种格式，<strong>实现方</strong>负责把自家的数据翻译成这种格式。</p>
+<h3 id="34-vs">3.4 "搜索" vs "抓取"——两个独立的遥控器<a class="headerlink" href="#34-vs" title="Permanent link">¶</a></h3>
+<p><code>hermes-agent</code> 把 web 能力切成了两类：</p>
+<ul>
+<li><strong>搜索（Search）</strong>：给关键词，返回结果链接列表。</li>
+<li><strong>抓取（Extract）</strong>：给一个 URL，返回这个网页的纯文本/Markdown 内容。</li>
+</ul>
+<p><strong>这两个能力是独立配置的</strong>——你可以用 SearXNG 搜索（免费、私有），同时用 Firecrawl 抓取（专业、能渲染 JS）。配置文件长这样：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">web</span><span class="p">:</span>
+<a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span><span class="nt">search_backend</span><span class="p">:</span><span class="w"> </span><span class="s">"searxng"</span><span class="w">        </span><span class="c1"># 这家只会搜，不会抓</span>
+<a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span><span class="nt">extract_backend</span><span class="p">:</span><span class="w"> </span><span class="s">"firecrawl"</span><span class="w">     </span><span class="c1"># 这家两个都能干</span>
+</code></pre></div>
+<hr/>
+<h2 id="_4">四、动手用一下！解决我们的用例<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p>我们走一遍"agent 调用搜索工具"的完整链路。</p>
+<h3 id="1">步骤 1：抽象基类长什么样<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
+<p>来自 <code>tools/web_providers/base.py</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">WebSearchProvider</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>    <span class="nd">@abstractmethod</span>
+<a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">provider_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+<a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a>    <span class="nd">@abstractmethod</span>
+<a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_configured</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="o">...</span>
+<a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a>    <span class="nd">@abstractmethod</span>
+<a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span> <span class="o">...</span>
+</code></pre></div>
+<p>三个抽象方法是"上岗准入"。<code>is_configured()</code> 不能发网络请求——只检查环境变量是否齐全。</p>
+<h3 id="2searxng">步骤 2：一个最简单的实现——SearXNG<a class="headerlink" href="#2searxng" title="Permanent link">¶</a></h3>
+<p>来自 <code>tools/web_providers/searxng.py</code>（核心部分）：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">SearXNGSearchProvider</span><span class="p">(</span><span class="n">WebSearchProvider</span><span class="p">):</span>
+<a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">provider_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a>        <span class="k">return</span> <span class="s2">"searxng"</span>
+<a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a>
+<a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_configured</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"SEARXNG_URL"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+</code></pre></div>
+<p>只要环境变量 <code>SEARXNG_URL</code> 配了，这位选手就报名"我能上场"。</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>        <span class="n">base_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"SEARXNG_URL"</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
+<a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a>        <span class="n">resp</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/search"</span><span class="p">,</span>
+<a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a>                         <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span> <span class="s2">"format"</span><span class="p">:</span> <span class="s2">"json"</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a>        <span class="n">raw</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"results"</span><span class="p">][:</span><span class="n">limit</span><span class="p">]</span>
+<a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a>        <span class="n">web</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"title"</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">"title"</span><span class="p">],</span> <span class="s2">"url"</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">"url"</span><span class="p">],</span>
+<a href="#__codelineno-7-7" id="__codelineno-7-7" name="__codelineno-7-7"></a>                <span class="s2">"description"</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">"content"</span><span class="p">],</span> <span class="s2">"position"</span><span class="p">:</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+<a href="#__codelineno-7-8" id="__codelineno-7-8" name="__codelineno-7-8"></a>               <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">raw</span><span class="p">)]</span>
+<a href="#__codelineno-7-9" id="__codelineno-7-9" name="__codelineno-7-9"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">"success"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"web"</span><span class="p">:</span> <span class="n">web</span><span class="p">}}</span>
+</code></pre></div>
+<p>工作流程很直白：发 HTTP 请求 → 拿到 JSON → 转成标准格式。<strong>注意最后返回的字典结构和前面规定的"普通话"完全一致</strong>。</p>
+<h3 id="3brave">步骤 3：换一家——Brave<a class="headerlink" href="#3brave" title="Permanent link">¶</a></h3>
+<p>来自 <code>tools/web_providers/brave_free.py</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">BraveFreeSearchProvider</span><span class="p">(</span><span class="n">WebSearchProvider</span><span class="p">):</span>
+<a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">provider_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"brave-free"</span>
+<a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_configured</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"BRAVE_SEARCH_API_KEY"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+</code></pre></div>
+<p>它的 <code>is_configured</code> 检查的是另一个环境变量。<code>search()</code> 内部细节也不同——用 <code>X-Subscription-Token</code> 头、走 <code>https://api.search.brave.com/...</code>——但<strong>返回格式还是那一套标准字典</strong>。</p>
+<h3 id="4">步骤 4：在配置文件里换台<a class="headerlink" href="#4" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="nt">web</span><span class="p">:</span>
+<a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="w">  </span><span class="nt">search_backend</span><span class="p">:</span><span class="w"> </span><span class="s">"brave-free"</span><span class="w">     </span><span class="c1"># 改成 "searxng" / "ddgs" / ...</span>
+</code></pre></div>
+<p><strong>主代码不动一行</strong>，搜索后端就切换了 🎉。</p>
+<h3 id="5agent">步骤 5：agent 怎么调用？<a class="headerlink" href="#5agent" title="Permanent link">¶</a></h3>
+<p>工具层（<code>web_search</code> 工具）大致这样做：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="n">provider</span> <span class="o">=</span> <span class="n">_select_search_provider</span><span class="p">()</span>   <span class="c1"># 读配置 → 查注册表 → 取实例</span>
+<a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="n">result</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">"今天北京天气"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<p>工具层从头到尾<strong>不知道</strong>自己在调 SearXNG 还是 Brave——它只看到一个实现了 <code>WebSearchProvider</code> 接口的对象。</p>
+<hr/>
+<h2 id="_5">五、内部是怎么运转的？<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<h3 id="51">5.1 一段直白的流程描述<a class="headerlink" href="#51" title="Permanent link">¶</a></h3>
+<p>agent 调用搜索工具时：</p>
+<ol>
+<li>工具层读取 <code>config["web"]["search_backend"]</code>，比如得到字符串 <code>"brave-free"</code>。</li>
+<li>它去注册表里查 <code>"brave-free"</code> → 拿回 <code>BraveFreeSearchProvider</code> 实例。</li>
+<li>它问实例 <code>is_configured()</code> → 看看环境变量配了没。</li>
+<li>调用 <code>provider.search(query, limit=5)</code>。</li>
+<li>provider 内部发 HTTP 请求、解析响应、转成标准格式。</li>
+<li>工具层把标准格式的字典 JSON 序列化，作为工具结果交给主循环。</li>
+<li>主循环把它喂给模型——模型只看到"网页结果列表"，根本不关心是哪家。</li>
+</ol>
+<h3 id="52">5.2 用图来理解<a class="headerlink" href="#52" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant A as Agent 主循环
+    participant T as web_search 工具
+    participant R as Provider 注册表
+    participant P as BraveFreeProvider
+    participant B as Brave API
+
+    A-&gt;&gt;T: 调用 web_search("北京天气")
+    T-&gt;&gt;R: 按配置取 search_backend
+    R--&gt;&gt;T: BraveFreeProvider 实例
+    T-&gt;&gt;P: search("北京天气", 5)
+    P-&gt;&gt;B: HTTPS 请求
+    B--&gt;&gt;P: Brave 原始 JSON
+    P--&gt;&gt;T: 标准化结果字典
+    T--&gt;&gt;A: JSON 字符串
+</code></pre>
+<p>注意：<strong>整个流程里"标准化"发生在 provider 内部</strong>——只有 provider 知道 Brave 的 JSON 结构，外面的世界统一只看标准格式。</p>
+<hr/>
+<h2 id="_6">六、再深入一点：注册表的核心代码<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<p>我们看 <code>agent/image_gen_registry.py</code>——所有"云服务注册表"都是这套结构：</p>
+<h3 id="61">6.1 注册一家选手<a class="headerlink" href="#61" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="n">_providers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ImageGenProvider</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a>
+<a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">register_provider</span><span class="p">(</span><span class="n">provider</span><span class="p">:</span> <span class="n">ImageGenProvider</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a>    <span class="k">with</span> <span class="n">_lock</span><span class="p">:</span>
+<a href="#__codelineno-11-6" id="__codelineno-11-6" name="__codelineno-11-6"></a>        <span class="n">_providers</span><span class="p">[</span><span class="n">provider</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">provider</span>
+</code></pre></div>
+<p>底层就是一个字典：键是名字，值是 provider 实例。<code>_lock</code> 保证多线程注册时不会出乱子。</p>
+<h3 id="62">6.2 解析"当前激活的"是哪家<a class="headerlink" href="#62" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_active_provider</span><span class="p">():</span>
+<a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>    <span class="n">configured</span> <span class="o">=</span> <span class="n">_read_from_config</span><span class="p">(</span><span class="s2">"image_gen.provider"</span><span class="p">)</span>
+<a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a>    <span class="k">if</span> <span class="n">configured</span> <span class="ow">and</span> <span class="n">configured</span> <span class="ow">in</span> <span class="n">_providers</span><span class="p">:</span>
+<a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a>        <span class="k">return</span> <span class="n">_providers</span><span class="p">[</span><span class="n">configured</span><span class="p">]</span>
+<a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_providers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<a href="#__codelineno-12-6" id="__codelineno-12-6" name="__codelineno-12-6"></a>        <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">_providers</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>   <span class="c1"># 只有一家就用这家</span>
+<a href="#__codelineno-12-7" id="__codelineno-12-7" name="__codelineno-12-7"></a>    <span class="k">if</span> <span class="s2">"fal"</span> <span class="ow">in</span> <span class="n">_providers</span><span class="p">:</span>
+<a href="#__codelineno-12-8" id="__codelineno-12-8" name="__codelineno-12-8"></a>        <span class="k">return</span> <span class="n">_providers</span><span class="p">[</span><span class="s2">"fal"</span><span class="p">]</span>                 <span class="c1"># 历史遗留默认</span>
+<a href="#__codelineno-12-9" id="__codelineno-12-9" name="__codelineno-12-9"></a>    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div>
+<p>优先级清晰：<strong>配置文件指定 &gt; 唯一一家就直接用 &gt; 兜底默认 &gt; 实在没有就 None</strong>。</p>
+<p>注意"兜底为 <code>None</code>"很重要——工具拿到 None 时会给用户一个友好的错误信息，提示他去 <code>hermes tools</code> 配置一下，<strong>而不是崩溃</strong>。</p>
+<h3 id="63">6.3 用同一套模板拷一份——视频版本<a class="headerlink" href="#63" title="Permanent link">¶</a></h3>
+<p><code>agent/video_gen_registry.py</code> 几乎和 <code>image_gen_registry.py</code> 一模一样：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="n">_providers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">VideoGenProvider</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a>
+<a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">register_provider</span><span class="p">(</span><span class="n">p</span><span class="p">):</span> <span class="o">...</span>
+<a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_active_provider</span><span class="p">():</span> <span class="o">...</span>
+</code></pre></div>
+<p>只是把 <code>ImageGenProvider</code> 换成 <code>VideoGenProvider</code>，把 <code>"image_gen"</code> 换成 <code>"video_gen"</code>。</p>
+<blockquote>
+<p>💡 <strong>设计哲学</strong>：每一类云服务都有自己<strong>独立的注册表</strong>——这样升级一个不会影响另一个，新加一类（比如未来想加"语音合成"）只要复制粘贴一份注册表模板就行。</p>
+</blockquote>
+<hr/>
+<h2 id="_7">七、各家"遥控器"长什么样？一张全家福<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<p>下面这张图展示了 <code>hermes-agent</code> 当前 5 类云服务的全景：</p>
+<pre class="mermaid"><code>flowchart TB
+    subgraph 搜索
+        SA[WebSearchProvider]
+        SA --&gt; B1[Brave]
+        SA --&gt; B2[SearXNG]
+        SA --&gt; B3[DDGS]
+    end
+    subgraph 抓取
+        EA[WebExtractProvider]
+        EA --&gt; E1[Firecrawl]
+        EA --&gt; E2[Tavily]
+        EA --&gt; E3[Exa]
+    end
+    subgraph 云浏览器
+        BA[CloudBrowserProvider]
+        BA --&gt; BR1[Browserbase]
+        BA --&gt; BR2[Browser Use]
+        BA --&gt; BR3[Firecrawl]
+    end
+    subgraph 图像生成
+        IA[ImageGenProvider]
+        IA --&gt; IM1[FAL]
+        IA --&gt; IM2[OpenAI]
+    end
+    subgraph 视频生成
+        VA[VideoGenProvider]
+        VA --&gt; VM1[FAL]
+        VA --&gt; VM2[xAI]
+    end
+</code></pre>
+<p><strong>5 类遥控器，每类都是同一个套路</strong>：</p>
+<ul>
+<li>一个抽象基类规定动作。</li>
+<li>N 个具体实现负责干活。</li>
+<li>一个独立的注册表负责发现和选用。</li>
+<li>配置文件里改一行字符串就切换。</li>
+</ul>
+<hr/>
+<h2 id="_8">八、看一眼"云浏览器"是怎么照着这套思路写的<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<p>来自 <code>tools/browser_providers/base.py</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">CloudBrowserProvider</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a>    <span class="nd">@abstractmethod</span>
+<a href="#__codelineno-14-3" id="__codelineno-14-3" name="__codelineno-14-3"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">provider_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+<a href="#__codelineno-14-4" id="__codelineno-14-4" name="__codelineno-14-4"></a>    <span class="nd">@abstractmethod</span>
+<a href="#__codelineno-14-5" id="__codelineno-14-5" name="__codelineno-14-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_configured</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="o">...</span>
+<a href="#__codelineno-14-6" id="__codelineno-14-6" name="__codelineno-14-6"></a>    <span class="nd">@abstractmethod</span>
+<a href="#__codelineno-14-7" id="__codelineno-14-7" name="__codelineno-14-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">create_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]:</span> <span class="o">...</span>
+<a href="#__codelineno-14-8" id="__codelineno-14-8" name="__codelineno-14-8"></a>    <span class="nd">@abstractmethod</span>
+<a href="#__codelineno-14-9" id="__codelineno-14-9" name="__codelineno-14-9"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">close_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="o">...</span>
+</code></pre></div>
+<p>熟悉的味道是不是？还是 <code>provider_name</code> + <code>is_configured</code> + 几个干活方法。但因为浏览器有"开/关会话"的概念，所以这里有两个核心动作：<code>create_session</code> 和 <code>close_session</code>。</p>
+<p>每位具体选手只要把这套接口实现一遍——比如 <code>BrowserbaseProvider</code> 用 <code>https://api.browserbase.com/v1/sessions</code> 创建会话，<code>BrowserUseProvider</code> 用 <code>https://api.browser-use.com/api/v3/browsers</code>——它们返回的字典都长这样：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="p">{</span>
+<a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a>    <span class="s2">"session_name"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span>   <span class="c1"># 给主程序内部用</span>
+<a href="#__codelineno-15-3" id="__codelineno-15-3" name="__codelineno-15-3"></a>    <span class="s2">"bb_session_id"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span>  <span class="c1"># 提供方那边的 ID</span>
+<a href="#__codelineno-15-4" id="__codelineno-15-4" name="__codelineno-15-4"></a>    <span class="s2">"cdp_url"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span>        <span class="c1"># Chrome DevTools 协议连接 URL</span>
+<a href="#__codelineno-15-5" id="__codelineno-15-5" name="__codelineno-15-5"></a>    <span class="s2">"features"</span><span class="p">:</span> <span class="p">{</span><span class="o">...</span><span class="p">},</span>       <span class="c1"># 启用了什么特性</span>
+<a href="#__codelineno-15-6" id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>调用方拿到这个字典就够了</strong>——它根本不需要知道幕后是 Browserbase 还是 Browser Use。</p>
+<hr/>
+<h2 id="_9">九、想自己加一家新的搜索服务商？三步走<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<p>假设我们想接入 <code>Kagi</code>：</p>
+<h3 id="1_1">步骤 1：建一个新文件<a class="headerlink" href="#1_1" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a>tools/web_providers/kagi.py
+</code></pre></div>
+<h3 id="2">步骤 2：继承基类，实现三个方法<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tools.web_providers.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebSearchProvider</span>
+<a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a>
+<a href="#__codelineno-17-3" id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">KagiSearchProvider</span><span class="p">(</span><span class="n">WebSearchProvider</span><span class="p">):</span>
+<a href="#__codelineno-17-4" id="__codelineno-17-4" name="__codelineno-17-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">provider_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"kagi"</span>
+<a href="#__codelineno-17-5" id="__codelineno-17-5" name="__codelineno-17-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_configured</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a href="#__codelineno-17-6" id="__codelineno-17-6" name="__codelineno-17-6"></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"KAGI_API_KEY"</span><span class="p">))</span>
+</code></pre></div>
+<p>身份和"自报家门"。</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-18-1" id="__codelineno-18-1" name="__codelineno-18-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<a href="#__codelineno-18-2" id="__codelineno-18-2" name="__codelineno-18-2"></a>        <span class="n">resp</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://kagi.com/api/v0/search"</span><span class="p">,</span>
+<a href="#__codelineno-18-3" id="__codelineno-18-3" name="__codelineno-18-3"></a>                         <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span> <span class="s2">"limit"</span><span class="p">:</span> <span class="n">limit</span><span class="p">},</span>
+<a href="#__codelineno-18-4" id="__codelineno-18-4" name="__codelineno-18-4"></a>                         <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">"Authorization"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Bot </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'KAGI_API_KEY'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">})</span>
+<a href="#__codelineno-18-5" id="__codelineno-18-5" name="__codelineno-18-5"></a>        <span class="c1"># ... 把 Kagi 的 JSON 转成标准格式</span>
+<a href="#__codelineno-18-6" id="__codelineno-18-6" name="__codelineno-18-6"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">"success"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"web"</span><span class="p">:</span> <span class="p">[</span><span class="o">...</span><span class="p">]}}</span>
+</code></pre></div>
+<p>发请求、转格式。<strong>只要返回字典的形状正确，外面没人在乎你内部是怎么调的</strong>。</p>
+<h3 id="3">步骤 3：在配置里启用<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-19-1" id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="nt">web</span><span class="p">:</span>
+<a href="#__codelineno-19-2" id="__codelineno-19-2" name="__codelineno-19-2"></a><span class="w">  </span><span class="nt">search_backend</span><span class="p">:</span><span class="w"> </span><span class="s">"kagi"</span>
+</code></pre></div>
+<p>外加在某个加载钩子里调一次 <code>_PROVIDER_REGISTRY["kagi"] = KagiSearchProvider()</code>（一般已经在 <code>web_providers/__init__.py</code> 里自动完成）。</p>
+<p>完事——主代码一行没动 🎉。</p>
+<hr/>
+<h2 id="_10">十、和前面章节的联系<a class="headerlink" href="#_10" title="Permanent link">¶</a></h2>
+<p>让我们回头看看这套"可插拔后端"和之前的核心抽象是怎么呼应的：</p>
+<table>
+<thead>
+<tr>
+<th>章节</th>
+<th>同款"可插拔"模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">Provider 档案（Provider Profiles）</a></td>
+<td>LLM 服务商档案</td>
+</tr>
+<tr>
+<td><a href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">Provider 传输层（Provider Transports）</a></td>
+<td>一种 api_mode 对应一个 Transport</td>
+</tr>
+<tr>
+<td><a href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">上下文引擎（Context Engine）</a></td>
+<td>一种压缩策略对应一个 Engine</td>
+</tr>
+<tr>
+<td><a href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">记忆提供方（Memory Provider）</a></td>
+<td>一种长期记忆后端对应一个 Provider</td>
+</tr>
+<tr>
+<td><a href="../06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">执行环境（Execution Environments）</a></td>
+<td>一种沙箱后端对应一个 Environment</td>
+</tr>
+<tr>
+<td><strong>本章</strong></td>
+<td>一种搜索/浏览器/图像 API 对应一个 Provider</td>
+</tr>
+</tbody>
+</table>
+<p>是的——<code>hermes-agent</code> 整个项目可以总结成一句话：<strong>"凡是有'多家厂商抢生意'的地方，都用 ABC + 注册表 把它做成可插拔的。"</strong> 这是项目最一以贯之的设计哲学。</p>
+<hr/>
+<h2 id="_11">十一、本章小结<a class="headerlink" href="#_11" title="Permanent link">¶</a></h2>
+<p>恭喜！你已经掌握了 <code>hermes-agent</code> 的第八个核心抽象：</p>
+<ul>
+<li><strong>云服务可插拔后端</strong>用"<strong>ABC + 注册表</strong>"的双层结构把搜索、抓取、云浏览器、图像/视频生成统一成"万能遥控器"。</li>
+<li>每一类服务都有自己的抽象基类（<code>WebSearchProvider</code> / <code>CloudBrowserProvider</code> / <code>ImageGenProvider</code> / <code>VideoGenProvider</code> …）和<strong>独立的注册表</strong>。</li>
+<li>所有 provider 都必须实现三件事：<strong>报名</strong>（<code>provider_name</code>）、<strong>自报家门</strong>（<code>is_configured</code> / <code>is_available</code>）、<strong>真正干活</strong>（<code>search</code> / <code>create_session</code> / <code>generate</code> …）。</li>
+<li>返回值是<strong>标准化字典</strong>——调用方学一种"普通话"就够，不需要管底层是 Brave、SearXNG 还是 Kagi。</li>
+<li><strong>配置文件改一行</strong>就能换厂商，主代码完全不动；新加一家厂商只需写一个继承基类的新文件。</li>
+<li>这套模式是 <code>hermes-agent</code> 整个项目最重复出现的设计哲学——和 Provider 档案、Transport、Context Engine、Memory Provider、Execution Environment 同根同源。</li>
+</ul>
+<hr/>
+<p>到这里，agent 已经能调用各种外部云服务了——搜东西、开浏览器、生成图片视频。但有了这些能力<strong>也意味着有了风险</strong>：万一 agent 一不小心搜了奇怪的内容、或者打开浏览器去访问一个不该访问的网站、或者生成了一张不合规的图片，怎么办？这就引出了下一章的问题：<strong>我们需要一道"门禁系统"，在关键动作执行前向用户征求同意，避免 agent 做出不可逆的危险动作</strong>。</p>
+<p>那就是下一章的主角——<strong>安全与同意护栏</strong>。</p>
+<p>👉 继续学习：<a href="../09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">安全与同意护栏（Safety &amp; Consent Guardrails）</a></p>
+<hr/>
+<p>Generated by <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../../javascripts/mathjax.js"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

@@ -1,0 +1,1244 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解" name="description"/>
+<link href="../09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/" rel="prev"/>
+<link href="../../../papers/2305.10601/" rel="next"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>10. 速率限制与重试治理 - 深度教学（GitHub 仓库 + 论文）</title>
+<link href="../../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#chapter-10-rate-limit-tracker-guard">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            深度教学（GitHub 仓库 + 论文）
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              10. 速率限制与重试治理
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../../../micrograd_overview/">
+          
+  
+  
+  GitHub 仓库
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../papers/2305.10601/">
+          
+  
+  
+  论文
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    深度教学（GitHub 仓库 + 论文）
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    GitHub 仓库
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    GitHub 仓库
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    micrograd
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    micrograd
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    1. 标量值与自动微分
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    2. 动态计算图
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    3. 反向传播与链式法则
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    4. 模块基类
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    5. 神经元
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    6. 神经网络层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    7. 多层感知机
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    nousresearch/hermes-agent
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_2_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    nousresearch/hermes-agent
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">
+<span class="md-ellipsis">
+    
+  
+    1. Provider 档案
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">
+<span class="md-ellipsis">
+    
+  
+    2. Provider 传输层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">
+<span class="md-ellipsis">
+    
+  
+    3. 上下文引擎
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">
+<span class="md-ellipsis">
+    
+  
+    4. 记忆提供方
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">
+<span class="md-ellipsis">
+    
+  
+    5. 工具产物预算系统
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">
+<span class="md-ellipsis">
+    
+  
+    6. 执行环境
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">
+<span class="md-ellipsis">
+    
+  
+    7. LSP 集成服务
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/">
+<span class="md-ellipsis">
+    
+  
+    8. 云服务可插拔后端
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">
+<span class="md-ellipsis">
+    
+  
+    9. 安全与同意护栏
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    10. 速率限制与重试治理
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    10. 速率限制与重试治理
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        一、问题从哪里来？一个"高速公路堵车"的故事
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        二、本章的核心用例
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        三、关键概念逐个看
+      
+    </span>
+</a>
+<nav aria-label="三、关键概念逐个看" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#31-x-ratelimit-">
+<span class="md-ellipsis">
+      
+        3.1 x-ratelimit-*：服务商给你的"仪表盘"
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#32-429-vs-429nous-portal">
+<span class="md-ellipsis">
+      
+        3.2 真 429 vs 假 429：Nous Portal 的特殊之处
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#33">
+<span class="md-ellipsis">
+      
+        3.3 共享文件作"红绿灯"：为什么要持久化？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#34-jitter">
+<span class="md-ellipsis">
+      
+        3.4 带 jitter 的指数退避：错峰起步
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        四、动手用一下！跟着核心用例走一遍
+      
+    </span>
+</a>
+<nav aria-label="四、动手用一下！跟着核心用例走一遍" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-x-ratelimit-">
+<span class="md-ellipsis">
+      
+        步骤 1：每次成功响应后，解析 x-ratelimit-* 头
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        步骤 2：以人类友好的方式展示
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3-429">
+<span class="md-ellipsis">
+      
+        步骤 3：遇到真 429 时，记录红灯状态
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4">
+<span class="md-ellipsis">
+      
+        步骤 4：每次发请求前先看红绿灯
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5-jitter">
+<span class="md-ellipsis">
+      
+        步骤 5：真要重试时，用 jitter 退避
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        五、内部是怎么运转的？
+      
+    </span>
+</a>
+<nav aria-label="五、内部是怎么运转的？" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#51">
+<span class="md-ellipsis">
+      
+        5.1 一段直白的流程描述
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#52">
+<span class="md-ellipsis">
+      
+        5.2 用图来理解
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        六、再深入一点：关键源码片段
+      
+    </span>
+</a>
+<nav aria-label="六、再深入一点：关键源码片段" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#61-rate_limit_trackerpy">
+<span class="md-ellipsis">
+      
+        6.1 解析头字段（来自 rate_limit_tracker.py）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#62">
+<span class="md-ellipsis">
+      
+        6.2 "实时剩余时间"的小聪明
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#63-nous_rate_guardpy">
+<span class="md-ellipsis">
+      
+        6.3 原子写文件（来自 nous_rate_guard.py）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#64-429">
+<span class="md-ellipsis">
+      
+        6.4 真假 429 的判定
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#65-jitter-retry_utilspy">
+<span class="md-ellipsis">
+      
+        6.5 jitter 退避的实现细节（来自 retry_utils.py）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      
+        七、整体协作的一张图
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      
+        八、和前面章节的联系
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+<span class="md-ellipsis">
+      
+        九、本章小结
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+<span class="md-ellipsis">
+      
+        全书完结
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_3_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/">
+<span class="md-ellipsis">
+    
+  
+    论文速览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/">
+<span class="md-ellipsis">
+    
+  
+    1. 背景与前置知识
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+<span class="md-ellipsis">
+    
+  
+    2. 方法详解
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/03_%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C/">
+<span class="md-ellipsis">
+    
+  
+    3. 实验与结果
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+<span class="md-ellipsis">
+    
+  
+    4. 源码分析
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/05_%E8%A7%81%E8%A7%A3%E4%B8%8E%E6%89%A9%E5%B1%95/">
+<span class="md-ellipsis">
+    
+  
+    5. 见解与扩展
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="导航栏" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../../..">
+<span class="md-ellipsis">
+    首页
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    GitHub 仓库
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../">
+<span class="md-ellipsis">
+    nousresearch/hermes-agent
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="chapter-10-rate-limit-tracker-guard">Chapter 10: 速率限制与重试治理（Rate Limit Tracker &amp; Guard）<a class="headerlink" href="#chapter-10-rate-limit-tracker-guard" title="Permanent link">¶</a></h1>
+<p>在上一章 <a href="../09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">安全与同意护栏（Safety &amp; Consent Guardrails）</a> 里，我们给 agent 装上了一整套"门禁系统"——保险柜门、猫眼、合同复查员……agent 现在已经被武装得相当完整了。</p>
+<p>但还有一个隐形的"交通警察"在背后默默调度——<strong>速率限制</strong>。</p>
+<ul>
+<li>你调 OpenAI 太快了 → 服务商返回 429。</li>
+<li>你调 Brave 太频繁了 → 工具失败。</li>
+<li>一旦 429 后还不停重试 → 重试本身又消耗配额，雪上加霜。</li>
+<li>更糟的是：你有 5 个会话同时跑（CLI + 网关 + cron + 一堆 subagent），它们<strong>互相不知道彼此已经触发了限流</strong>，于是 5 路一起拼命重试——配额被翻 5 倍速消耗。</li>
+</ul>
+<p>本章主角 <strong>速率限制与重试治理（Rate Limit Tracker &amp; Guard）</strong> 就是来当这位交通警察的：在多车道高速公路上立"前方拥堵预警 + 红绿灯"，让所有车道（会话）<strong>统一减速</strong>，而不是一起踩油门加剧拥堵。</p>
+<hr/>
+<h2 id="_1">一、问题从哪里来？一个"高速公路堵车"的故事<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>想象一条 5 车道的高速路：</p>
+<p><strong>糟糕的场景</strong>：
+- 前方出了点小拥堵，车道 A 的司机踩油门变道想超车 → 没用，他也卡住了。
+- 同一时刻，车道 B、C、D、E 的司机也都踩油门想超车 → 5 个人一起冲，堵得更死。
+- 大家一起 honking，然后<strong>全员同时再踩一次油门</strong>——所谓的"重试风暴"或"惊群效应"（thundering herd）。</p>
+<p><strong>正确的做法</strong>：
+1. <strong>前方预警</strong>：路边电子屏告诉所有人"前方 3 公里有拥堵，你目前剩余通行配额 30%"。
+2. <strong>红绿灯</strong>：真出事了（事故封路），就在所有入口同步亮红灯——每个车道都看得见，统一等。
+3. <strong>错峰起步</strong>：红灯转绿时，不让所有车一起冲，每辆车随机等 0~5 秒（jitter）再走，避免又堵在一起。</p>
+<p><code>hermes-agent</code> 用三个小模块对应这三件事：</p>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>角色</th>
+<th>解决的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RateLimitTracker</code>（<code>rate_limit_tracker.py</code>）</td>
+<td>电子预警屏</td>
+<td>解析 <code>x-ratelimit-*</code> 响应头，告诉你"还剩多少配额、什么时候重置"</td>
+</tr>
+<tr>
+<td><code>nous_rate_guard</code>（<code>nous_rate_guard.py</code>）</td>
+<td>红绿灯</td>
+<td>真的 429 配额耗尽时，把状态写到<strong>共享文件</strong>，所有会话同步避让</td>
+</tr>
+<tr>
+<td><code>retry_utils</code>（<code>retry_utils.py</code>）</td>
+<td>错峰起步规则</td>
+<td>重试时用<strong>带抖动的指数退避</strong>，避免雪崩</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="_2">二、本章的核心用例<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<blockquote>
+<p>agent 通过 Nous Portal 调用模型，遇到 429 错误，错误信息里写着"小时配额已耗尽，3600 秒后重置"。我们希望：</p>
+<ol>
+<li><strong>正在跑的这次请求</strong>用带 jitter 的退避策略重试，不要立刻死扛。</li>
+<li>这个"3600 秒后才能恢复"的状态被<strong>持久化到磁盘</strong>，所以即便另一个并发的 CLI、网关或 cron 会话同时跑起来，它们<strong>也能立刻看到红灯</strong>，根本不发请求。</li>
+<li><strong>能区分"真限流"和"假限流"</strong>——上游某个模型偶发抽风的小 429 不应该把整个 Nous 锁死。</li>
+</ol>
+</blockquote>
+<p>读完本章你会看清这三件事是怎么协同的。</p>
+<hr/>
+<h2 id="_3">三、关键概念逐个看<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="31-x-ratelimit-">3.1 <code>x-ratelimit-*</code>：服务商给你的"仪表盘"<a class="headerlink" href="#31-x-ratelimit-" title="Permanent link">¶</a></h3>
+<p>现代 LLM API（Nous、OpenRouter、OpenAI 兼容）都会在响应头里附带这一套数字：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>x-ratelimit-limit-requests        每分钟请求上限
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>x-ratelimit-remaining-requests    本分钟还剩几次
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>x-ratelimit-reset-requests        本分钟窗口几秒后重置
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>x-ratelimit-limit-requests-1h     每小时请求上限
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>x-ratelimit-remaining-requests-1h ...
+<a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>... 还有 tokens 的 4 个对应字段
+</code></pre></div>
+<p>总共 <strong>4 个维度 × 3 类字段 = 12 个 header</strong>。<code>RateLimitTracker</code> 把它们解析成一个 Python 对象，让 agent 能像看仪表盘一样查看："咦，RPH 还剩 30%，再用谨慎一点。"</p>
+<h3 id="32-429-vs-429nous-portal">3.2 真 429 vs 假 429：Nous Portal 的特殊之处<a class="headerlink" href="#32-429-vs-429nous-portal" title="Permanent link">¶</a></h3>
+<p>Nous Portal 在一个端点后面<strong>多路复用</strong>了好几个上游模型（DeepSeek、Kimi、MiMo……）。所以 429 其实有两种含义：</p>
+<ul>
+<li><strong>真限流</strong>：你自己账户在 Nous 上的 RPM/RPH 桶用光了 → 这是真的没配额，硬扛没用。</li>
+<li><strong>假限流</strong>：某个具体上游模型（比如 DeepSeek）瞬时容量不够 → 几秒就恢复，跟你账户没关系。</li>
+</ul>
+<p>如果把"假限流"也当真的 → 你会把整个 Nous 锁死几分钟，所有模型都不能用。这就是 <code>is_genuine_nous_rate_limit()</code> 要细致区分的事——只有响应头明确表示"某个桶 remaining=0 且 reset&gt;=60 秒"才认定为真。</p>
+<h3 id="33">3.3 共享文件作"红绿灯"：为什么要持久化？<a class="headerlink" href="#33" title="Permanent link">¶</a></h3>
+<p>每个 429 在 Nous 这边可能触发<strong>多达 9 次重试调用</strong>（SDK 3 次 × Hermes 3 次）。如果你同时跑 5 个会话——那就是 45 次几乎同时的请求。这就是<strong>重试放大效应</strong>。</p>
+<p>解决方案：第一次确认"真限流"后，立刻把状态写进 <code>~/.hermes/rate_limits/nous.json</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">{</span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="nt">"reset_at"</span><span class="p">:</span><span class="w"> </span><span class="mf">1715701200.0</span><span class="p">,</span>
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span><span class="nt">"recorded_at"</span><span class="p">:</span><span class="w"> </span><span class="mf">1715697600.0</span><span class="p">,</span>
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">  </span><span class="nt">"reset_seconds"</span><span class="p">:</span><span class="w"> </span><span class="mf">3600.0</span>
+<a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>任何会话</strong>（CLI、网关、cron）在发请求前先 <code>cat</code> 一下这个文件——发现还在限流期就<strong>直接跳过</strong>，根本不发请求。这就是跨进程的"红绿灯"。</p>
+<h3 id="34-jitter">3.4 带 jitter 的指数退避：错峰起步<a class="headerlink" href="#34-jitter" title="Permanent link">¶</a></h3>
+<p>最经典的退避策略是"指数退避"：第 1 次等 5 秒、第 2 次等 10 秒、第 3 次等 20 秒……但如果两个进程<strong>同步</strong>触发，它们也会<strong>同步</strong>地在第 5、10、20 秒一起重试——又一次惊群。</p>
+<p>加上 jitter（抖动）就好了：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>delay = min(5 * 2^(attempt-1), 120) + random(0, 0.5 * delay)
+</code></pre></div>
+<p>每次重试时间加一点"随机噪声"，让多个并发会话<strong>自动错峰</strong>。这是 AWS Architecture Blog 推广的经典做法。</p>
+<hr/>
+<h2 id="_4">四、动手用一下！跟着核心用例走一遍<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<h3 id="1-x-ratelimit-">步骤 1：每次成功响应后，解析 <code>x-ratelimit-*</code> 头<a class="headerlink" href="#1-x-ratelimit-" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">agent.rate_limit_tracker</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_rate_limit_headers</span>
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>
+<a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="n">state</span> <span class="o">=</span> <span class="n">parse_rate_limit_headers</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">"nous"</span><span class="p">)</span>
+<a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="c1"># state 是 RateLimitState 对象，包含 4 个 bucket</span>
+</code></pre></div>
+<p><strong>输入</strong>：HTTP 响应的 headers 字典。
+<strong>输出</strong>：一个结构化对象，你能问它"requests_hour.remaining 还剩多少？"。</p>
+<h3 id="2">步骤 2：以人类友好的方式展示<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">agent.rate_limit_tracker</span><span class="w"> </span><span class="kn">import</span> <span class="n">format_rate_limit_display</span>
+<a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>
+<a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">format_rate_limit_display</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+</code></pre></div>
+<p><strong>输出</strong>大致长这样：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>Nous Rate Limits (captured just now):
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>
+<a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>  Requests/min   [██░░░░░░░░░░░░░░░░░░]  10.0%  10/100 used  (90 left, resets in 47s)
+<a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a>  Requests/hr    [████████████░░░░░░░░]  60.0%  600/1000 used  (400 left, resets in 38m)
+<a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a>
+<a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a>  Tokens/min     [████░░░░░░░░░░░░░░░░]  20.0%  40K/200K used  (160K left, resets in 30s)
+</code></pre></div>
+<p>这是 <code>/usage</code> 斜杠命令显示的内容——一目了然地告诉用户"前方还剩多少燃料"。</p>
+<h3 id="3-429">步骤 3：遇到真 429 时，记录红灯状态<a class="headerlink" href="#3-429" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">agent.nous_rate_guard</span><span class="w"> </span><span class="kn">import</span> <span class="n">record_nous_rate_limit</span><span class="p">,</span> <span class="n">is_genuine_nous_rate_limit</span>
+<a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>
+<a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="k">if</span> <span class="n">is_genuine_nous_rate_limit</span><span class="p">(</span><span class="n">headers</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span> <span class="n">last_known_state</span><span class="o">=</span><span class="n">state</span><span class="p">):</span>
+<a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a>    <span class="n">record_nous_rate_limit</span><span class="p">(</span><span class="n">headers</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>输入</strong>：429 响应的 headers + 上一次成功时记录的 state。
+<strong>效果</strong>：如果判定为真限流，把"reset_at"写到 <code>~/.hermes/rate_limits/nous.json</code>。这是个原子写——别的会话立刻能读到。</p>
+<h3 id="4">步骤 4：每次发请求前先看红绿灯<a class="headerlink" href="#4" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">agent.nous_rate_guard</span><span class="w"> </span><span class="kn">import</span> <span class="n">nous_rate_limit_remaining</span><span class="p">,</span> <span class="n">format_remaining</span>
+<a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>
+<a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="n">remaining</span> <span class="o">=</span> <span class="n">nous_rate_limit_remaining</span><span class="p">()</span>
+<a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="k">if</span> <span class="n">remaining</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"⛔ Nous is rate-limited. Wait </span><span class="si">{</span><span class="n">format_remaining</span><span class="p">(</span><span class="n">remaining</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+<a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a>    <span class="k">return</span>
+</code></pre></div>
+<p><strong>输入</strong>：什么都不给。
+<strong>输出</strong>：要么 <code>None</code>（绿灯，可以走），要么"还剩多少秒"（红灯，赶紧停）。</p>
+<p>这一段会在每次调用 Nous <strong>之前</strong>跑一遍——是跨会话同步避让的核心。</p>
+<h3 id="5-jitter">步骤 5：真要重试时，用 jitter 退避<a class="headerlink" href="#5-jitter" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">agent.retry_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">jittered_backoff</span>
+<a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>
+<a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+<a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a>    <span class="k">try</span><span class="p">:</span> <span class="k">return</span> <span class="n">call_api</span><span class="p">()</span>
+<a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a>    <span class="k">except</span> <span class="n">RateLimitError</span><span class="p">:</span>
+<a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">jittered_backoff</span><span class="p">(</span><span class="n">attempt</span><span class="p">))</span>
+</code></pre></div>
+<p><strong>输入</strong>：第几次重试。
+<strong>输出</strong>：一个介于"基础退避时间"和"基础退避+50% jitter"之间的随机延迟。多个会话同时跑这段代码时，它们会<strong>自动错峰</strong>重试。</p>
+<hr/>
+<h2 id="_5">五、内部是怎么运转的？<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<h3 id="51">5.1 一段直白的流程描述<a class="headerlink" href="#51" title="Permanent link">¶</a></h3>
+<p>一次完整的"调用 + 限流处理"链路是这样的：</p>
+<ol>
+<li><strong>预检</strong>：调 <code>nous_rate_limit_remaining()</code>——如果文件里写着"还在限流期"，直接放弃，根本不发请求。</li>
+<li><strong>发请求</strong>：调 Nous API。</li>
+<li><strong>成功路径</strong>：</li>
+<li>用 <code>parse_rate_limit_headers()</code> 把响应头解析成 <code>RateLimitState</code>，缓存起来（供 <code>/usage</code> 命令显示）。</li>
+<li>调 <code>clear_nous_rate_limit()</code> 删除红灯文件（确认通畅）。</li>
+<li><strong>失败路径（收到 429）</strong>：</li>
+<li>调 <code>is_genuine_nous_rate_limit()</code> 判定真假——看响应头里 <code>remaining==0 且 reset&gt;=60s</code> 吗？</li>
+<li>真限流 → 调 <code>record_nous_rate_limit()</code> 写红灯文件。</li>
+<li>假限流 → 不写文件，只让本次请求失败，重试机制接管。</li>
+<li><strong>重试</strong>：用 <code>jittered_backoff(attempt)</code> 计算延迟，sleep 之后回到第 1 步。</li>
+</ol>
+<h3 id="52">5.2 用图来理解<a class="headerlink" href="#52" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant S1 as 会话 A (CLI)
+    participant S2 as 会话 B (网关)
+    participant F as 共享文件<br/>nous.json
+    participant N as Nous Portal
+
+    S1-&gt;&gt;F: nous_rate_limit_remaining()
+    F--&gt;&gt;S1: None (绿灯)
+    S1-&gt;&gt;N: POST /v1/chat/completions
+    N--&gt;&gt;S1: 429 + 真限流 headers
+    S1-&gt;&gt;F: record_nous_rate_limit()
+    Note over F: 写入 reset_at=now+3600
+
+    S2-&gt;&gt;F: nous_rate_limit_remaining()
+    F--&gt;&gt;S2: 3598.5 (红灯！)
+    Note over S2: 直接放弃，不发请求
+</code></pre>
+<p><strong>关键洞察</strong>：会话 A 替会话 B "挨了那一刀"——B 没浪费一次请求就知道现在不能调。这就是跨会话协调的价值。</p>
+<hr/>
+<h2 id="_6">六、再深入一点：关键源码片段<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<h3 id="61-rate_limit_trackerpy">6.1 解析头字段（来自 <code>rate_limit_tracker.py</code>）<a class="headerlink" href="#61-rate_limit_trackerpy" title="Permanent link">¶</a></h3>
+<p>核心是一个"小工厂方法"，给定资源名和后缀就能造一个 bucket：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_bucket</span><span class="p">(</span><span class="n">resource</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RateLimitBucket</span><span class="p">:</span>
+<a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a>    <span class="n">tag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">resource</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">"</span>
+<a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a>    <span class="k">return</span> <span class="n">RateLimitBucket</span><span class="p">(</span>
+<a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a>        <span class="n">limit</span><span class="o">=</span><span class="n">_safe_int</span><span class="p">(</span><span class="n">lowered</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">"x-ratelimit-limit-</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">"</span><span class="p">)),</span>
+<a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a>        <span class="n">remaining</span><span class="o">=</span><span class="n">_safe_int</span><span class="p">(</span><span class="n">lowered</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">"x-ratelimit-remaining-</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">"</span><span class="p">)),</span>
+<a href="#__codelineno-9-6" id="__codelineno-9-6" name="__codelineno-9-6"></a>        <span class="n">reset_seconds</span><span class="o">=</span><span class="n">_safe_float</span><span class="p">(</span><span class="n">lowered</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">"x-ratelimit-reset-</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">"</span><span class="p">)),</span>
+<a href="#__codelineno-9-7" id="__codelineno-9-7" name="__codelineno-9-7"></a>        <span class="n">captured_at</span><span class="o">=</span><span class="n">now</span><span class="p">,</span>
+<a href="#__codelineno-9-8" id="__codelineno-9-8" name="__codelineno-9-8"></a>    <span class="p">)</span>
+</code></pre></div>
+<p>四类 bucket 用同一个函数生成：<code>_bucket("requests")</code>、<code>_bucket("requests", "-1h")</code>、<code>_bucket("tokens")</code>、<code>_bucket("tokens", "-1h")</code>——避免重复代码。</p>
+<h3 id="62">6.2 "实时剩余时间"的小聪明<a class="headerlink" href="#62" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="nd">@property</span>
+<a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">remaining_seconds_now</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a>    <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">captured_at</span>
+<a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a>    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_seconds</span> <span class="o">-</span> <span class="n">elapsed</span><span class="p">)</span>
+</code></pre></div>
+<p>为什么需要这个？因为响应头里写的"还有 47 秒重置"是<strong>那个瞬间</strong>的——你 30 秒后再看，应该显示"还有 17 秒重置"。这里减去已流逝时间，让显示数字一直保持新鲜。</p>
+<h3 id="63-nous_rate_guardpy">6.3 原子写文件（来自 <code>nous_rate_guard.py</code>）<a class="headerlink" href="#63-nous_rate_guardpy" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="n">fd</span><span class="p">,</span> <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">state_dir</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">".tmp"</span><span class="p">)</span>
+<a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">fdopen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a>    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+<a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="n">atomic_replace</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>为什么不直接 <code>open(path, "w")</code>？</strong> 因为如果在写到一半时进程崩了，文件会变成"半写状态"——其他会话读到时会拿到坏 JSON。</p>
+<p><strong>原子替换</strong>保证：要么完整看到旧版本，要么完整看到新版本，永远不会看到半成品。这是文件系统级的"事务性"。</p>
+<h3 id="64-429">6.4 真假 429 的判定<a class="headerlink" href="#64-429" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">is_genuine_nous_rate_limit</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">last_known_state</span><span class="p">):</span>
+<a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>    <span class="n">state</span> <span class="o">=</span> <span class="n">_parse_buckets_from_headers</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+<a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a>    <span class="k">if</span> <span class="n">_has_exhausted_bucket</span><span class="p">(</span><span class="n">state</span><span class="p">):</span> <span class="k">return</span> <span class="kc">True</span>
+<a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a>    <span class="k">if</span> <span class="n">last_known_state</span> <span class="ow">and</span> <span class="n">_has_exhausted_bucket_in_object</span><span class="p">(</span><span class="n">last_known_state</span><span class="p">):</span>
+<a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a>        <span class="k">return</span> <span class="kc">True</span>
+<a href="#__codelineno-12-6" id="__codelineno-12-6" name="__codelineno-12-6"></a>    <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
+<p>两路证据，<strong>只要一路确认</strong>就判真。判定逻辑在 <code>_has_exhausted_bucket</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_has_exhausted_bucket</span><span class="p">(</span><span class="n">buckets</span><span class="p">):</span>
+<a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a>    <span class="k">for</span> <span class="n">remaining</span><span class="p">,</span> <span class="n">reset</span> <span class="ow">in</span> <span class="n">buckets</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+<a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a>        <span class="k">if</span> <span class="n">remaining</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">reset</span> <span class="ow">and</span> <span class="n">reset</span> <span class="o">&gt;=</span> <span class="mf">60.0</span><span class="p">:</span>
+<a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a>            <span class="k">return</span> <span class="kc">True</span>
+<a href="#__codelineno-13-5" id="__codelineno-13-5" name="__codelineno-13-5"></a>    <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
+<p><strong><code>reset &gt;= 60.0</code></strong> 是关键——小于 60 秒的 reset 被当成"瞬时抽风"忽略掉。这是从真实事故中学到的：DeepSeek 模型偶发性给个"reset 5 秒"的 429，如果当真就会冤枉整个 Nous。</p>
+<h3 id="65-jitter-retry_utilspy">6.5 jitter 退避的实现细节（来自 <code>retry_utils.py</code>）<a class="headerlink" href="#65-jitter-retry_utilspy" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="n">exponent</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">attempt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="n">delay</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">base_delay</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">exponent</span><span class="p">),</span> <span class="n">max_delay</span><span class="p">)</span>
+<a href="#__codelineno-14-3" id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time_ns</span><span class="p">()</span> <span class="o">^</span> <span class="p">(</span><span class="n">tick</span> <span class="o">*</span> <span class="mh">0x9E3779B9</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFF</span>
+<a href="#__codelineno-14-4" id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+<a href="#__codelineno-14-5" id="__codelineno-14-5" name="__codelineno-14-5"></a><span class="n">jitter</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">jitter_ratio</span> <span class="o">*</span> <span class="n">delay</span><span class="p">)</span>
+<a href="#__codelineno-14-6" id="__codelineno-14-6" name="__codelineno-14-6"></a><span class="k">return</span> <span class="n">delay</span> <span class="o">+</span> <span class="n">jitter</span>
+</code></pre></div>
+<p>注意 <code>seed</code> 的构造——用纳秒时间戳 <strong>XOR</strong> 一个全局自增计数器乘以一个素数（<code>0x9E3779B9</code> 是黄金比率的 32 位整数表示，常用作哈希常数）。</p>
+<p>为什么这么麻烦？因为：</p>
+<ul>
+<li>如果只用 <code>time.time()</code> → 同一毫秒内多次调用会得到同样的 seed → 同样的 jitter → 没起到错峰效果。</li>
+<li>加上<strong>全局自增计数器</strong>：即便时钟太粗糙，每次调用也保证拿到唯一的 seed。</li>
+<li>计数器要用<strong>线程锁</strong>保护（<code>_jitter_lock</code>）—— 因为多个 gateway 会话可能在不同线程里同时进入这段代码。</li>
+</ul>
+<p>这是"看起来简单、细节里全是工程经验"的典型代码。</p>
+<hr/>
+<h2 id="_7">七、整体协作的一张图<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<pre class="mermaid"><code>flowchart TB
+    A[Agent 主循环] --&gt; B{先看红绿灯<br/>nous_rate_limit_remaining}
+    B --&gt;|红灯| Z[直接放弃<br/>不发请求]
+    B --&gt;|绿灯| C[发送 API 请求]
+    C --&gt; D{响应?}
+    D --&gt;|200| E[parse_rate_limit_headers<br/>更新仪表盘]
+    E --&gt; F[clear_nous_rate_limit<br/>确认通畅]
+    D --&gt;|429| G{is_genuine_nous_rate_limit?}
+    G --&gt;|真| H[record_nous_rate_limit<br/>写红灯文件]
+    G --&gt;|假| I[just retry]
+    H --&gt; J[jittered_backoff<br/>错峰等待]
+    I --&gt; J
+    J --&gt; A
+</code></pre>
+<p>三个模块各司其职、互不耦合，但合在一起构成一套<strong>完整的"流量调度"系统</strong>。</p>
+<hr/>
+<h2 id="_8">八、和前面章节的联系<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<p>回头看，本章和之前的几章其实是<strong>同一类问题在不同层面的体现</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>章节</th>
+<th>解决的资源问题</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">上下文引擎</a></td>
+<td>上下文窗口（token 容量）</td>
+<td>书架满了怎么压缩</td>
+</tr>
+<tr>
+<td><a href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">工具产物预算系统</a></td>
+<td>单轮 token 预算</td>
+<td>快递站怎么收纳大件</td>
+</tr>
+<tr>
+<td><strong>本章</strong></td>
+<td>API 调用配额（次数、跨会话）</td>
+<td>高速公路怎么调度车流</td>
+</tr>
+</tbody>
+</table>
+<p>每一章都在回答："当某种<strong>有限资源</strong>遇到<strong>过载</strong>时，怎么优雅地降速、协调、避免雪崩？" 这是构建生产级 AI agent 不可回避的工程主题。</p>
+<hr/>
+<h2 id="_9">九、本章小结<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<p>恭喜！你已经掌握了 <code>hermes-agent</code> 的第十个、也是最后一个核心抽象：</p>
+<ul>
+<li><strong>速率限制与重试治理</strong>是 agent 的"交通警察"——管理上游 API 的配额、跨会话同步避让、错峰重试。</li>
+<li><strong><code>RateLimitTracker</code></strong> 解析 <code>x-ratelimit-*</code> 响应头（4 个维度 × 12 个字段），把它们变成可查询的仪表盘，给 <code>/usage</code> 命令用。</li>
+<li><strong><code>nous_rate_guard</code></strong> 在确认是<strong>真</strong>配额耗尽时把状态写到 <code>~/.hermes/rate_limits/nous.json</code>——所有会话（CLI、网关、cron）在发请求前先 <code>cat</code> 这个文件，<strong>立刻知道现在该停</strong>。</li>
+<li><strong>真/假 429 区分</strong>：只有"某桶 remaining=0 且 reset&gt;=60 秒"才算真——避免上游某模型瞬时抽风把整个 Nous 锁死。</li>
+<li><strong><code>retry_utils</code></strong> 提供<strong>带 jitter 的指数退避</strong>，用线程安全的计数器 + 高熵 seed 让并发会话<strong>自动错峰重试</strong>。</li>
+<li>整体设计哲学是<strong>"前方预警 + 红绿灯 + 错峰起步"</strong>，对应"看见拥堵、告知所有车、各自岔开时间走"。</li>
+</ul>
+<hr/>
+<h2 id="_10">全书完结<a class="headerlink" href="#_10" title="Permanent link">¶</a></h2>
+<p>到这里，<code>hermes-agent</code> 的十个核心抽象就介绍完了：</p>
+<ol>
+<li><a href="../01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">Provider 档案</a> ——"名片夹"</li>
+<li><a href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">Provider 传输层</a> ——"翻译秘书"</li>
+<li><a href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">上下文引擎</a> ——"图书管理员"</li>
+<li><a href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">记忆提供方</a> ——"私人秘书"</li>
+<li><a href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">工具产物预算系统</a> ——"快递分拣中心"</li>
+<li><a href="../06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">执行环境</a> ——"远程双手"</li>
+<li><a href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">LSP 集成服务</a> ——"贴身代码审稿人"</li>
+<li><a href="../08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/">云服务可插拔后端</a> ——"万能遥控器"</li>
+<li><a href="../09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">安全与同意护栏</a> ——"门禁系统"</li>
+<li><strong>速率限制与重试治理</strong> ——"交通警察"</li>
+</ol>
+<p>整个项目最一以贯之的设计哲学是——<strong>"凡是有多种实现可选的地方，都用 ABC + 注册表 做成可插拔的；凡是有限资源，都做一套预算/治理子系统专门管它。"</strong></p>
+<p>希望这套教程让你不仅"会用" <code>hermes-agent</code>，更能从它的代码里学到一种<strong>面向变化与不确定性的工程思维</strong>：永远给未来的扩展留口子、永远在关键路径上加一道护栏、永远诚实地写下"我挡不住什么"。</p>
+<p>愿你也能写出这样优雅的代码 🎉。</p>
+<hr/>
+<p>Generated by <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../../javascripts/mathjax.js"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

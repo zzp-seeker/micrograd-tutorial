@@ -1,0 +1,1156 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解" name="description"/>
+<link href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/" rel="prev"/>
+<link href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/" rel="next"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>4. 记忆提供方 - 深度教学（GitHub 仓库 + 论文）</title>
+<link href="../../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#chapter-4-memory-provider">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            深度教学（GitHub 仓库 + 论文）
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              4. 记忆提供方
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../../../micrograd_overview/">
+          
+  
+  
+  GitHub 仓库
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../papers/2305.10601/">
+          
+  
+  
+  论文
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    深度教学（GitHub 仓库 + 论文）
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    GitHub 仓库
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    GitHub 仓库
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    micrograd
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    micrograd
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    1. 标量值与自动微分
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    2. 动态计算图
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    3. 反向传播与链式法则
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    4. 模块基类
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    5. 神经元
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    6. 神经网络层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    7. 多层感知机
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    nousresearch/hermes-agent
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_2_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    nousresearch/hermes-agent
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">
+<span class="md-ellipsis">
+    
+  
+    1. Provider 档案
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">
+<span class="md-ellipsis">
+    
+  
+    2. Provider 传输层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">
+<span class="md-ellipsis">
+    
+  
+    3. 上下文引擎
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    4. 记忆提供方
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    4. 记忆提供方
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        一、问题从哪里来？一个销售经理的小故事
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        二、本章的核心用例
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        三、记忆提供方到底要做什么？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#provider">
+<span class="md-ellipsis">
+      
+        四、关键设计：只能有一个外部 provider
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        五、动手用一下！四个最常用的钩子
+      
+    </span>
+</a>
+<nav aria-label="五、动手用一下！四个最常用的钩子" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1">
+<span class="md-ellipsis">
+      
+        步骤 1：会话启动时初始化
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        步骤 2:每轮对话前预取
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3">
+<span class="md-ellipsis">
+      
+        步骤 3：每轮对话后写入
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4">
+<span class="md-ellipsis">
+      
+        步骤 4：会话结束时抽取
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        六、内部是怎么运转的？
+      
+    </span>
+</a>
+<nav aria-label="六、内部是怎么运转的？" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#61">
+<span class="md-ellipsis">
+      
+        6.1 流程一遍过
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#62">
+<span class="md-ellipsis">
+      
+        6.2 用图来理解
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        七、再深入一点：基类长什么样
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      
+        八、与上下文压缩协作的小巧思
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#provider_1">
+<span class="md-ellipsis">
+      
+        九、写一个"最最小"的自定义 provider
+      
+    </span>
+</a>
+<nav aria-label='九、写一个"最最小"的自定义 provider' class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1_1">
+<span class="md-ellipsis">
+      
+        步骤 1：定义类与名字
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2_1">
+<span class="md-ellipsis">
+      
+        步骤 2：可用性检查与初始化
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3_1">
+<span class="md-ellipsis">
+      
+        步骤 3：预取与写入
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4-schemas-provider">
+<span class="md-ellipsis">
+      
+        步骤 4：工具 schemas（这个 provider 不暴露工具）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#provider_2">
+<span class="md-ellipsis">
+      
+        十、provider 还能"潜伏"做的事
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      
+        十一、它和谁打交道？一张全景图
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+<span class="md-ellipsis">
+      
+        十二、本章小结
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">
+<span class="md-ellipsis">
+    
+  
+    5. 工具产物预算系统
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">
+<span class="md-ellipsis">
+    
+  
+    6. 执行环境
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">
+<span class="md-ellipsis">
+    
+  
+    7. LSP 集成服务
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/">
+<span class="md-ellipsis">
+    
+  
+    8. 云服务可插拔后端
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">
+<span class="md-ellipsis">
+    
+  
+    9. 安全与同意护栏
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../10_%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E6%B2%BB%E7%90%86_rate_limit_tracker___guard__/">
+<span class="md-ellipsis">
+    
+  
+    10. 速率限制与重试治理
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_3_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/">
+<span class="md-ellipsis">
+    
+  
+    论文速览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/">
+<span class="md-ellipsis">
+    
+  
+    1. 背景与前置知识
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+<span class="md-ellipsis">
+    
+  
+    2. 方法详解
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/03_%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C/">
+<span class="md-ellipsis">
+    
+  
+    3. 实验与结果
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+<span class="md-ellipsis">
+    
+  
+    4. 源码分析
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/05_%E8%A7%81%E8%A7%A3%E4%B8%8E%E6%89%A9%E5%B1%95/">
+<span class="md-ellipsis">
+    
+  
+    5. 见解与扩展
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="导航栏" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../../..">
+<span class="md-ellipsis">
+    首页
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    GitHub 仓库
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../">
+<span class="md-ellipsis">
+    nousresearch/hermes-agent
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="chapter-4-memory-provider">Chapter 4: 记忆提供方（Memory Provider）<a class="headerlink" href="#chapter-4-memory-provider" title="Permanent link">¶</a></h1>
+<p>在上一章 <a href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">上下文引擎（Context Engine）</a> 里，我们学到了"图书管理员"如何在书架快爆掉时整理旧书。但有一个遗留问题：<strong>那些被压缩走的旧内容，其实只在当前这次会话里活着</strong>——你下次重新打开 agent，前几天的对话就像没发生过一样。</p>
+<p>如果 agent 能像真人助理一样"记住你这位客户"，每次开聊前先翻翻笔记本——"上次我们聊过 X、Y、Z"，那协作就会顺畅得多。这位"私人秘书"就是本章主角——<strong>记忆提供方（Memory Provider）</strong>。</p>
+<hr/>
+<h2 id="_1">一、问题从哪里来？一个销售经理的小故事<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>想象你是一位销售经理，每天要见 5 位客户。你有两种工作方式：</p>
+<p><strong>方式 A</strong>：每次见客户都从零开始。
+- 客户："上周不是跟你说过我对功能 X 不感兴趣吗？"
+- 你（一脸茫然）："呃……我们再聊一遍？"</p>
+<p><strong>方式 B</strong>：你有一本厚厚的客户笔记本。每次开会前<strong>翻一翻</strong>："这位客户上次说反对 X，倾向 Y，下次要给他寄样品。"开完会再把新事项<strong>记下来</strong>。</p>
+<p>显然方式 B 才像个靠谱的助理。</p>
+<p><code>hermes-agent</code> 默认情况下接近方式 A——一次会话结束，记忆就消失了。但只要装上一个<strong>记忆提供方</strong>（如 Honcho、Hindsight、Mem0），它就能立刻升级成方式 B：</p>
+<ul>
+<li>每轮对话<strong>之前</strong>，悄悄从外部记忆库里<strong>预取</strong>相关内容塞进 prompt。</li>
+<li>每轮对话<strong>之后</strong>，把新内容<strong>异步写</strong>到记忆库里。</li>
+<li>会话结束时，做一次<strong>总结与抽取</strong>，沉淀长期记忆。</li>
+</ul>
+<hr/>
+<h2 id="_2">二、本章的核心用例<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<blockquote>
+<p>我们想给 agent 装一个名叫 <code>honcho</code> 的外部记忆库。安装后，agent 应该在每次回答用户之前自动从 Honcho 拉一段相关上下文，回答之后再异步把这一轮对话写回 Honcho；并且<strong>多个外部记忆提供方不能同时启用</strong>，避免工具列表互相打架。</p>
+</blockquote>
+<p>读完本章你会理解这套生命周期的钩子，以及如何写一个自己的最小记忆提供方。</p>
+<hr/>
+<h2 id="_3">三、记忆提供方到底要做什么？<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>整个生命周期可以套用"私人秘书的一天"来理解：</p>
+<table>
+<thead>
+<tr>
+<th>秘书的动作</th>
+<th>对应的方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>上岗第一天，准备好笔记本</td>
+<td><code>initialize(session_id, ...)</code></td>
+</tr>
+<tr>
+<td>老板交代："我今天先看下笔记"</td>
+<td><code>system_prompt_block()</code></td>
+</tr>
+<tr>
+<td>每次会议开始前翻笔记</td>
+<td><code>prefetch(query)</code></td>
+</tr>
+<tr>
+<td>会议刚结束就记一笔</td>
+<td><code>sync_turn(user, assistant)</code></td>
+</tr>
+<tr>
+<td>每轮可能提供"查归档"工具</td>
+<td><code>get_tool_schemas()</code> + <code>handle_tool_call()</code></td>
+</tr>
+<tr>
+<td>一天结束，整理总结</td>
+<td><code>on_session_end(messages)</code></td>
+</tr>
+<tr>
+<td>下班，合上笔记本</td>
+<td><code>shutdown()</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>hermes-agent</code> 通过一个叫 <strong>MemoryManager</strong> 的"调度员"在合适的时机依次调用这些方法。</p>
+<hr/>
+<h2 id="provider">四、关键设计：只能有一个外部 provider<a class="headerlink" href="#provider" title="Permanent link">¶</a></h2>
+<p><code>hermes-agent</code> 明确规定：<strong>同一时间只能启用一个外部记忆 provider</strong>。原因很简单：</p>
+<ul>
+<li>每个外部 provider 通常会向模型暴露 3~5 个工具（如 <code>honcho_query</code>、<code>mem0_search</code>）。</li>
+<li>同时启用三家 = 工具列表瞬间膨胀到 10+ 个，模型很容易选错，schema 也吃掉宝贵的 token。</li>
+</ul>
+<p>所以配置文件里只能选一家：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">memory</span><span class="p">:</span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">honcho</span><span class="w">   </span><span class="c1"># 或 hindsight / mem0 / none</span>
+</code></pre></div>
+<blockquote>
+<p>💡 <strong>类比</strong>：你可以同时用纸质笔记本和电子文档记笔记，但秘书一次只用一本——否则她查的时候不知道翻哪边。</p>
+</blockquote>
+<hr/>
+<h2 id="_4">五、动手用一下！四个最常用的钩子<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p>我们假设已经有了一个 <code>HonchoProvider</code> 实例。下面看看 MemoryManager 是怎么按节奏调用它的。</p>
+<h3 id="1">步骤 1：会话启动时初始化<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">provider</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>    <span class="n">session_id</span><span class="o">=</span><span class="s2">"sess-001"</span><span class="p">,</span>
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>    <span class="n">hermes_home</span><span class="o">=</span><span class="s2">"/home/me/.hermes"</span><span class="p">,</span>
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>    <span class="n">platform</span><span class="o">=</span><span class="s2">"cli"</span><span class="p">,</span>
+<a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>    <span class="n">agent_context</span><span class="o">=</span><span class="s2">"primary"</span><span class="p">,</span>
+<a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="p">)</span>
+</code></pre></div>
+<p>这是秘书的"上岗仪式"。<code>hermes_home</code> 告诉她笔记本放哪、<code>platform</code> 告诉她在哪个终端工作、<code>agent_context="primary"</code> 表示她服务的是主 agent（不是 cron 这种后台任务）。</p>
+<h3 id="2">步骤 2:每轮对话前预取<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">context</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">prefetch</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">"今天北京天气怎么样？"</span><span class="p">)</span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="c1"># 例：context = "用户上周说他在北京，对暴雨预警比较关注。"</span>
+</code></pre></div>
+<p><strong>输入</strong>：用户这一轮要问的问题。
+<strong>输出</strong>：一段从记忆库捞出的相关文本。主循环会把它<strong>拼到 system prompt</strong> 里，模型就有"前情提要"可看了。</p>
+<h3 id="3">步骤 3：每轮对话后写入<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">provider</span><span class="o">.</span><span class="n">sync_turn</span><span class="p">(</span>
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>    <span class="n">user_content</span><span class="o">=</span><span class="s2">"今天北京天气怎么样？"</span><span class="p">,</span>
+<a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>    <span class="n">assistant_content</span><span class="o">=</span><span class="s2">"北京今天晴，最高 28 度。"</span><span class="p">,</span>
+<a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="p">)</span>
+</code></pre></div>
+<p>这一步通常是<strong>非阻塞</strong>的——provider 内部会把这对消息塞进队列，由后台线程慢慢写到 Honcho 后端。这样主循环不会因为网络慢而卡住。</p>
+<h3 id="4">步骤 4：会话结束时抽取<a class="headerlink" href="#4" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="n">provider</span><span class="o">.</span><span class="n">on_session_end</span><span class="p">(</span><span class="n">messages</span><span class="o">=</span><span class="n">full_history</span><span class="p">)</span>
+</code></pre></div>
+<p>秘书会扫一遍整段对话，提炼出"今天的客户偏好"，比如"用户更倾向用 Python 而不是 JS"，存进长期记忆。<strong>这一步只在真正退出时调用</strong>，不是每轮都调。</p>
+<hr/>
+<h2 id="_5">六、内部是怎么运转的？<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<h3 id="61">6.1 流程一遍过<a class="headerlink" href="#61" title="Permanent link">¶</a></h3>
+<p>一次完整的对话回合，MemoryManager 大致做这些事：</p>
+<ol>
+<li>主循环把用户新消息追加到 <code>messages</code>。</li>
+<li><strong>预取</strong>：调用 <code>provider.prefetch(user_msg)</code>，拿到一段记忆文本。</li>
+<li>主循环把记忆文本拼进 system prompt，再走 <a href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">Provider 传输层（Provider Transports）</a> 发请求。</li>
+<li>拿到回复，主循环调用 <code>provider.sync_turn(user_msg, assistant_msg)</code>——把这轮写回后台。</li>
+<li>调用 <code>provider.queue_prefetch(next_hint)</code>——为下一轮预取候选答案排队。</li>
+<li>用户敲了 <code>/exit</code>，主循环调用 <code>provider.on_session_end(messages)</code> 做总结。</li>
+</ol>
+<h3 id="62">6.2 用图来理解<a class="headerlink" href="#62" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant U as 用户
+    participant L as 主循环
+    participant M as MemoryManager
+    participant P as HonchoProvider
+    participant LLM as 大模型
+
+    U-&gt;&gt;L: 新消息
+    L-&gt;&gt;M: prefetch(消息)
+    M-&gt;&gt;P: prefetch(...)
+    P--&gt;&gt;L: 一段相关记忆
+    L-&gt;&gt;LLM: 发请求(含记忆)
+    LLM--&gt;&gt;L: 回复
+    L-&gt;&gt;M: sync_turn(用户, 助手)
+    M-&gt;&gt;P: 异步写入
+</code></pre>
+<p>关键点：<strong>主循环只和 MemoryManager 对话，从不直接接触 provider</strong>。这样 provider 可以随意被换掉，主代码不动。</p>
+<hr/>
+<h2 id="_6">七、再深入一点：基类长什么样<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<p>我们看 <code>agent/memory_provider.py</code> 里基类的几个核心抽象方法（必须实现）：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">MemoryProvider</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>    <span class="nd">@property</span>
+<a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>    <span class="nd">@abstractmethod</span>
+<a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>           <span class="c1"># 短名字</span>
+<a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a>    <span class="nd">@abstractmethod</span>
+<a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_available</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="o">...</span>  <span class="c1"># 配置齐全吗？</span>
+<a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a>    <span class="nd">@abstractmethod</span>
+<a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="o">...</span>
+<a href="#__codelineno-5-9" id="__codelineno-5-9" name="__codelineno-5-9"></a>    <span class="nd">@abstractmethod</span>
+<a href="#__codelineno-5-10" id="__codelineno-5-10" name="__codelineno-5-10"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_tool_schemas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="o">...</span>
+</code></pre></div>
+<p>四个抽象方法是"上岗准入"。<code>is_available()</code> 特别重要——它不能发网络请求，只检查"环境变量在不在、依赖装没装"。如果返回 False，MemoryManager 就跳过这个 provider。</p>
+<p>下面这些钩子有<strong>默认空实现</strong>，你需要哪个就重写哪个：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">prefetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="s2">""</span><span class="p">):</span> <span class="k">return</span> <span class="s2">""</span>
+<a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">sync_turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_content</span><span class="p">,</span> <span class="n">assistant_content</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="s2">""</span><span class="p">):</span> <span class="k">pass</span>
+<a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">on_session_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">):</span> <span class="k">pass</span>
+<a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">on_pre_compress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="k">return</span> <span class="s2">""</span>
+<a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">on_delegation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="k">pass</span>
+</code></pre></div>
+<p>这种"少量必选 + 大量可选"的设计让上手成本很低——<strong>你可以只实现 4 个抽象方法就跑起来</strong>。</p>
+<hr/>
+<h2 id="_7">八、与上下文压缩协作的小巧思<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<p>记得上一章的图书管理员吗？她在压缩前会调用 provider 一次：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="n">extra</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">on_pre_compress</span><span class="p">(</span><span class="n">messages_to_drop</span><span class="p">)</span>
+<a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="c1"># extra 会被拼进压缩 prompt</span>
+</code></pre></div>
+<p>意思是："秘书姐姐，这几本旧书我要塞进归档卡，你有什么想保留的关键信息吗？" provider 可以返回一段"用户偏好 / 项目背景"，压缩器会把它写进摘要。这样 <strong>session 内的压缩</strong> 和 <strong>跨 session 的长期记忆</strong> 能彼此协作，不至于丢掉关键事实。</p>
+<hr/>
+<h2 id="provider_1">九、写一个"最最小"的自定义 provider<a class="headerlink" href="#provider_1" title="Permanent link">¶</a></h2>
+<p>来体验一下完整流程。我们写一个把对话存到本地 JSON 文件的玩具 provider。</p>
+<h3 id="1_1">步骤 1：定义类与名字<a class="headerlink" href="#1_1" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">agent.memory_provider</span><span class="w"> </span><span class="kn">import</span> <span class="n">MemoryProvider</span>
+<a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span>
+<a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>
+<a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">JsonProvider</span><span class="p">(</span><span class="n">MemoryProvider</span><span class="p">):</span>
+<a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a>    <span class="nd">@property</span>
+<a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"json"</span>
+</code></pre></div>
+<p>只是声明，没什么逻辑。</p>
+<h3 id="2_1">步骤 2：可用性检查与初始化<a class="headerlink" href="#2_1" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a>        <span class="k">return</span> <span class="kc">True</span>        <span class="c1"># 本地文件，永远可用</span>
+<a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a>
+<a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">"hermes_home"</span><span class="p">],</span> <span class="s2">"mem.json"</span><span class="p">)</span>
+<a href="#__codelineno-9-6" id="__codelineno-9-6" name="__codelineno-9-6"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">session_id</span> <span class="o">=</span> <span class="n">session_id</span>
+</code></pre></div>
+<p><code>hermes_home</code> 是 MemoryManager 帮我们传进来的家目录——别硬编码 <code>~/.hermes</code>。</p>
+<h3 id="3_1">步骤 3：预取与写入<a class="headerlink" href="#3_1" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">prefetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="s2">""</span><span class="p">):</span>
+<a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">):</span> <span class="k">return</span> <span class="s2">""</span>
+<a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a>        <span class="n">notes</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a>        <span class="k">return</span> <span class="s2">"之前的笔记："</span> <span class="o">+</span> <span class="s2">"; "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">notes</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:])</span>  <span class="c1"># 取最近 3 条</span>
+</code></pre></div>
+<p>读出最近 3 条笔记拼成一段文本。模型会在 system prompt 里看到它们。</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">sync_turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_content</span><span class="p">,</span> <span class="n">assistant_content</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="s2">""</span><span class="p">):</span>
+<a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a>        <span class="n">notes</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">))</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
+<a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a>        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Q:</span><span class="si">{</span><span class="n">user_content</span><span class="p">[:</span><span class="mi">40</span><span class="p">]</span><span class="si">}</span><span class="s2"> A:</span><span class="si">{</span><span class="n">assistant_content</span><span class="p">[:</span><span class="mi">40</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a>        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">))</span>
+</code></pre></div>
+<p>简单地追加一条问答到 JSON 数组里。</p>
+<h3 id="4-schemas-provider">步骤 4：工具 schemas（这个 provider 不暴露工具）<a class="headerlink" href="#4-schemas-provider" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_tool_schemas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="p">[]</span>
+</code></pre></div>
+<p>返回空列表表示"我不需要给模型加新工具"——这是合法的，叫做 <strong>context-only provider</strong>。</p>
+<p><strong>输出</strong>：把这个文件放进 <code>~/.hermes/plugins/memory/json/__init__.py</code>，注册一下，再在 <code>config.yaml</code> 里写 <code>memory.provider: json</code>，就大功告成。下次启动 agent，它会自动从 <code>~/.hermes/mem.json</code> 读取上次的笔记 🎉。</p>
+<hr/>
+<h2 id="provider_2">十、provider 还能"潜伏"做的事<a class="headerlink" href="#provider_2" title="Permanent link">¶</a></h2>
+<p>除了核心四件套，基类还埋了几个有趣的可选钩子：</p>
+<table>
+<thead>
+<tr>
+<th>钩子</th>
+<th>什么时候被叫醒</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>on_turn_start(turn, msg, ...)</code></td>
+<td>每轮开始时——计数、轮询维护</td>
+</tr>
+<tr>
+<td><code>on_session_switch(new_id, ...)</code></td>
+<td>用户敲 <code>/branch</code> / <code>/resume</code> / <code>/reset</code> 时</td>
+</tr>
+<tr>
+<td><code>on_delegation(task, result)</code></td>
+<td>主 agent 收到 subagent 的产物时</td>
+</tr>
+<tr>
+<td><code>on_memory_write(action, ...)</code></td>
+<td>内置 memory 工具新增/删除条目时</td>
+</tr>
+<tr>
+<td><code>get_config_schema()</code></td>
+<td>用户运行 <code>hermes memory setup</code> 走配置向导时</td>
+</tr>
+</tbody>
+</table>
+<p>举个直观例子：当用户用 <code>/branch</code> 复制一份会话探索分叉时，MemoryManager 会调 <code>on_session_switch(new_session_id, parent_session_id=old, reset=False)</code>。provider 就知道："哦，这是同一段对话的分叉，不是新对话，我得维护父子关系。" </p>
+<p>这种"细粒度通知"让 provider 能在不破坏主循环的情况下做非常聪明的事。</p>
+<hr/>
+<h2 id="_8">十一、它和谁打交道？一张全景图<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    A[用户消息] --&gt; B[主循环]
+    B --&gt; C[MemoryManager]
+    C --&gt; D[当前 provider]
+    D --&gt; E[(外部记忆后端)]
+    B --&gt; F[Provider 传输层]
+    F --&gt; G[(LLM)]
+    D -.记忆文本.-&gt; B
+</code></pre>
+<ul>
+<li><strong>主循环</strong>只问 MemoryManager 要"记忆文本"，不关心是 Honcho 还是 Mem0。</li>
+<li><strong>MemoryManager</strong> 是调度员，决定"现在该敲哪个钩子"。</li>
+<li><strong>Provider</strong> 是真正干活的秘书，连接外部记忆后端。</li>
+<li>系统里<strong>最多一位外部秘书</strong>在岗，保证工具表干净。</li>
+</ul>
+<hr/>
+<h2 id="_9">十二、本章小结<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<p>恭喜！你已经掌握了 <code>hermes-agent</code> 的第四个核心抽象：</p>
+<ul>
+<li><strong>记忆提供方</strong>是 agent 的"私人秘书"——每轮前预取、每轮后写入、会话末抽取。</li>
+<li>所有 provider 实现同一个抽象基类 <code>MemoryProvider</code>，<strong>必须实现</strong> <code>name</code> / <code>is_available</code> / <code>initialize</code> / <code>get_tool_schemas</code>，其它钩子按需重写。</li>
+<li>同一时间<strong>只能启用一个外部 provider</strong>，避免工具 schema 膨胀。</li>
+<li>provider 与 <a href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">上下文引擎（Context Engine）</a> 通过 <code>on_pre_compress</code> 协作，让短期压缩和长期记忆配合。</li>
+<li>写一个最小 provider 只需要 ~20 行代码：实现 4 个抽象方法 + 重写 <code>prefetch</code> / <code>sync_turn</code> 即可。</li>
+</ul>
+<hr/>
+<p>到这里 agent 已经能"记住你"了，但它做事时会调用各种工具——<code>Bash</code>、<code>Read</code>、<code>WebFetch</code>……这些工具的产物（比如一份几万行的日志、或者一张图片）可能瞬间塞爆整个上下文。这就引出了下一章的问题：<strong>怎么给工具产物上一个"预算"，谁占多了就裁谁？</strong></p>
+<p>👉 继续学习：<a href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">工具产物预算系统（Tool Result Budget）</a></p>
+<hr/>
+<p>Generated by <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../../javascripts/mathjax.js"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

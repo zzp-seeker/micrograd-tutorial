@@ -1,0 +1,1328 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解" name="description"/>
+<link href="../08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/" rel="prev"/>
+<link href="../10_%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E6%B2%BB%E7%90%86_rate_limit_tracker___guard__/" rel="next"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>9. 安全与同意护栏 - 深度教学（GitHub 仓库 + 论文）</title>
+<link href="../../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#chapter-9-safety-consent-guardrails">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            深度教学（GitHub 仓库 + 论文）
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              9. 安全与同意护栏
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../../../micrograd_overview/">
+          
+  
+  
+  GitHub 仓库
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../papers/2305.10601/">
+          
+  
+  
+  论文
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    深度教学（GitHub 仓库 + 论文）
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    GitHub 仓库
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    GitHub 仓库
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    micrograd
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    micrograd
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    1. 标量值与自动微分
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    2. 动态计算图
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    3. 反向传播与链式法则
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    4. 模块基类
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    5. 神经元
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    6. 神经网络层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    7. 多层感知机
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    nousresearch/hermes-agent
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_2_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    nousresearch/hermes-agent
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">
+<span class="md-ellipsis">
+    
+  
+    1. Provider 档案
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">
+<span class="md-ellipsis">
+    
+  
+    2. Provider 传输层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">
+<span class="md-ellipsis">
+    
+  
+    3. 上下文引擎
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">
+<span class="md-ellipsis">
+    
+  
+    4. 记忆提供方
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">
+<span class="md-ellipsis">
+    
+  
+    5. 工具产物预算系统
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">
+<span class="md-ellipsis">
+    
+  
+    6. 执行环境
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">
+<span class="md-ellipsis">
+    
+  
+    7. LSP 集成服务
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/">
+<span class="md-ellipsis">
+    
+  
+    8. 云服务可插拔后端
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    9. 安全与同意护栏
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    9. 安全与同意护栏
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        一、问题从哪里来？一栋房子的门禁系统
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        二、本章的核心用例
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        三、关键概念逐个看
+      
+    </span>
+</a>
+<nav aria-label="三、关键概念逐个看" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#31-file_safety">
+<span class="md-ellipsis">
+      
+        3.1 file_safety：保险柜门（敏感文件禁写名单）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#32-url_safetyssrf">
+<span class="md-ellipsis">
+      
+        3.2 url_safety：猫眼（SSRF 拦截）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#33-website_policy">
+<span class="md-ellipsis">
+      
+        3.3 website_policy：黑名单（用户自定义）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#34-path_security">
+<span class="md-ellipsis">
+      
+        3.4 path_security：门牌核对（防路径穿越）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#35-file_state-agent">
+<span class="md-ellipsis">
+      
+        3.5 file_state：共享日历（多 agent 并发协调）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#36-slash_confirm-clarify">
+<span class="md-ellipsis">
+      
+        3.6 slash_confirm / clarify：合同复查员（用户同意）
+      
+    </span>
+</a>
+<nav aria-label="3.6 slash_confirm / clarify：合同复查员（用户同意）" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#slash_confirm">
+<span class="md-ellipsis">
+      
+        slash_confirm：高代价操作的"确认 / 总是允许 / 取消"
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#clarify-agent">
+<span class="md-ellipsis">
+      
+        clarify：让 agent 主动问用户
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        四、动手用一下！跟着核心用例走一遍
+      
+    </span>
+</a>
+<nav aria-label="四、动手用一下！跟着核心用例走一遍" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-file_safety">
+<span class="md-ellipsis">
+      
+        第 1 道：file_safety 直接拦截
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        第 2 道：假设有人想"曲线救国"——用符号链接绕过
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3-url">
+<span class="md-ellipsis">
+      
+        第 3 道：用户主动给一个看起来正常的 URL，但解析后是元数据接口
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4-subagent">
+<span class="md-ellipsis">
+      
+        第 4 道：subagent 的并发写覆盖
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5">
+<span class="md-ellipsis">
+      
+        第 5 道：高代价操作的同意
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        五、内部是怎么运转的？
+      
+    </span>
+</a>
+<nav aria-label="五、内部是怎么运转的？" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#51">
+<span class="md-ellipsis">
+      
+        5.1 一段直白的流程描述
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#52">
+<span class="md-ellipsis">
+      
+        5.2 用图来理解
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        六、再深入一点：几个值得细看的设计
+      
+    </span>
+</a>
+<nav aria-label="六、再深入一点：几个值得细看的设计" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#61-file_safety-realpath">
+<span class="md-ellipsis">
+      
+        6.1 file_safety：为什么要解析 realpath
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#62-url_safety">
+<span class="md-ellipsis">
+      
+        6.2 url_safety：失败时"封闭"还是"开放"？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#63-file_state">
+<span class="md-ellipsis">
+      
+        6.3 file_state：环境变量逃生口
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#64-clarify_gateway">
+<span class="md-ellipsis">
+      
+        6.4 clarify_gateway：心跳的细节
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#65-env_passthrough">
+<span class="md-ellipsis">
+      
+        6.5 env_passthrough：连"安全机制本身"也要防被绕过
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      
+        七、各部分如何串成一张图
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      
+        八、本章小结
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../10_%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E6%B2%BB%E7%90%86_rate_limit_tracker___guard__/">
+<span class="md-ellipsis">
+    
+  
+    10. 速率限制与重试治理
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_3_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/">
+<span class="md-ellipsis">
+    
+  
+    论文速览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/">
+<span class="md-ellipsis">
+    
+  
+    1. 背景与前置知识
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+<span class="md-ellipsis">
+    
+  
+    2. 方法详解
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/03_%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C/">
+<span class="md-ellipsis">
+    
+  
+    3. 实验与结果
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+<span class="md-ellipsis">
+    
+  
+    4. 源码分析
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/05_%E8%A7%81%E8%A7%A3%E4%B8%8E%E6%89%A9%E5%B1%95/">
+<span class="md-ellipsis">
+    
+  
+    5. 见解与扩展
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="导航栏" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../../..">
+<span class="md-ellipsis">
+    首页
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    GitHub 仓库
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../">
+<span class="md-ellipsis">
+    nousresearch/hermes-agent
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="chapter-9-safety-consent-guardrails">Chapter 9: 安全与同意护栏（Safety &amp; Consent Guardrails）<a class="headerlink" href="#chapter-9-safety-consent-guardrails" title="Permanent link">¶</a></h1>
+<p>在上一章 <a href="../08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/">云服务可插拔后端（Cloud Service Providers）</a> 里，我们让 agent 拥有了"万能遥控器"——可以调用搜索、云浏览器、图像/视频生成等各种外部服务。到现在为止，agent 的能力已经非常强：能写文件、跑命令、记忆偏好、跨环境作业、看代码诊断、调云服务。</p>
+<p><strong>但能力越大，闯祸的代价也越大</strong>。想象这些场景：</p>
+<ul>
+<li>agent 一时手抖，把 <code>~/.ssh/id_rsa</code>（你的私钥）当作普通文件给覆盖了。</li>
+<li>一段被注入的提示词诱导 agent 去访问 <code>http://169.254.169.254/</code>（云服务商的元数据接口），把你机器上的临时凭证泄露出去。</li>
+<li>两个并发的 subagent 同时改同一个文件——agent A 读了一份旧版本，agent B 已经更新过了，A 写回去把 B 的修改覆盖了。</li>
+<li>agent 准备执行一个"清空所有缓存"的高代价操作——但用户其实只想清当前项目的。</li>
+</ul>
+<p>这就是本章主角 <strong>安全与同意护栏（Safety &amp; Consent Guardrails）</strong> 要解决的问题——给 agent 装上一套<strong>门禁系统</strong>：危险动作在开门之前，先三问。</p>
+<hr/>
+<h2 id="_1">一、问题从哪里来？一栋房子的门禁系统<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>想象你家是一栋装了完整安保的房子：</p>
+<table>
+<thead>
+<tr>
+<th>房子上的设备</th>
+<th>对应的护栏模块</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>保险柜门</strong> ——某些贵重物品所在的房间永远不能进</td>
+<td><code>file_safety</code>（禁写敏感文件）</td>
+</tr>
+<tr>
+<td><strong>猫眼</strong> ——访客在按门铃前先看清楚是谁</td>
+<td><code>url_safety</code>（SSRF 拦截）</td>
+</tr>
+<tr>
+<td><strong>黑名单</strong> ——你列出"这几位邻居我不见"</td>
+<td><code>website_policy</code>（用户自定义黑名单）</td>
+</tr>
+<tr>
+<td><strong>门牌核对</strong> ——访客必须报清楚要找几号房</td>
+<td><code>path_security</code>（防路径穿越）</td>
+</tr>
+<tr>
+<td><strong>共享日历</strong> ——多个家人同时安排活动不冲突</td>
+<td><code>file_state</code>（多 agent 并发文件协调）</td>
+</tr>
+<tr>
+<td><strong>合同复查员</strong> ——签大额合同前必须问一句"您确定吗？"</td>
+<td><code>slash_confirm</code> / <code>clarify</code>（用户同意）</td>
+</tr>
+</tbody>
+</table>
+<p>这一整套设备共同组成一道"危险动作开门前先三问"的护栏。下面我们一个一个看。</p>
+<hr/>
+<h2 id="_2">二、本章的核心用例<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<blockquote>
+<p>agent 收到一个看似无害的请求："帮我把 <code>~/.ssh/authorized_keys</code> 里多加一行 key"。这个动作如果真的执行了——攻击者就能从此免密码登录你的机器。我们想知道：<code>hermes-agent</code> 是<strong>在哪一道闸门</strong>把这种请求拦下来的？同时，如果是一个<strong>有风险但用户真的想做</strong>的操作（比如清缓存），系统是如何<strong>先问一下</strong>用户、再继续的？</p>
+</blockquote>
+<p>读完本章你会看到这六道防线如何串成一个整体。</p>
+<hr/>
+<h2 id="_3">三、关键概念逐个看<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<h3 id="31-file_safety">3.1 <code>file_safety</code>：保险柜门（敏感文件禁写名单）<a class="headerlink" href="#31-file_safety" title="Permanent link">¶</a></h3>
+<p>最直接的防线——<strong>有一些文件，无论 agent 多想写都不让写</strong>。比如 SSH 私钥、<code>/etc/sudoers</code>、<code>.bashrc</code> 这种"一写就出大事"的文件。</p>
+<p>这个名单是<strong>钉死在代码里</strong>的（来自 <code>agent/file_safety.py</code>），用户改不了——这是设计上的"刚性底线"。</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1"># 简化版示意</span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">build_write_denied_paths</span><span class="p">(</span><span class="n">home</span><span class="p">):</span>
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>    <span class="k">return</span> <span class="p">{</span>
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s2">".ssh"</span><span class="p">,</span> <span class="s2">"authorized_keys"</span><span class="p">),</span>
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s2">".ssh"</span><span class="p">,</span> <span class="s2">"id_rsa"</span><span class="p">),</span>
+<a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>        <span class="s2">"/etc/sudoers"</span><span class="p">,</span>
+<a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>        <span class="s2">"/etc/shadow"</span><span class="p">,</span>
+<a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>        <span class="c1"># ... 还有 .bashrc / .pgpass / .npmrc 等十几个</span>
+<a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>    <span class="p">}</span>
+</code></pre></div>
+<p>这里列的是<strong>精确路径</strong>（"这个文件本身不能写"）。另外还有"目录前缀"列表——比如整个 <code>~/.ssh/</code> 目录、<code>~/.aws/</code> 目录都被禁止写入：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">build_write_denied_prefixes</span><span class="p">(</span><span class="n">home</span><span class="p">):</span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>    <span class="k">return</span> <span class="p">[</span>
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s2">".ssh"</span><span class="p">),</span>
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s2">".aws"</span><span class="p">),</span>
+<a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s2">".gnupg"</span><span class="p">),</span>
+<a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>        <span class="c1"># ...</span>
+<a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>    <span class="p">]</span>
+</code></pre></div>
+<p>判断逻辑就一行：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">is_write_denied</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>    <span class="n">resolved</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>   <span class="c1"># 关键：解析符号链接</span>
+<a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>    <span class="k">return</span> <span class="n">resolved</span> <span class="ow">in</span> <span class="n">DENIED_PATHS</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span>
+<a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>        <span class="n">resolved</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">DENIED_PREFIXES</span>
+<a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>    <span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>💡 <strong><code>realpath</code> 是关键</strong>——如果不解析符号链接，攻击者可以做一个 <code>~/decoy.txt → ~/.ssh/id_rsa</code> 的软链，绕过精确路径匹配。解析过后，无论怎么伪装都会被识破。</p>
+</blockquote>
+<p>还有一个可选的 <strong>"安全写入根目录"</strong> 机制（<code>HERMES_WRITE_SAFE_ROOT</code> 环境变量）——设了它之后，agent <strong>只能</strong>在这个目录内写文件，其他地方一律拒绝。这是给企业部署用的"白名单模式"。</p>
+<h3 id="32-url_safetyssrf">3.2 <code>url_safety</code>：猫眼（SSRF 拦截）<a class="headerlink" href="#32-url_safetyssrf" title="Permanent link">¶</a></h3>
+<p>agent 调用 <code>web_fetch</code> 时，URL 可能藏着陷阱。最经典的是 <strong>云元数据接口</strong>：</p>
+<ul>
+<li>AWS / GCP / Azure：<code>http://169.254.169.254/</code></li>
+<li>Alibaba：<code>http://100.100.100.200/</code></li>
+<li>AWS ECS：<code>http://169.254.170.2/</code></li>
+</ul>
+<p>这些地址在云服务器<strong>内部</strong>能访问，返回的内容是<strong>当前机器的临时凭证</strong>。一旦 agent 帮攻击者 fetch 了这种 URL，凭证就泄露了。这就是 SSRF（Server-Side Request Forgery）攻击。</p>
+<p><code>tools/url_safety.py</code> 给所有 web 工具加了一道前置检查：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">_ALWAYS_BLOCKED_IPS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span>
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>    <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s2">"169.254.169.254"</span><span class="p">),</span>
+<a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>    <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s2">"169.254.170.2"</span><span class="p">),</span>
+<a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>    <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s2">"100.100.100.200"</span><span class="p">),</span>
+<a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>    <span class="c1"># ...</span>
+<a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="p">})</span>
+<a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="n">_ALWAYS_BLOCKED_NETWORKS</span> <span class="o">=</span> <span class="p">(</span>
+<a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a>    <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s2">"169.254.0.0/16"</span><span class="p">),</span>   <span class="c1"># 整段链路本地</span>
+<a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="p">)</span>
+</code></pre></div>
+<p>更绝的是，它会<strong>真的去 DNS 解析一遍</strong>，防止攻击者用域名包装这些 IP：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">is_safe_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+<a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>    <span class="n">hostname</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">hostname</span>
+<a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">sockaddr</span> <span class="ow">in</span> <span class="n">socket</span><span class="o">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+<a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a>        <span class="n">ip</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="n">sockaddr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>        <span class="k">if</span> <span class="n">ip</span> <span class="ow">in</span> <span class="n">_ALWAYS_BLOCKED_IPS</span><span class="p">:</span>
+<a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a>            <span class="k">return</span> <span class="kc">False</span>         <span class="c1"># 拦截</span>
+<a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a>        <span class="k">if</span> <span class="n">ip</span><span class="o">.</span><span class="n">is_private</span> <span class="ow">or</span> <span class="n">ip</span><span class="o">.</span><span class="n">is_loopback</span><span class="p">:</span>
+<a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a>            <span class="k">return</span> <span class="kc">False</span>         <span class="c1"># 拦截内网</span>
+<a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a>    <span class="k">return</span> <span class="kc">True</span>
+</code></pre></div>
+<p>也就是说，攻击者就算建一个 <code>evil.com → 169.254.169.254</code> 的 DNS 记录，agent 解析后照样拒绝。</p>
+<blockquote>
+<p>⚠️ <strong>限制</strong>：DNS rebinding 攻击（解析时返回公网 IP、真连接时返回内网 IP）这一层挡不住——文件注释里诚实地写明了这一点。要彻底防御需要在连接层做（如 egress proxy）。安全设计就是这样——明确知道自己的边界，比假装"绝对安全"靠谱得多。</p>
+</blockquote>
+<h3 id="33-website_policy">3.3 <code>website_policy</code>：黑名单（用户自定义）<a class="headerlink" href="#33-website_policy" title="Permanent link">¶</a></h3>
+<p><code>url_safety</code> 防的是"技术性危险"（私网/元数据）。但用户可能还想加自己的"政策性黑名单"——比如"我不让 agent 访问任何社交媒体"、"我们公司禁止访问竞品官网"。</p>
+<p><code>tools/website_policy.py</code> 让用户在 <code>~/.hermes/config.yaml</code> 里自定义：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nt">security</span><span class="p">:</span>
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span><span class="nt">website_blocklist</span><span class="p">:</span>
+<a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="nt">domains</span><span class="p">:</span>
+<a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"twitter.com"</span>
+<a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"*.facebook.com"</span><span class="w">      </span><span class="c1"># 通配符支持</span>
+<a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"competitor.com"</span>
+<a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">    </span><span class="nt">shared_files</span><span class="p">:</span>
+<a href="#__codelineno-5-9" id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"team-blocklist.txt"</span><span class="w">  </span><span class="c1"># 也可以指向共享列表文件</span>
+</code></pre></div>
+<p><code>check_website_access(url)</code> 在每次访问前查这张表，命中就返回一个错误字典：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="p">{</span>
+<a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>    <span class="s2">"host"</span><span class="p">:</span> <span class="s2">"twitter.com"</span><span class="p">,</span>
+<a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a>    <span class="s2">"rule"</span><span class="p">:</span> <span class="s2">"twitter.com"</span><span class="p">,</span>
+<a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a>    <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Blocked by website policy: ..."</span><span class="p">,</span>
+<a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="p">}</span>
+</code></pre></div>
+<p>为了不让每次 fetch 都重新读 YAML，模块内置了 <strong>30 秒的缓存</strong>——大批量爬取时也不会拖慢。</p>
+<h3 id="34-path_security">3.4 <code>path_security</code>：门牌核对（防路径穿越）<a class="headerlink" href="#34-path_security" title="Permanent link">¶</a></h3>
+<p>很多工具接受"路径"作为参数。如果用户传 <code>../../etc/passwd</code>，agent 不小心就会读到不该读的地方。<code>tools/path_security.py</code> 提供一个共享的"门牌核对器"：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_within_dir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+<a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>    <span class="k">try</span><span class="p">:</span>
+<a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a>        <span class="n">resolved</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a>        <span class="n">root_resolved</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a>        <span class="n">resolved</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">root_resolved</span><span class="p">)</span>   <span class="c1"># 关键</span>
+<a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a>    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+<a href="#__codelineno-7-7" id="__codelineno-7-7" name="__codelineno-7-7"></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Path escapes allowed directory: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span>
+<a href="#__codelineno-7-8" id="__codelineno-7-8" name="__codelineno-7-8"></a>    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div>
+<p><code>relative_to()</code> 是 Python 自带的优雅方法——如果 <code>resolved</code> 不在 <code>root_resolved</code> 下面，它会抛 <code>ValueError</code>。再加上前面 <code>resolve()</code> 解析符号链接，等于双重保险。</p>
+<p>哪里用到？skill 加载器、cron job 注册器、凭证文件读取器都共用这一个函数——<strong>避免每个地方各自实现一遍可能不一样的检查</strong>。</p>
+<h3 id="35-file_state-agent">3.5 <code>file_state</code>：共享日历（多 agent 并发协调）<a class="headerlink" href="#35-file_state-agent" title="Permanent link">¶</a></h3>
+<p>这是最巧妙的一道护栏。设想：</p>
+<ol>
+<li>主 agent 派出 subagent A 和 B，都让它们修改 <code>config.json</code>。</li>
+<li>A 先读了文件（mtime=10:00:00），看到内容是 <code>{"x": 1}</code>。</li>
+<li>B 也读了文件，但<strong>没等 A 写完，就先写</strong>了 <code>{"x": 2}</code>（mtime=10:00:05）。</li>
+<li>A 仍然以为内容是 <code>{"x": 1}</code>，于是写 <code>{"x": 1, "y": 3}</code>——<strong>B 的修改被覆盖了！</strong></li>
+</ol>
+<p><code>tools/file_state.py</code> 用一个<strong>进程级共享注册表</strong>追踪这种情况：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">FileStateRegistry</span><span class="p">:</span>
+<a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>    <span class="n">_reads</span><span class="p">:</span> <span class="nb">dict</span>          <span class="c1"># {task_id: {path: (mtime, read_ts, partial)}}</span>
+<a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a>    <span class="n">_last_writer</span><span class="p">:</span> <span class="nb">dict</span>    <span class="c1"># {path: (task_id, write_ts)}</span>
+<a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a>    <span class="n">_path_locks</span><span class="p">:</span> <span class="nb">dict</span>     <span class="c1"># {path: Lock}</span>
+</code></pre></div>
+<p>工具在写文件之前调用 <code>check_stale(task_id, path)</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="n">warning</span> <span class="o">=</span> <span class="n">check_stale</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="s2">"config.json"</span><span class="p">)</span>
+<a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="k">if</span> <span class="n">warning</span><span class="p">:</span>
+<a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a>    <span class="k">return</span> <span class="n">tool_error</span><span class="p">(</span><span class="n">warning</span><span class="p">)</span>
+</code></pre></div>
+<p><code>check_stale</code> 会回答三种情况：</p>
+<ol>
+<li><strong>"sibling subagent 写过了"</strong> → 报告："这个文件被 subagent B 在 10:00:05 改过了——而你最后读取是 10:00:00。请重新 read_file 后再写。"</li>
+<li><strong>"mtime 漂移了（外部修改）"</strong> → 同样要求重新读。</li>
+<li><strong>"你根本没读过这个文件"</strong> → 报告："你都没读过，写啥呢？先 read_file 一下。"</li>
+</ol>
+<p>加上 <code>lock_path()</code> 这个 context manager，对同一个文件的"读→改→写"序列还能串行化。<strong>这就让多 agent 共享文件系统时也不容易出现互相覆盖。</strong></p>
+<h3 id="36-slash_confirm-clarify">3.6 <code>slash_confirm</code> / <code>clarify</code>：合同复查员（用户同意）<a class="headerlink" href="#36-slash_confirm-clarify" title="Permanent link">¶</a></h3>
+<p>最后一道防线是"开口问一下用户"。<code>hermes-agent</code> 把它分成两种性格不同的场景：</p>
+<h4 id="slash_confirm"><code>slash_confirm</code>：高代价操作的"确认 / 总是允许 / 取消"<a class="headerlink" href="#slash_confirm" title="Permanent link">¶</a></h4>
+<p>例子：用户敲了 <code>/reload-mcp</code>——这会让所有 MCP 服务器重启、prompt 缓存失效，是个"贵"的操作。系统不会闷头执行，而是先弹三个按钮：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a>[ 这次允许 ]  [ 总是允许 ]  [ 取消 ]
+</code></pre></div>
+<p><code>tools/slash_confirm.py</code> 维护一张"待确认"表：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="n">session_key</span><span class="p">,</span> <span class="n">confirm_id</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+<a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a>    <span class="n">_pending</span><span class="p">[</span><span class="n">session_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+<a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a>        <span class="s2">"confirm_id"</span><span class="p">:</span> <span class="n">confirm_id</span><span class="p">,</span> <span class="s2">"command"</span><span class="p">:</span> <span class="n">command</span><span class="p">,</span>
+<a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a>        <span class="s2">"handler"</span><span class="p">:</span> <span class="n">handler</span><span class="p">,</span> <span class="s2">"created_at"</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+<a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a>    <span class="p">}</span>
+</code></pre></div>
+<p>用户按下任何按钮 → 平台层调 <code>resolve(session_key, confirm_id, choice)</code> → 触发对应的 handler。如果 5 分钟没回应就<strong>自动作废</strong>——防止僵尸确认堆积。</p>
+<h4 id="clarify-agent"><code>clarify</code>：让 agent 主动问用户<a class="headerlink" href="#clarify-agent" title="Permanent link">¶</a></h4>
+<p>这是 agent <strong>自己</strong>调用的工具。"我不确定下一步该怎么做，先问问用户"：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="n">clarify</span><span class="p">(</span>
+<a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>    <span class="n">question</span><span class="o">=</span><span class="s2">"你希望我清理哪个目录的缓存？"</span><span class="p">,</span>
+<a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a>    <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">"仅当前项目"</span><span class="p">,</span> <span class="s2">"整个用户目录"</span><span class="p">,</span> <span class="s2">"全局缓存"</span><span class="p">]</span>
+<a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="p">)</span>
+</code></pre></div>
+<p>在 CLI 里就是箭头键选；在 Telegram 里是 inline buttons；在没有 UI 的地方就是"回复 1/2/3"。<strong>关键设计</strong>：agent 调用 <code>clarify</code> 后，它的线程会<strong>阻塞</strong>等用户回答——这必须用线程安全的事件来实现：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="nd">@dataclass</span>
+<a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">_ClarifyEntry</span><span class="p">:</span>
+<a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a>    <span class="n">clarify_id</span><span class="p">:</span> <span class="nb">str</span>
+<a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a>    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span>
+<a href="#__codelineno-13-5" id="__codelineno-13-5" name="__codelineno-13-5"></a>    <span class="n">choices</span><span class="p">:</span> <span class="nb">list</span>
+<a href="#__codelineno-13-6" id="__codelineno-13-6" name="__codelineno-13-6"></a>    <span class="n">event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>
+<a href="#__codelineno-13-7" id="__codelineno-13-7" name="__codelineno-13-7"></a>    <span class="n">response</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div>
+<p>agent 线程 <code>event.wait()</code>，平台线程收到回复后 <code>event.set()</code>——经典的生产者/消费者模型。还配合<strong>1 秒一次的活动心跳</strong>避免被超时杀死：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a>    <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span> <span class="k">break</span>   <span class="c1"># 等到了</span>
+<a href="#__codelineno-14-3" id="__codelineno-14-3" name="__codelineno-14-3"></a>    <span class="n">touch_activity_if_due</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="s2">"waiting for user clarify response"</span><span class="p">)</span>
+</code></pre></div>
+<hr/>
+<h2 id="_4">四、动手用一下！跟着核心用例走一遍<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<p>回到本章用例："agent 想往 <code>~/.ssh/authorized_keys</code> 里加一行"。我们看看防线是怎么生效的。</p>
+<h3 id="1-file_safety">第 1 道：<code>file_safety</code> 直接拦截<a class="headerlink" href="#1-file_safety" title="Permanent link">¶</a></h3>
+<p><code>write_file</code> 工具在动手前会先调用：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">agent.file_safety</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_write_denied</span>
+<a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a>
+<a href="#__codelineno-15-3" id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="k">if</span> <span class="n">is_write_denied</span><span class="p">(</span><span class="s2">"~/.ssh/authorized_keys"</span><span class="p">):</span>
+<a href="#__codelineno-15-4" id="__codelineno-15-4" name="__codelineno-15-4"></a>    <span class="k">return</span> <span class="n">tool_error</span><span class="p">(</span><span class="s2">"Refusing to write to a sensitive system file."</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>输入</strong>：路径 <code>~/.ssh/authorized_keys</code>。
+<strong>输出</strong>：<code>True</code>（被禁止）→ 工具立刻返回错误。<strong>模型看到错误后会自己放弃这个动作</strong>，并向用户解释为什么。</p>
+<p>请求被钉死在第一道门，<strong>根本走不到 <code>env.execute()</code> 那一步</strong>。</p>
+<h3 id="2">第 2 道：假设有人想"曲线救国"——用符号链接绕过<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<p>攻击者改用 <code>write_file("~/.config/myapp/keys")</code>——但这个路径其实是一个软链，指向 <code>~/.ssh/authorized_keys</code>。</p>
+<p><code>is_write_denied</code> 内部第一句就是 <code>os.path.realpath(path)</code>——它会<strong>先把软链解析掉</strong>，再去查名单。所以照样拦下。</p>
+<h3 id="3-url">第 3 道：用户主动给一个看起来正常的 URL，但解析后是元数据接口<a class="headerlink" href="#3-url" title="Permanent link">¶</a></h3>
+<p>用户（或被注入的提示词）说："帮我 fetch 一下 <code>http://internal-metadata.io/</code>"，而 <code>internal-metadata.io</code> 在 DNS 里指向 <code>169.254.169.254</code>。</p>
+<p><code>web_fetch</code> 工具调用 <code>is_safe_url(url)</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="n">addr_info</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="s2">"internal-metadata.io"</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="c1"># 解析结果：[("169.254.169.254", ...)]</span>
+<a href="#__codelineno-16-3" id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="c1"># 命中 _ALWAYS_BLOCKED_IPS → 返回 False</span>
+</code></pre></div>
+<p><strong>输出</strong>：<code>False</code> → 工具立刻拒绝，记一条 warning 到日志。</p>
+<h3 id="4-subagent">第 4 道：subagent 的并发写覆盖<a class="headerlink" href="#4-subagent" title="Permanent link">¶</a></h3>
+<p>主 agent 派 A 和 B 同时改 <code>config.json</code>。A 读完后还没写，B 已经写完了。等 A 准备写时：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="n">warning</span> <span class="o">=</span> <span class="n">check_stale</span><span class="p">(</span><span class="s2">"agent-A"</span><span class="p">,</span> <span class="s2">"/path/config.json"</span><span class="p">)</span>
+<a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="c1"># 返回："config.json was modified by sibling subagent 'agent-B' at 10:00:05..."</span>
+</code></pre></div>
+<p>工具把这条警告作为错误返回给 A——A 的模型收到后会<strong>主动 re-read</strong> 文件，看到 B 的新内容，再决定怎么合并。</p>
+<h3 id="5">第 5 道：高代价操作的同意<a class="headerlink" href="#5" title="Permanent link">¶</a></h3>
+<p>agent 准备清理所有缓存。它不会直接动手，而是调用 <code>clarify</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-18-1" id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">clarify</span><span class="p">(</span>
+<a href="#__codelineno-18-2" id="__codelineno-18-2" name="__codelineno-18-2"></a>    <span class="n">question</span><span class="o">=</span><span class="s2">"确定要清理所有缓存吗？这会清掉约 2GB 数据。"</span><span class="p">,</span>
+<a href="#__codelineno-18-3" id="__codelineno-18-3" name="__codelineno-18-3"></a>    <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">"确定"</span><span class="p">,</span> <span class="s2">"仅清当前项目"</span><span class="p">,</span> <span class="s2">"取消"</span><span class="p">]</span>
+<a href="#__codelineno-18-4" id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="p">)</span>
+</code></pre></div>
+<p>agent 线程阻塞等用户选——用户选了"仅清当前项目"，agent 就走对应分支。<strong>用户的同意被显式记录在工具结果里</strong>，不会被忽略。</p>
+<hr/>
+<h2 id="_5">五、内部是怎么运转的？<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<h3 id="51">5.1 一段直白的流程描述<a class="headerlink" href="#51" title="Permanent link">¶</a></h3>
+<p>让我们把六道防线串起来——看一次"agent 调用 write_file" 完整地经过哪些关卡：</p>
+<ol>
+<li><strong>路径解析</strong>：把用户给的路径用 <code>Path.resolve()</code> 解析符号链接。</li>
+<li><strong><code>path_security</code> 检查</strong>：如果有效目录范围限制（比如安全 root），先核对在不在范围内。</li>
+<li><strong><code>file_safety</code> 检查</strong>：用 <code>is_write_denied()</code> 查"敏感文件名单"。</li>
+<li><strong><code>file_state.check_stale</code> 检查</strong>：看看其他 agent 有没有刚改过这个文件。</li>
+<li><strong>如果是高风险写入</strong>：调 <code>clarify</code> 问用户。</li>
+<li><strong><code>lock_path</code> 加锁</strong>：进入"读→改→写"临界区。</li>
+<li><strong>真正写入</strong>。</li>
+<li><strong><code>file_state.note_write</code> 记账</strong>：告诉别的 agent 我写了这个文件、什么时候写的。</li>
+</ol>
+<h3 id="52">5.2 用图来理解<a class="headerlink" href="#52" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant A as Agent (主循环)
+    participant T as write_file 工具
+    participant FS as file_safety
+    participant ST as file_state
+    participant U as 用户
+    participant D as 磁盘
+
+    A-&gt;&gt;T: write_file("~/.ssh/...")
+    T-&gt;&gt;FS: is_write_denied(path)?
+    FS--&gt;&gt;T: True (禁止)
+    T--&gt;&gt;A: ❌ 错误：敏感文件
+
+    Note over A,D: ——另一个安全场景——
+    A-&gt;&gt;T: write_file("config.json")
+    T-&gt;&gt;FS: is_write_denied(path)?
+    FS--&gt;&gt;T: False (放行)
+    T-&gt;&gt;ST: check_stale(task, path)?
+    ST--&gt;&gt;T: 警告：sibling 改过了
+    T--&gt;&gt;A: ❌ 请 re-read
+</code></pre>
+<p>注意：<strong>模型不需要知道这些防线的存在</strong>——它只看到工具返回的错误信息，自己读懂"哦我应该换个方式"。整套护栏对模型是<strong>透明的指导</strong>：错误信息越具体，模型自我修正越快。</p>
+<hr/>
+<h2 id="_6">六、再深入一点：几个值得细看的设计<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<h3 id="61-file_safety-realpath">6.1 <code>file_safety</code>：为什么要解析 <code>realpath</code><a class="headerlink" href="#61-file_safety-realpath" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-19-1" id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">is_write_denied</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<a href="#__codelineno-19-2" id="__codelineno-19-2" name="__codelineno-19-2"></a>    <span class="n">resolved</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)))</span>
+<a href="#__codelineno-19-3" id="__codelineno-19-3" name="__codelineno-19-3"></a>    <span class="k">if</span> <span class="n">resolved</span> <span class="ow">in</span> <span class="n">build_write_denied_paths</span><span class="p">(</span><span class="n">home</span><span class="p">):</span>
+<a href="#__codelineno-19-4" id="__codelineno-19-4" name="__codelineno-19-4"></a>        <span class="k">return</span> <span class="kc">True</span>
+<a href="#__codelineno-19-5" id="__codelineno-19-5" name="__codelineno-19-5"></a>    <span class="c1"># ...</span>
+</code></pre></div>
+<p><code>realpath</code> 同时做了两件事：解析 <code>~</code>、解析符号链接。这是<strong>安全检查的金科玉律</strong>——<strong>永远在解析后的真实路径上检查</strong>，否则攻击者可以通过别名、软链、相对路径绕过任何字符串匹配。</p>
+<h3 id="62-url_safety">6.2 <code>url_safety</code>：失败时"封闭"还是"开放"？<a class="headerlink" href="#62-url_safety" title="Permanent link">¶</a></h3>
+<p>注意 <code>is_safe_url</code> 在 DNS 解析失败时的行为：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-20-1" id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="k">try</span><span class="p">:</span>
+<a href="#__codelineno-20-2" id="__codelineno-20-2" name="__codelineno-20-2"></a>    <span class="n">addr_info</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<a href="#__codelineno-20-3" id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">gaierror</span><span class="p">:</span>
+<a href="#__codelineno-20-4" id="__codelineno-20-4" name="__codelineno-20-4"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Blocked request — DNS resolution failed"</span><span class="p">)</span>
+<a href="#__codelineno-20-5" id="__codelineno-20-5" name="__codelineno-20-5"></a>    <span class="k">return</span> <span class="kc">False</span>    <span class="c1"># ← fail-closed：解析不出来就直接拒绝</span>
+</code></pre></div>
+<p>这就是 <strong>fail-closed（失败时封闭）</strong> 设计原则。<strong>安全检查里"宁愿误杀也不放过"</strong>——如果 DNS 都解析不出来，HTTP 客户端也连不上，拦截掉没有任何损失，但能挡住一些 DNS 攻击。</p>
+<p>相比之下 <code>website_policy</code> 在配置文件出错时是 fail-open（继续工作）——因为这是用户的政策，配置错了不应该把整个 web 工具瘫痪。<strong>两种策略各有适用场景</strong>。</p>
+<h3 id="63-file_state">6.3 <code>file_state</code>：环境变量逃生口<a class="headerlink" href="#63-file_state" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-21-1" id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_disabled</span><span class="p">():</span>
+<a href="#__codelineno-21-2" id="__codelineno-21-2" name="__codelineno-21-2"></a>    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"HERMES_DISABLE_FILE_STATE_GUARD"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"1"</span>
+</code></pre></div>
+<p>每次 <code>check_stale</code> 之前都会先看这个环境变量——如果设了 <code>=1</code> 就直接返回 <code>None</code>（不检查）。<strong>为什么留这道口子？</strong> 因为有时候开发者真的需要绕过——比如本地脚本调试、或者跑测试。<strong>好的安全机制要能让用户自己关掉它</strong>——而不是无脑挡所有人。</p>
+<h3 id="64-clarify_gateway">6.4 <code>clarify_gateway</code>：心跳的细节<a class="headerlink" href="#64-clarify_gateway" title="Permanent link">¶</a></h3>
+<p>回顾刚才那段 <code>wait_for_response</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-22-1" id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a href="#__codelineno-22-2" id="__codelineno-22-2" name="__codelineno-22-2"></a>    <span class="n">remaining</span> <span class="o">=</span> <span class="n">deadline</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+<a href="#__codelineno-22-3" id="__codelineno-22-3" name="__codelineno-22-3"></a>    <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="k">break</span>
+<a href="#__codelineno-22-4" id="__codelineno-22-4" name="__codelineno-22-4"></a>    <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">remaining</span><span class="p">)):</span> <span class="k">break</span>
+<a href="#__codelineno-22-5" id="__codelineno-22-5" name="__codelineno-22-5"></a>    <span class="n">touch_activity_if_due</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="s2">"waiting for user clarify response"</span><span class="p">)</span>
+</code></pre></div>
+<p>为什么不直接 <code>event.wait(timeout=600)</code>？因为 <a href="06_执行环境_执行环境_execution_environments__.md">执行环境（Execution Environments）</a> 那一层有"心跳监听"——如果 agent 线程 5 分钟没动静，会被当成卡死强行杀掉。这里用 1 秒一次的小循环每次都"打个卡"，告诉外层"我没卡死，我在等用户呢"。</p>
+<p><strong>这种细节是真实工程里护栏成功的关键</strong>——理想的"等用户回答"和现实的"看门狗在监听"必须协调好。</p>
+<h3 id="65-env_passthrough">6.5 <code>env_passthrough</code>：连"安全机制本身"也要防被绕过<a class="headerlink" href="#65-env_passthrough" title="Permanent link">¶</a></h3>
+<p>最后一个值得看的细节在 <code>tools/env_passthrough.py</code>。背景：skill 可以声明"我需要 <code>MY_API_KEY</code> 这个环境变量传到沙箱里"。一切美好。但要是有恶意 skill 声明"我需要 <code>ANTHROPIC_API_KEY</code>"——就把 hermes 自己的凭证泄露给沙箱进程了。</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-23-1" id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">register_env_passthrough</span><span class="p">(</span><span class="n">var_names</span><span class="p">):</span>
+<a href="#__codelineno-23-2" id="__codelineno-23-2" name="__codelineno-23-2"></a>    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">var_names</span><span class="p">:</span>
+<a href="#__codelineno-23-3" id="__codelineno-23-3" name="__codelineno-23-3"></a>        <span class="k">if</span> <span class="n">_is_hermes_provider_credential</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<a href="#__codelineno-23-4" id="__codelineno-23-4" name="__codelineno-23-4"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"refusing to register Hermes provider credential"</span><span class="p">)</span>
+<a href="#__codelineno-23-5" id="__codelineno-23-5" name="__codelineno-23-5"></a>            <span class="k">continue</span>   <span class="c1"># 直接拒绝</span>
+<a href="#__codelineno-23-6" id="__codelineno-23-6" name="__codelineno-23-6"></a>        <span class="n">_get_allowed</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div>
+<p><code>_HERMES_PROVIDER_ENV_BLOCKLIST</code> 是钉死的核心凭证名单——<strong>skill 永远无法把它们加进 passthrough 列表</strong>。这是修复一个真实 CVE（GHSA-rhgp-j443-p4rf）的产物——<strong>好的安全机制是从被攻破中学习的</strong>。</p>
+<hr/>
+<h2 id="_7">七、各部分如何串成一张图<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<pre class="mermaid"><code>flowchart TB
+    A[Agent 动作] --&gt; B{动作类型?}
+    B --&gt;|写文件| C[file_safety + path_security<br/>+ file_state]
+    B --&gt;|访问 URL| D[url_safety<br/>+ website_policy]
+    B --&gt;|装 MCP 包| E[osv_check<br/>恶意包检测]
+    B --&gt;|高代价操作| F[slash_confirm<br/>三选一]
+    B --&gt;|不确定| G[clarify<br/>问用户]
+    B --&gt;|读敏感缓存| H[get_read_block_error<br/>防 prompt 注入]
+    C --&gt; I{放行?}
+    D --&gt; I
+    E --&gt; I
+    F --&gt; I
+    G --&gt; I
+    H --&gt; I
+    I --&gt;|是| J[执行]
+    I --&gt;|否| K[返回错误<br/>模型自我修正]
+</code></pre>
+<p>六道防线<strong>协同工作</strong>，覆盖了 agent 主要的"动手前"决策点。每一道都遵循同样的设计哲学：</p>
+<ul>
+<li><strong>fail-closed 优先</strong>——拿不准就拒绝，安全机制不应有"灰色地带"。</li>
+<li><strong>解析后再判断</strong>——永远在最终真实路径/IP 上检查，不依赖字符串。</li>
+<li><strong>给模型清晰的错误</strong>——返回的错误信息要明确告诉模型"为什么、怎么改"，让它自我修正。</li>
+<li><strong>用户可以同意</strong>——<code>slash_confirm</code> 和 <code>clarify</code> 不是"拒绝执行"而是"先问一下"，给用户保留控制权。</li>
+<li><strong>不假装完美</strong>——<code>url_safety</code> 文件注释里明确写了 DNS rebinding 挡不住，因为修这个需要在更底层做。</li>
+</ul>
+<hr/>
+<h2 id="_8">八、本章小结<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<p>恭喜！你已经掌握了 <code>hermes-agent</code> 的第九个核心抽象：</p>
+<ul>
+<li><strong>安全与同意护栏</strong>是 agent 的"门禁系统"，由六个互相协作的模块组成——<code>file_safety</code>、<code>url_safety</code>、<code>website_policy</code>、<code>path_security</code>、<code>file_state</code>、<code>slash_confirm</code> / <code>clarify</code>。</li>
+<li><strong><code>file_safety</code></strong> 用钉死的名单 + 解析 <code>realpath</code> 阻止写入敏感文件（SSH key、shadow、bashrc...）。</li>
+<li><strong><code>url_safety</code></strong> 在 DNS 解析后检查 IP，<strong>始终拒绝</strong>云元数据接口（169.254.169.254 等），不论配置如何。</li>
+<li><strong><code>website_policy</code></strong> 让用户在配置文件里自定义黑名单，30 秒缓存避免性能损耗。</li>
+<li><strong><code>path_security</code></strong> 用 <code>resolve() + relative_to()</code> 防 <code>..</code> 路径穿越，被 skill、cron、credential 三处复用。</li>
+<li><strong><code>file_state</code></strong> 通过进程级注册表追踪每个 agent 的读/写时间戳，防止多 subagent 互相覆盖。</li>
+<li><strong><code>slash_confirm</code> / <code>clarify</code></strong> 在"高代价"或"不确定"的关口主动问用户，保留人类决策权。</li>
+<li>所有护栏共同遵循 <strong>fail-closed、realpath-then-check、清晰错误信息</strong> 三大设计原则。</li>
+</ul>
+<hr/>
+<p>到这里，agent 已经被装备得相当完整了——能力多、能跑多种环境、有记忆、有诊断、有安全护栏。但还有一个层面悄悄影响着一切：<strong>速率限制</strong>。你调 OpenAI 太快了、你调 Brave 太频繁了——服务商会返回 429，工具会失败，重试不当还会让封号雪上加霜。</p>
+<p>下一章我们就看看 <code>hermes-agent</code> 是怎么把"速率限制与重试治理"也做成一个独立的、聪明的子系统的。</p>
+<p>👉 继续学习：<a href="../10_%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E6%B2%BB%E7%90%86_rate_limit_tracker___guard__/">速率限制与重试治理（Rate Limit Tracker &amp; Guard）</a></p>
+<hr/>
+<p>Generated by <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../../javascripts/mathjax.js"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

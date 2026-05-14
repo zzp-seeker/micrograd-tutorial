@@ -6,24 +6,24 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解" name="description"/>
-<link href=".." rel="prev"/>
-<link href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/" rel="next"/>
-<link href="../assets/images/favicon.png" rel="icon"/>
+<link href="../../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/" rel="prev"/>
+<link href="01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
 <title>概览 - 深度教学（GitHub 仓库 + 论文）</title>
-<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
-<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
 <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
-<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
 </head>
 <body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
 <input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#tutorial-micrograd">
+<a class="md-skip" href="#tutorial-hermes-agent">
           跳转至
         </a>
 </div>
@@ -31,7 +31,7 @@
 </div>
 <header class="md-header" data-md-component="header">
 <nav aria-label="页眉" class="md-header__inner md-grid">
-<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" data-md-component="logo" href=".." title="深度教学（GitHub 仓库 + 论文）">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" data-md-component="logo" href="../.." title="深度教学（GitHub 仓库 + 论文）">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
 </a>
 <label class="md-header__button md-icon" for="__drawer">
@@ -102,7 +102,7 @@
 <div class="md-grid">
 <ul class="md-tabs__list">
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="..">
+<a class="md-tabs__link" href="../..">
         
   
   
@@ -113,7 +113,7 @@
       </a>
 </li>
 <li class="md-tabs__item md-tabs__item--active">
-<a class="md-tabs__link" href="./">
+<a class="md-tabs__link" href="../../micrograd_overview/">
           
   
   
@@ -122,7 +122,7 @@
         </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../papers/2305.10601/">
+<a class="md-tabs__link" href="../../papers/2305.10601/">
           
   
   
@@ -140,14 +140,14 @@
 <div class="md-sidebar__inner">
 <nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" data-md-component="logo" href=".." title="深度教学（GitHub 仓库 + 论文）">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="深度教学（GitHub 仓库 + 论文）">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
 </a>
     深度教学（GitHub 仓库 + 论文）
   </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="..">
+<a class="md-nav__link" href="../..">
 <span class="md-ellipsis">
     
   
@@ -181,8 +181,8 @@
 
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_1" type="checkbox"/>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2_1" type="checkbox"/>
 <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
 <span class="md-ellipsis">
     
@@ -194,12 +194,134 @@
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="true" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
 <label class="md-nav__title" for="__nav_2_1">
 <span class="md-nav__icon md-icon"></span>
             
   
     micrograd
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../micrograd_overview/">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    1. 标量值与自动微分
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    2. 动态计算图
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    3. 反向传播与链式法则
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    4. 模块基类
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    5. 神经元
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    6. 神经网络层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    7. 多层感知机
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    nousresearch/hermes-agent
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_2_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    nousresearch/hermes-agent
   
 
           </label>
@@ -246,129 +368,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
-<span class="md-ellipsis">
-    
-  
-    1. 标量值与自动微分
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
-<span class="md-ellipsis">
-    
-  
-    2. 动态计算图
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
-<span class="md-ellipsis">
-    
-  
-    3. 反向传播与链式法则
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
-<span class="md-ellipsis">
-    
-  
-    4. 模块基类
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
-<span class="md-ellipsis">
-    
-  
-    5. 神经元
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
-<span class="md-ellipsis">
-    
-  
-    6. 神经网络层
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
-<span class="md-ellipsis">
-    
-  
-    7. 多层感知机
-  
-
-    
-  </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--section md-nav__item--nested">
-<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2_2" type="checkbox"/>
-<label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
-<span class="md-ellipsis">
-    
-  
-    nousresearch/hermes-agent
-  
-
-    
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_2_2_label" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_2_2">
-<span class="md-nav__icon md-icon"></span>
-            
-  
-    nousresearch/hermes-agent
-  
-
-          </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../repos/hermes-agent/">
-<span class="md-ellipsis">
-    
-  
-    概览
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../repos/hermes-agent/01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">
+<a class="md-nav__link" href="01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">
 <span class="md-ellipsis">
     
   
@@ -380,7 +380,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../repos/hermes-agent/02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">
+<a class="md-nav__link" href="02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">
 <span class="md-ellipsis">
     
   
@@ -392,7 +392,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../repos/hermes-agent/03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">
+<a class="md-nav__link" href="03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">
 <span class="md-ellipsis">
     
   
@@ -404,7 +404,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../repos/hermes-agent/04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">
+<a class="md-nav__link" href="04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">
 <span class="md-ellipsis">
     
   
@@ -416,7 +416,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../repos/hermes-agent/05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">
+<a class="md-nav__link" href="05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">
 <span class="md-ellipsis">
     
   
@@ -428,7 +428,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../repos/hermes-agent/06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">
+<a class="md-nav__link" href="06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">
 <span class="md-ellipsis">
     
   
@@ -440,7 +440,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../repos/hermes-agent/07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">
+<a class="md-nav__link" href="07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">
 <span class="md-ellipsis">
     
   
@@ -452,7 +452,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../repos/hermes-agent/08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/">
+<a class="md-nav__link" href="08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/">
 <span class="md-ellipsis">
     
   
@@ -464,7 +464,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../repos/hermes-agent/09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">
+<a class="md-nav__link" href="09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">
 <span class="md-ellipsis">
     
   
@@ -476,7 +476,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../repos/hermes-agent/10_%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E6%B2%BB%E7%90%86_rate_limit_tracker___guard__/">
+<a class="md-nav__link" href="10_%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E6%B2%BB%E7%90%86_rate_limit_tracker___guard__/">
 <span class="md-ellipsis">
     
   
@@ -540,7 +540,7 @@
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../papers/2305.10601/">
+<a class="md-nav__link" href="../../papers/2305.10601/">
 <span class="md-ellipsis">
     
   
@@ -552,7 +552,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../papers/2305.10601/01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/">
+<a class="md-nav__link" href="../../papers/2305.10601/01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/">
 <span class="md-ellipsis">
     
   
@@ -564,7 +564,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../papers/2305.10601/02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+<a class="md-nav__link" href="../../papers/2305.10601/02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
 <span class="md-ellipsis">
     
   
@@ -576,7 +576,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../papers/2305.10601/03_%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C/">
+<a class="md-nav__link" href="../../papers/2305.10601/03_%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C/">
 <span class="md-ellipsis">
     
   
@@ -588,7 +588,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../papers/2305.10601/04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+<a class="md-nav__link" href="../../papers/2305.10601/04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
 <span class="md-ellipsis">
     
   
@@ -600,7 +600,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../papers/2305.10601/05_%E8%A7%81%E8%A7%A3%E4%B8%8E%E6%89%A9%E5%B1%95/">
+<a class="md-nav__link" href="../../papers/2305.10601/05_%E8%A7%81%E8%A7%A3%E4%B8%8E%E6%89%A9%E5%B1%95/">
 <span class="md-ellipsis">
     
   
@@ -626,14 +626,14 @@
 <nav aria-label="导航栏" class="md-path">
 <ol class="md-path__list">
 <li class="md-path__item">
-<a class="md-path__link" href="..">
+<a class="md-path__link" href="../..">
 <span class="md-ellipsis">
     首页
   </span>
 </a>
 </li>
 <li class="md-path__item">
-<a class="md-path__link" href="./">
+<a class="md-path__link" href="../../micrograd_overview/">
 <span class="md-ellipsis">
     GitHub 仓库
   </span>
@@ -642,59 +642,73 @@
 <li class="md-path__item">
 <a class="md-path__link" href="./">
 <span class="md-ellipsis">
-    micrograd
+    nousresearch/hermes-agent
   </span>
 </a>
 </li>
 </ol>
 </nav>
 <article class="md-content__inner md-typeset">
-<h1 id="tutorial-micrograd">Tutorial: micrograd<a class="headerlink" href="#tutorial-micrograd" title="Permanent link">¶</a></h1>
-<p><code>micrograd</code> 是一个<strong>极简的自动微分引擎</strong>，仅用约 100 行代码就实现了基于<strong>动态计算图</strong>的<em>反向模式自动求导</em>（reverse-mode autodiff），并在其上构建了一个类似 <em>PyTorch</em> 风格的<strong>小型神经网络库</strong>（约 50 行代码）。
-它的核心是 <code>Value</code> 类——一个包装<strong>标量数值</strong>并记录梯度的"带记忆的数字"，所有数学运算都会自动构建一张<strong>有向无环图（DAG）</strong>，从而支持调用 <code>backward()</code> 自动计算偏导数。
-在引擎之上，项目提供了 <code>Module</code>、<code>Neuron</code>、<code>Layer</code>、<code>MLP</code> 四个抽象，让用户能像搭积木一样组装出<strong>多层感知机</strong>，并完成诸如二分类等真实训练任务。
-虽然由于只支持标量运算导致效率不高，但它<strong>直观、易读、麻雀虽小五脏俱全</strong>，非常适合用于<em>教学</em>和理解深度学习框架的底层原理。</p>
-<p><strong>Source Repository:</strong> <a href="https://github.com/karpathy/micrograd">https://github.com/karpathy/micrograd</a></p>
+<h1 id="tutorial-hermes-agent">Tutorial: hermes-agent<a class="headerlink" href="#tutorial-hermes-agent" title="Permanent link">¶</a></h1>
+<p><code>hermes-agent</code> 是一个<strong>多后端、可插拔的 AI 编码 Agent 框架</strong>。它把和大模型对话的"传输层"、跑命令的"执行环境"、搜索/抓网页/生图等"云能力"全部抽象成统一接口，再用<em>声明式档案</em>和<em>插件注册表</em>把具体厂商（Anthropic、OpenAI、Bedrock、Brave、Browserbase 等）挂载进来。</p>
+<p>围绕主循环还配套了一整套<strong>护栏与治理机制</strong>：<em>上下文引擎</em>管 token 预算和压缩、<em>记忆提供方</em>管跨会话长期记忆、<em>工具产物预算系统</em>防止超大输出撑爆窗口、<em>LSP 服务</em>实时反馈代码诊断、<em>速率限制治理</em>跨会话同步避让 429、<em>安全护栏</em>拦截危险写入和 SSRF。整体设计让用户<strong>换厂商、换沙箱、换搜索引擎只改一行配置</strong>，主代码不动。</p>
+<p><strong>Source Repository:</strong> <a href="None">None</a></p>
 <pre class="mermaid"><code>flowchart TD
-    A0["标量值与自动微分 (Value)
+    A0["Provider 传输层（Provider Transports）
 "]
-    A1["动态计算图 (DAG)
+    A1["Provider 档案（Provider Profiles）
 "]
-    A2["反向传播与链式法则 (backward)
+    A2["上下文引擎（Context Engine）
 "]
-    A3["模块基类 (Module)
+    A3["记忆提供方（Memory Provider）
 "]
-    A4["神经元 (Neuron)
+    A4["执行环境（Execution Environments）
 "]
-    A5["神经网络层 (Layer)
+    A5["工具产物预算系统（Tool Result Budget）
 "]
-    A6["多层感知机 (MLP)
+    A6["LSP 集成服务（LSP Service）
 "]
-    A0 -- "运算时构建" --&gt; A1
-    A2 -- "拓扑排序遍历" --&gt; A1
-    A0 -- "提供 backward 方法" --&gt; A2
-    A4 -- "继承" --&gt; A3
-    A5 -- "继承" --&gt; A3
-    A6 -- "继承" --&gt; A3
-    A4 -- "用 Value 表示权重" --&gt; A0
-    A5 -- "聚合多个神经元" --&gt; A4
-    A6 -- "串联多层" --&gt; A5
+    A7["云服务可插拔后端（Cloud Service Providers）
+"]
+    A8["速率限制与重试治理（Rate Limit Tracker &amp; Guard）
+"]
+    A9["安全与同意护栏（Safety &amp; Consent Guardrails）
+"]
+    A0 -- "读取配置驱动" --&gt; A1
+    A1 -- "声明 api_mode" --&gt; A0
+    A2 -- "消费 token 使用量" --&gt; A0
+    A3 -- "压缩前抽取记忆" --&gt; A2
+    A5 -- "写入沙箱临时文件" --&gt; A4
+    A6 -- "在工作区运行诊断" --&gt; A4
+    A7 -- "调用前校验 URL" --&gt; A9
+    A8 -- "解析响应头限流" --&gt; A0
+    A9 -- "拦截危险命令" --&gt; A4
+    A9 -- "阻断 SSRF 请求" --&gt; A7
+    A3 -- "受预算约束" --&gt; A5
+    A2 -- "感知配额状态" --&gt; A8
+    A6 -- "诊断输出截断" --&gt; A5
 </code></pre>
 <h2 id="chapters">Chapters<a class="headerlink" href="#chapters" title="Permanent link">¶</a></h2>
 <ol>
-<li><a href="../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">标量值与自动微分 (Value)
+<li><a href="01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">Provider 档案（Provider Profiles）
 </a></li>
-<li><a href="../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">动态计算图 (DAG)
+<li><a href="02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">Provider 传输层（Provider Transports）
 </a></li>
-<li><a href="../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">反向传播与链式法则 (backward)
+<li><a href="03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">上下文引擎（Context Engine）
 </a></li>
-<li><a href="../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">模块基类 (Module)
+<li><a href="04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">记忆提供方（Memory Provider）
 </a></li>
-<li><a href="../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">神经元 (Neuron)
+<li><a href="05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">工具产物预算系统（Tool Result Budget）
 </a></li>
-<li><a href="../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">神经网络层 (Layer)
+<li><a href="06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">执行环境（Execution Environments）
 </a></li>
-<li><a href="../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">多层感知机 (MLP)
+<li><a href="07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">LSP 集成服务（LSP Service）
+</a></li>
+<li><a href="08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/">云服务可插拔后端（Cloud Service Providers）
+</a></li>
+<li><a href="09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">安全与同意护栏（Safety &amp; Consent Guardrails）
+</a></li>
+<li><a href="10_%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E6%B2%BB%E7%90%86_rate_limit_tracker___guard__/">速率限制与重试治理（Rate Limit Tracker &amp; Guard）
 </a></li>
 </ol>
 <hr/>
@@ -720,9 +734,9 @@
 <div class="md-dialog" data-md-component="dialog">
 <div class="md-dialog__inner md-typeset"></div>
 </div>
-<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
-<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
-<script src="../javascripts/mathjax.js"></script>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
 <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
 window.mermaidConfig = {default: {

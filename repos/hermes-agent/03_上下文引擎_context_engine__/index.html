@@ -1,0 +1,1134 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解" name="description"/>
+<link href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/" rel="prev"/>
+<link href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/" rel="next"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>3. 上下文引擎 - 深度教学（GitHub 仓库 + 论文）</title>
+<link href="../../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#chapter-3-context-engine">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            深度教学（GitHub 仓库 + 论文）
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              3. 上下文引擎
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../../../micrograd_overview/">
+          
+  
+  
+  GitHub 仓库
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../papers/2305.10601/">
+          
+  
+  
+  论文
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    深度教学（GitHub 仓库 + 论文）
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    GitHub 仓库
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    GitHub 仓库
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    micrograd
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    micrograd
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    1. 标量值与自动微分
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    2. 动态计算图
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    3. 反向传播与链式法则
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    4. 模块基类
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    5. 神经元
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    6. 神经网络层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    7. 多层感知机
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    nousresearch/hermes-agent
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_2_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    nousresearch/hermes-agent
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">
+<span class="md-ellipsis">
+    
+  
+    1. Provider 档案
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">
+<span class="md-ellipsis">
+    
+  
+    2. Provider 传输层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    3. 上下文引擎
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    3. 上下文引擎
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        一、问题从哪里来？一个图书馆的小故事
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        二、本章的核心用例
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        三、上下文引擎到底要管什么？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        四、关键概念逐个看
+      
+    </span>
+</a>
+<nav aria-label="四、关键概念逐个看" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#41-token-context-window">
+<span class="md-ellipsis">
+      
+        4.1 token 与 context window
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#42">
+<span class="md-ellipsis">
+      
+        4.2 "保护区"——哪些书永远不动
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#43">
+<span class="md-ellipsis">
+      
+        4.3 可插拔的设计
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#contextengine">
+<span class="md-ellipsis">
+      
+        五、ContextEngine 抽象基类：所有引擎的"岗位说明书"
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        六、动手用一下！跟着用例走一遍
+      
+    </span>
+</a>
+<nav aria-label="六、动手用一下！跟着用例走一遍" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-token">
+<span class="md-ellipsis">
+      
+        步骤 1：每次拿到回复后，更新 token 仪表盘
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        步骤 2：问引擎"要不要压缩？"
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3">
+<span class="md-ellipsis">
+      
+        步骤 3：真的开始压缩
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4">
+<span class="md-ellipsis">
+      
+        步骤 4：会话结束时持久化（可选）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        七、内部是怎么运转的？
+      
+    </span>
+</a>
+<nav aria-label="七、内部是怎么运转的？" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#71">
+<span class="md-ellipsis">
+      
+        7.1 一段直白的流程描述
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#72">
+<span class="md-ellipsis">
+      
+        7.2 用图来理解
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#contextcompressor">
+<span class="md-ellipsis">
+      
+        八、再深入一点：默认引擎 ContextCompressor
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      
+        九、生命周期钩子：什么时候被叫醒？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#agent">
+<span class="md-ellipsis">
+      
+        十、引擎还能"借工具给 agent 用"
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      
+        十一、写一个最小的自定义引擎
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+<span class="md-ellipsis">
+      
+        十二、引擎从哪儿来？
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+<span class="md-ellipsis">
+      
+        十三、本章小结
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">
+<span class="md-ellipsis">
+    
+  
+    4. 记忆提供方
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">
+<span class="md-ellipsis">
+    
+  
+    5. 工具产物预算系统
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../06_%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83_execution_environments__/">
+<span class="md-ellipsis">
+    
+  
+    6. 执行环境
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">
+<span class="md-ellipsis">
+    
+  
+    7. LSP 集成服务
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/">
+<span class="md-ellipsis">
+    
+  
+    8. 云服务可插拔后端
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">
+<span class="md-ellipsis">
+    
+  
+    9. 安全与同意护栏
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../10_%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E6%B2%BB%E7%90%86_rate_limit_tracker___guard__/">
+<span class="md-ellipsis">
+    
+  
+    10. 速率限制与重试治理
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_3_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/">
+<span class="md-ellipsis">
+    
+  
+    论文速览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/">
+<span class="md-ellipsis">
+    
+  
+    1. 背景与前置知识
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+<span class="md-ellipsis">
+    
+  
+    2. 方法详解
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/03_%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C/">
+<span class="md-ellipsis">
+    
+  
+    3. 实验与结果
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+<span class="md-ellipsis">
+    
+  
+    4. 源码分析
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/05_%E8%A7%81%E8%A7%A3%E4%B8%8E%E6%89%A9%E5%B1%95/">
+<span class="md-ellipsis">
+    
+  
+    5. 见解与扩展
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="导航栏" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../../..">
+<span class="md-ellipsis">
+    首页
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    GitHub 仓库
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../">
+<span class="md-ellipsis">
+    nousresearch/hermes-agent
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="chapter-3-context-engine">Chapter 3: 上下文引擎（Context Engine）<a class="headerlink" href="#chapter-3-context-engine" title="Permanent link">¶</a></h1>
+<p>在上一章 <a href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">Provider 传输层（Provider Transports）</a> 里，我们解决了"消息怎么发出去、回复怎么收回来"的问题。但还有一个更早、更关键的问题等着我们：<strong>这些消息从哪儿来？里面塞了多少东西？会不会超出模型能吃下的容量？</strong></p>
+<p>这就是本章主角——<strong>上下文引擎（Context Engine）</strong>——要管的事儿。</p>
+<hr/>
+<h2 id="_1">一、问题从哪里来？一个图书馆的小故事<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>想象你有一张<strong>只能放 20 本书</strong>的书架。</p>
+<ul>
+<li>早上，你拿来了 5 本书，没问题。</li>
+<li>中午，你又拿来 10 本，加起来 15 本，还撑得住。</li>
+<li>下午，你想再放 8 本——糟糕，书架只能放 20 本，要爆了！</li>
+</ul>
+<p>这时你不会乱扔，而是请来一位<strong>图书管理员</strong>：</p>
+<ol>
+<li>她看看哪些是"老书"（你最近没翻过），把它们整理成一份<strong>索引摘要卡</strong>。</li>
+<li>把厚厚的几本旧书换成一张薄薄的卡片，立刻腾出空位。</li>
+<li>新书顺利上架，你需要时还能凭卡片找回旧内容。</li>
+</ol>
+<p><code>hermes-agent</code> 的对话也一样：</p>
+<ul>
+<li>模型的 <strong>context window</strong>（上下文窗口）就是"书架容量"，比如 200,000 tokens。</li>
+<li>每轮对话的消息就是一本一本新书往书架上塞。</li>
+<li>塞着塞着就会超——这时候必须有人来决定：<strong>什么时候压缩？怎么压缩？压完保留哪些信息？</strong></li>
+</ul>
+<p>这位"图书管理员"就是 <strong>上下文引擎（Context Engine）</strong>。</p>
+<hr/>
+<h2 id="_2">二、本章的核心用例<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<blockquote>
+<p>我们想知道：当对话历史快要爆掉模型的 context window 时，<code>hermes-agent</code> 是如何自动检测、自动压缩、并继续工作的？同时，我们想知道<strong>如何把默认的压缩引擎换成自己写的引擎</strong>，比如 LCM 这种基于 DAG 的方案。</p>
+</blockquote>
+<p>读完本章你就能理解整套机制，并且会写一个最小的自定义引擎。</p>
+<hr/>
+<h2 id="_3">三、上下文引擎到底要管什么？<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>引擎的职责可以拆成 4 件事，每件都对应图书管理员的一个动作：</p>
+<table>
+<thead>
+<tr>
+<th>引擎方法</th>
+<th>图书管理员的对应动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>update_from_response(usage)</code></td>
+<td>"刚刚又上架了多少本书？我心里有数。"</td>
+</tr>
+<tr>
+<td><code>should_compress()</code></td>
+<td>"书架快满了吗？要不要现在收拾？"</td>
+</tr>
+<tr>
+<td><code>compress(messages)</code></td>
+<td>"好嘞，开始整理——把旧书归档成摘要卡。"</td>
+</tr>
+<tr>
+<td><code>get_tool_schemas()</code></td>
+<td>"我还可以给你提供一个'查归档'的工具（如 LCM 的 grep）。"</td>
+</tr>
+</tbody>
+</table>
+<p>外加一些<strong>生命周期钩子</strong>（session 开始、结束、重置），让引擎能在合适的时机加载或保存状态。</p>
+<hr/>
+<h2 id="_4">四、关键概念逐个看<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<h3 id="41-token-context-window">4.1 token 与 context window<a class="headerlink" href="#41-token-context-window" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>token</strong>：一个 token 大约是 4 个英文字符或 1~2 个汉字。模型按 token 计费、按 token 限容。</li>
+<li><strong>context window</strong>：模型一次能"看到"的最大 token 数，例如 Claude Sonnet 4.5 是 200,000。</li>
+<li><strong>threshold（阈值）</strong>：我们不会等"完全装满"才压缩——默认在 <strong>75%</strong> 就触发，留点缓冲。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">threshold_percent</span> <span class="o">=</span> <span class="mf">0.75</span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="n">context_length</span>    <span class="o">=</span> <span class="mi">200_000</span>
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="n">threshold_tokens</span>  <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">context_length</span> <span class="o">*</span> <span class="n">threshold_percent</span><span class="p">)</span>  <span class="c1"># 150_000</span>
+</code></pre></div>
+<p>这相当于："书架还剩 25% 空位时就开始整理"——保险起见。</p>
+<h3 id="42">4.2 "保护区"——哪些书永远不动<a class="headerlink" href="#42" title="Permanent link">¶</a></h3>
+<p>引擎不能把所有旧消息都压掉，否则模型就失忆了。所以有两个保护参数：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">protect_first_n</span> <span class="o">=</span> <span class="mi">3</span>   <span class="c1"># 最前面 3 条消息永不压缩（system prompt 等）</span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="n">protect_last_n</span>  <span class="o">=</span> <span class="mi">6</span>   <span class="c1"># 最近 6 条消息永不压缩（当前任务上下文）</span>
+</code></pre></div>
+<p>只有"夹在中间的老消息"才会被合并成摘要。这就像图书管理员不会动你<strong>最开头的镇馆之宝</strong>，也不会动<strong>手边正在读的那几本</strong>。</p>
+<h3 id="43">4.3 可插拔的设计<a class="headerlink" href="#43" title="Permanent link">¶</a></h3>
+<p><code>hermes-agent</code> 不强迫你用某一种压缩策略。配置文件里写：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">context</span><span class="p">:</span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="nt">engine</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compressor</span><span class="w">   </span><span class="c1"># 默认值；也可以换成 "lcm" 或别的</span>
+</code></pre></div>
+<p>只要你的引擎实现了下面这套接口，就能直接顶替默认实现——主程序完全不需要改。</p>
+<hr/>
+<h2 id="contextengine">五、<code>ContextEngine</code> 抽象基类：所有引擎的"岗位说明书"<a class="headerlink" href="#contextengine" title="Permanent link">¶</a></h2>
+<p>我们看一下基类最关键的几个字段（来自 <code>agent/context_engine.py</code>）：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">ContextEngine</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>    <span class="n">last_prompt_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># 上一轮 prompt 用了多少 token</span>
+<a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>    <span class="n">threshold_tokens</span><span class="p">:</span>   <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># 触发阈值</span>
+<a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>    <span class="n">context_length</span><span class="p">:</span>     <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># 模型窗口大小</span>
+<a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>    <span class="n">compression_count</span><span class="p">:</span>  <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># 这个 session 压缩过几次</span>
+</code></pre></div>
+<p>这四个数字是引擎必须维护的"仪表盘"。<code>run_agent.py</code> 会直接读它们来显示给用户：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>[ctx: 120,431 / 200,000 tokens (60%) | compressed: 1x]
+</code></pre></div>
+<p>接着是三个<strong>必须实现</strong>的方法：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nd">@abstractmethod</span>
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">update_from_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="p">):</span> <span class="o">...</span>   <span class="c1"># 收账</span>
+<a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="nd">@abstractmethod</span>
+<a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">should_compress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt_tokens</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="o">...</span>   <span class="c1"># 判断</span>
+<a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="nd">@abstractmethod</span>
+<a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">compress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span> <span class="o">...</span>   <span class="c1"># 真正动手</span>
+</code></pre></div>
+<p>任何引擎只要把这三个补齐，就能上岗。</p>
+<hr/>
+<h2 id="_5">六、动手用一下！跟着用例走一遍<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<p>假设我们正在和模型聊一个超长的任务，第 30 轮对话开始了。让我们一步步看主循环和引擎的协作。</p>
+<h3 id="1-token">步骤 1：每次拿到回复后，更新 token 仪表盘<a class="headerlink" href="#1-token" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="c1"># 主循环拿到 API 回复后</span>
+<a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="n">engine</span><span class="o">.</span><span class="n">update_from_response</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">usage</span><span class="p">)</span>
+</code></pre></div>
+<p>引擎内部会把 <code>usage.prompt_tokens</code> 等写进自己的 <code>last_prompt_tokens</code> 字段。<strong>就像图书管理员清点今天上架了几本新书。</strong></p>
+<h3 id="2">步骤 2：问引擎"要不要压缩？"<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="k">if</span> <span class="n">engine</span><span class="o">.</span><span class="n">should_compress</span><span class="p">():</span>
+<a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"书架快满，准备整理！"</span><span class="p">)</span>
+</code></pre></div>
+<p>默认实现的逻辑就是一行比较：<code>last_prompt_tokens &gt;= threshold_tokens</code>。</p>
+<h3 id="3">步骤 3：真的开始压缩<a class="headerlink" href="#3" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="n">messages</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>输入</strong>：可能有 80 条消息的长列表。
+<strong>输出</strong>：可能只有 30 条的短列表——中间的老消息被合并成一条"摘要消息"，前 3 条和后 6 条原封不动。</p>
+<p>主循环拿到压缩后的 <code>messages</code>，下一轮就用它继续对话。模型看不到旧的细节，但能看到一段简短的"前情提要"。</p>
+<h3 id="4">步骤 4：会话结束时持久化（可选）<a class="headerlink" href="#4" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="n">engine</span><span class="o">.</span><span class="n">on_session_end</span><span class="p">(</span><span class="n">session_id</span><span class="p">,</span> <span class="n">messages</span><span class="p">)</span>
+</code></pre></div>
+<p>如果是 LCM 这种带索引的引擎，它会在这里把 DAG 写到磁盘，下次启动还能加载。默认压缩器啥也不做。</p>
+<hr/>
+<h2 id="_6">七、内部是怎么运转的？<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<h3 id="71">7.1 一段直白的流程描述<a class="headerlink" href="#71" title="Permanent link">¶</a></h3>
+<p>一次完整的"对话回合 + 自动压缩"是这样的：</p>
+<ol>
+<li>用户输入新一条消息，主循环把它追加到 <code>messages</code> 列表。</li>
+<li>主循环挑选好 <a href="../01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">Provider 档案</a> 和 <a href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">Transport</a>，把 <code>messages</code> 翻译后发请求。</li>
+<li>拿到回复，主循环调用 <code>engine.update_from_response(usage)</code>——引擎记下"这轮用了多少 token"。</li>
+<li>主循环问 <code>engine.should_compress()</code>——超过阈值就返回 True。</li>
+<li>如果要压缩，主循环调用 <code>engine.compress(messages)</code>，拿回压缩后的列表。</li>
+<li>下一轮对话继续。</li>
+</ol>
+<h3 id="72">7.2 用图来理解<a class="headerlink" href="#72" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant U as 用户
+    participant L as 主循环
+    participant E as ContextEngine
+    participant M as LLM
+
+    U-&gt;&gt;L: 新消息
+    L-&gt;&gt;M: 发请求（带完整 messages）
+    M--&gt;&gt;L: 回复 + usage
+    L-&gt;&gt;E: update_from_response(usage)
+    L-&gt;&gt;E: should_compress()?
+    E--&gt;&gt;L: True / False
+    L-&gt;&gt;E: compress(messages)  // 如果 True
+    E--&gt;&gt;L: 压缩后的 messages
+</code></pre>
+<p>注意：<strong>主循环只问、不思考</strong>——所有"什么时候压、压多少、怎么压"的决策都封装在引擎里。这就是策略与执行分离的好处。</p>
+<hr/>
+<h2 id="contextcompressor">八、再深入一点：默认引擎 <code>ContextCompressor</code><a class="headerlink" href="#contextcompressor" title="Permanent link">¶</a></h2>
+<p>默认引擎做的事情很朴素，可以总结成 3 步：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="c1"># 伪代码示意</span>
+<a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">compress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+<a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a>    <span class="n">head</span> <span class="o">=</span> <span class="n">messages</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">protect_first_n</span><span class="p">]</span>       <span class="c1"># 保护前 N</span>
+<a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a>    <span class="n">tail</span> <span class="o">=</span> <span class="n">messages</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">protect_last_n</span><span class="p">:]</span>       <span class="c1"># 保护后 M</span>
+<a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a>    <span class="n">middle</span> <span class="o">=</span> <span class="n">messages</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">protect_first_n</span><span class="p">:</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">protect_last_n</span><span class="p">]</span>
+<a href="#__codelineno-10-6" id="__codelineno-10-6" name="__codelineno-10-6"></a>    <span class="n">summary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_llm_summarize</span><span class="p">(</span><span class="n">middle</span><span class="p">)</span>        <span class="c1"># 让 LLM 写摘要</span>
+<a href="#__codelineno-10-7" id="__codelineno-10-7" name="__codelineno-10-7"></a>    <span class="k">return</span> <span class="n">head</span> <span class="o">+</span> <span class="p">[</span><span class="n">summary</span><span class="p">]</span> <span class="o">+</span> <span class="n">tail</span>
+</code></pre></div>
+<p>它的核心思想就是：<strong>护住头尾，中间用一段摘要替换</strong>。摘要本身是由一次额外的 LLM 调用生成的——所以压缩本身是"花一点 token 换更多 token 的空间"。</p>
+<hr/>
+<h2 id="_7">九、生命周期钩子：什么时候被叫醒？<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<p>引擎并不是只会"压缩"，它还会在关键时刻被通知：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">on_session_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="o">...</span>
+<a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">on_session_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">,</span> <span class="n">messages</span><span class="p">):</span> <span class="o">...</span>
+<a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">on_session_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="o">...</span>
+</code></pre></div>
+<ul>
+<li><strong>session_start</strong>：CLI 启动或新建会话时调用。LCM 这种带索引的引擎会在这里<strong>加载磁盘上的 DAG</strong>。</li>
+<li><strong>session_end</strong>：真正退出时调用（不是每轮！）。用于持久化。</li>
+<li><strong>session_reset</strong>：用户敲了 <code>/reset</code> 或 <code>/new</code>，把计数器清零。</li>
+</ul>
+<p>默认实现里 <code>on_session_reset()</code> 就是：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">on_session_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">last_prompt_tokens</span> <span class="o">=</span> <span class="mi">0</span>
+<a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">last_completion_tokens</span> <span class="o">=</span> <span class="mi">0</span>
+<a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">last_total_tokens</span> <span class="o">=</span> <span class="mi">0</span>
+<a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">compression_count</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre></div>
+<p>简简单单把仪表盘归零。</p>
+<hr/>
+<h2 id="agent">十、引擎还能"借工具给 agent 用"<a class="headerlink" href="#agent" title="Permanent link">¶</a></h2>
+<p>这是上下文引擎一个很妙的设计：它不仅压缩，还可以<strong>给 agent 提供额外的工具</strong>。</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_tool_schemas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a>    <span class="k">return</span> <span class="p">[]</span>   <span class="c1"># 默认啥也不给</span>
+<a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a>
+<a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">handle_tool_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a href="#__codelineno-13-5" id="__codelineno-13-5" name="__codelineno-13-5"></a>    <span class="o">...</span>
+</code></pre></div>
+<p>举个例子：LCM 引擎可能把对话历史压成 DAG 存到本地，然后给 agent 提供一个 <code>lcm_grep</code> 工具——agent 想找"3 小时前那段关于数据库迁移的对话"时，可以主动调用 <code>lcm_grep(keyword="migration")</code> 去翻索引。</p>
+<p>也就是说：<strong>引擎既是"管家"，又是"档案室管理员"</strong>。它不仅决定哪些旧消息被压缩走，还能让 agent 在需要时回头查档。</p>
+<hr/>
+<h2 id="_8">十一、写一个最小的自定义引擎<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<p>为了让你有个完整印象，我们来写一个<strong>"永远不压缩"</strong>的玩具引擎：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">agent.context_engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContextEngine</span>
+<a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a>
+<a href="#__codelineno-14-3" id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">NoOpEngine</span><span class="p">(</span><span class="n">ContextEngine</span><span class="p">):</span>
+<a href="#__codelineno-14-4" id="__codelineno-14-4" name="__codelineno-14-4"></a>    <span class="nd">@property</span>
+<a href="#__codelineno-14-5" id="__codelineno-14-5" name="__codelineno-14-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"noop"</span>
+</code></pre></div>
+<p>定义个名字。接下来是三个必备方法：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update_from_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="p">):</span>
+<a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_prompt_tokens</span> <span class="o">=</span> <span class="n">usage</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"prompt_tokens"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+<p>记下来 token 数就行。</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">should_compress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt_tokens</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a>        <span class="k">return</span> <span class="kc">False</span>   <span class="c1"># 永远不压</span>
+</code></pre></div>
+<p>懒得压，永远说 False。</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">compress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a>        <span class="k">return</span> <span class="n">messages</span>   <span class="c1"># 原样返回</span>
+</code></pre></div>
+<p><strong>输出</strong>：把这个类注册成 <code>context.engine = noop</code>，<code>hermes-agent</code> 就完全不会触发压缩。当然，这只是演示——一旦真的塞爆窗口，模型会直接报错。</p>
+<hr/>
+<h2 id="_9">十二、引擎从哪儿来？<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<p>和前两章一样，引擎也是<strong>可插拔</strong>的。它的发现机制和 Provider 档案如出一辙：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-18-1" id="__codelineno-18-1" name="__codelineno-18-1"></a>plugins/context_engine/&lt;name&gt;/        # 内置
+<a href="#__codelineno-18-2" id="__codelineno-18-2" name="__codelineno-18-2"></a>~/.hermes/plugins/context_engine/&lt;name&gt;/   # 用户私人
+</code></pre></div>
+<p>每个目录里放一个 <code>__init__.py</code>，导入并注册你的引擎类。主程序根据 <code>context.engine</code> 配置项选用其中一个。</p>
+<pre class="mermaid"><code>flowchart LR
+    A[config.yaml<br/>context.engine] --&gt; B{注册表}
+    B --&gt; C[ContextCompressor 默认]
+    B --&gt; D[LCM 第三方]
+    B --&gt; E[你自己的 Engine]
+</code></pre>
+<p>一次会话里<strong>只有一个引擎是激活的</strong>，但你可以随时换。</p>
+<hr/>
+<h2 id="_10">十三、本章小结<a class="headerlink" href="#_10" title="Permanent link">¶</a></h2>
+<p>恭喜！你已经掌握了 <code>hermes-agent</code> 的第三个核心抽象：</p>
+<ul>
+<li><strong>上下文引擎</strong>像图书管理员，负责跟踪 token、判断是否压缩、真正执行压缩、还能给 agent 提供额外工具。</li>
+<li>所有引擎实现同一个抽象基类 <code>ContextEngine</code>，对外暴露 <code>update_from_response</code>、<code>should_compress</code>、<code>compress</code> 三个必备方法。</li>
+<li>通过保护<strong>前 N 条 + 后 M 条</strong>消息，引擎只压缩"中间的老内容"，避免丢失关键上下文。</li>
+<li>引擎是<strong>可插拔的</strong>：配置文件里改一行 <code>context.engine: xxx</code> 就能换实现，主代码不动。</li>
+<li>引擎还有生命周期钩子（<code>on_session_start</code> / <code>on_session_end</code> / <code>on_session_reset</code>），方便加载、保存、重置状态。</li>
+</ul>
+<p>到这里我们解决了"消息<strong>容器</strong>会不会爆"的问题。但更早一层的问题是——<strong>那些被压缩走的旧信息，能不能持久化下来，让 agent 在未来某天想起来时还能查到？</strong> 单靠一个 session 内的摘要是不够的，我们需要一个真正长期的"记忆库"。</p>
+<p>那就是下一章的主角——<strong>记忆提供方</strong>。</p>
+<p>👉 继续学习：<a href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">记忆提供方（Memory Provider）</a></p>
+<hr/>
+<p>Generated by <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../../javascripts/mathjax.js"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

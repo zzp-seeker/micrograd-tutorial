@@ -1,0 +1,1198 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="AI 生成的深度教学站点：代码仓库 walkthrough + 论文逐章讲解" name="description"/>
+<link href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/" rel="prev"/>
+<link href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/" rel="next"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>6. 执行环境 - 深度教学（GitHub 仓库 + 论文）</title>
+<link href="../../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#chapter-6-execution-environments">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            深度教学（GitHub 仓库 + 论文）
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              6. 执行环境
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="切换到深色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="切换到深色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="切换到浅色模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="切换到浅色模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../../../micrograd_overview/">
+          
+  
+  
+  GitHub 仓库
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../papers/2305.10601/">
+          
+  
+  
+  论文
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="深度教学（GitHub 仓库 + 论文）" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="深度教学（GitHub 仓库 + 论文）">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    深度教学（GitHub 仓库 + 论文）
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+<span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    GitHub 仓库
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    GitHub 仓库
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    micrograd
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    micrograd
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../01_%E6%A0%87%E9%87%8F%E5%80%BC%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86__value__/">
+<span class="md-ellipsis">
+    
+  
+    1. 标量值与自动微分
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../02_%E5%8A%A8%E6%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE__dag__/">
+<span class="md-ellipsis">
+    
+  
+    2. 动态计算图
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../03_%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E4%B8%8E%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99__backward__/">
+<span class="md-ellipsis">
+    
+  
+    3. 反向传播与链式法则
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../04_%E6%A8%A1%E5%9D%97%E5%9F%BA%E7%B1%BB__module__/">
+<span class="md-ellipsis">
+    
+  
+    4. 模块基类
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../05_%E7%A5%9E%E7%BB%8F%E5%85%83__neuron__/">
+<span class="md-ellipsis">
+    
+  
+    5. 神经元
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../06_%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%B1%82__layer__/">
+<span class="md-ellipsis">
+    
+  
+    6. 神经网络层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../07_%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA__mlp__/">
+<span class="md-ellipsis">
+    
+  
+    7. 多层感知机
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    nousresearch/hermes-agent
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_2_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_2_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    nousresearch/hermes-agent
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../">
+<span class="md-ellipsis">
+    
+  
+    概览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../01_provider_%E6%A1%A3%E6%A1%88_provider_profiles__/">
+<span class="md-ellipsis">
+    
+  
+    1. Provider 档案
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../02_provider_%E4%BC%A0%E8%BE%93%E5%B1%82_provider_transports__/">
+<span class="md-ellipsis">
+    
+  
+    2. Provider 传输层
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../03_%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BC%95%E6%93%8E_context_engine__/">
+<span class="md-ellipsis">
+    
+  
+    3. 上下文引擎
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../04_%E8%AE%B0%E5%BF%86%E6%8F%90%E4%BE%9B%E6%96%B9_memory_provider__/">
+<span class="md-ellipsis">
+    
+  
+    4. 记忆提供方
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">
+<span class="md-ellipsis">
+    
+  
+    5. 工具产物预算系统
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    6. 执行环境
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    6. 执行环境
+  
+
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        一、问题从哪里来？一只"远程双手"的故事
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        二、本章的核心用例
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        三、执行环境到底是什么？
+      
+    </span>
+</a>
+<nav aria-label="三、执行环境到底是什么？" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#31">
+<span class="md-ellipsis">
+      
+        3.1 一张全景图：手套有几款？
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        四、关键概念逐个看
+      
+    </span>
+</a>
+<nav aria-label="四、关键概念逐个看" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#41-execute">
+<span class="md-ellipsis">
+      
+        4.1 execute()：唯一的"伸手动作"
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#42-cwd">
+<span class="md-ellipsis">
+      
+        4.2 CWD（当前目录）跟踪
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#43-filesyncmanager">
+<span class="md-ellipsis">
+      
+        4.3 文件同步（FileSyncManager）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#44">
+<span class="md-ellipsis">
+      
+        4.4 中断与取消
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#45">
+<span class="md-ellipsis">
+      
+        4.5 持久化文件系统（可选）
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        五、动手用一下！跟着核心用例走一遍
+      
+    </span>
+</a>
+<nav aria-label="五、动手用一下！跟着核心用例走一遍" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1">
+<span class="md-ellipsis">
+      
+        步骤 1：根据配置选一副手套
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+<span class="md-ellipsis">
+      
+        步骤 2：跑命令
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3-envexecute">
+<span class="md-ellipsis">
+      
+        步骤 3：预算系统调用 env.execute 写自提柜
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4">
+<span class="md-ellipsis">
+      
+        步骤 4：会话结束时清理
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        六、内部是怎么运转的？
+      
+    </span>
+</a>
+<nav aria-label="六、内部是怎么运转的？" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#61">
+<span class="md-ellipsis">
+      
+        6.1 一段直白的流程描述
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#62">
+<span class="md-ellipsis">
+      
+        6.2 用图来理解
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      
+        七、再深入一点：关键源码片段
+      
+    </span>
+</a>
+<nav aria-label="七、再深入一点：关键源码片段" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#71">
+<span class="md-ellipsis">
+      
+        7.1 抽象基类的核心约定
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#72-ssh-connection">
+<span class="md-ellipsis">
+      
+        7.2 SSH 后端：connection 复用
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#73-ssh">
+<span class="md-ellipsis">
+      
+        7.3 SSH 后端：批量上传文件
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#74-daytona-sdk">
+<span class="md-ellipsis">
+      
+        7.4 Daytona 后端：用 SDK 调度
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#75-daytona">
+<span class="md-ellipsis">
+      
+        7.5 Daytona 后端：持久化沙箱
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#76-modal-http">
+<span class="md-ellipsis">
+      
+        7.6 Modal 后端：通过 HTTP 网关
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#77-singularity">
+<span class="md-ellipsis">
+      
+        7.7 Singularity 后端：安全加固
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      
+        八、它和"工具产物预算"的协作（再回头看一眼）
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+<span class="md-ellipsis">
+      
+        九、本章小结
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">
+<span class="md-ellipsis">
+    
+  
+    7. LSP 集成服务
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../08_%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%8F%AF%E6%8F%92%E6%8B%94%E5%90%8E%E7%AB%AF_cloud_service_providers__/">
+<span class="md-ellipsis">
+    
+  
+    8. 云服务可插拔后端
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../09_%E5%AE%89%E5%85%A8%E4%B8%8E%E5%90%8C%E6%84%8F%E6%8A%A4%E6%A0%8F_safety___consent_guardrails__/">
+<span class="md-ellipsis">
+    
+  
+    9. 安全与同意护栏
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../10_%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%8E%E9%87%8D%E8%AF%95%E6%B2%BB%E7%90%86_rate_limit_tracker___guard__/">
+<span class="md-ellipsis">
+    
+  
+    10. 速率限制与重试治理
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    论文
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    论文
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_1_label" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_3_1">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Tree of Thoughts (NeurIPS 2023)
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/">
+<span class="md-ellipsis">
+    
+  
+    论文速览
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/01_%E8%83%8C%E6%99%AF%E4%B8%8E%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/">
+<span class="md-ellipsis">
+    
+  
+    1. 背景与前置知识
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/02_%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+<span class="md-ellipsis">
+    
+  
+    2. 方法详解
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/03_%E5%AE%9E%E9%AA%8C%E4%B8%8E%E7%BB%93%E6%9E%9C/">
+<span class="md-ellipsis">
+    
+  
+    3. 实验与结果
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/04_%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+<span class="md-ellipsis">
+    
+  
+    4. 源码分析
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../papers/2305.10601/05_%E8%A7%81%E8%A7%A3%E4%B8%8E%E6%89%A9%E5%B1%95/">
+<span class="md-ellipsis">
+    
+  
+    5. 见解与扩展
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="导航栏" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../../..">
+<span class="md-ellipsis">
+    首页
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../../../micrograd_overview/">
+<span class="md-ellipsis">
+    GitHub 仓库
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../">
+<span class="md-ellipsis">
+    nousresearch/hermes-agent
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="chapter-6-execution-environments">Chapter 6: 执行环境（Execution Environments）<a class="headerlink" href="#chapter-6-execution-environments" title="Permanent link">¶</a></h1>
+<p>在上一章 <a href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">工具产物预算系统（Tool Result Budget）</a> 的结尾，我们留下了一个悬念：预算系统要把超大产物<strong>写到沙箱临时文件里</strong>，但写到哪个"沙箱"？写到 <code>/tmp</code> 就一定对吗？万一 agent 此刻正运行在远程服务器、Docker 容器、或者 Modal 云端，那它眼中的 <code>/tmp</code> 跟你主机上的 <code>/tmp</code> 根本不是同一个目录。</p>
+<p>为了把这道难题彻底封装起来，<code>hermes-agent</code> 提供了一层"统一双手"——本章主角 <strong>执行环境（Execution Environments）</strong>。</p>
+<hr/>
+<h2 id="_1">一、问题从哪里来？一只"远程双手"的故事<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>想象你坐在办公室里，但需要操控不同地方的双手帮你做事：</p>
+<ul>
+<li>有时候要在<strong>自己电脑</strong>上跑一句 <code>python build.py</code>。</li>
+<li>有时候要在<strong>远程服务器</strong>上跑 <code>systemctl restart nginx</code>。</li>
+<li>有时候要在<strong>云端沙箱</strong>里运行一段可能有风险的脚本（防止把本机搞坏）。</li>
+<li>有时候要在<strong>Docker 容器</strong>里测试一个干净环境。</li>
+</ul>
+<p>如果每种场景你都得记住一套不同的 API：本地用 <code>subprocess.run</code>、远程用 <code>paramiko</code>、Docker 用 <code>docker exec</code>、Modal 用 SDK……主代码会被切碎成一堆 <code>if-else</code>。</p>
+<p>聪明的设计是：<strong>给所有"双手"穿同一副手套</strong>。无论这双手物理上在哪里，主程序对它说的话永远只有一句：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">env</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"ls -la"</span><span class="p">)</span>
+</code></pre></div>
+<p>剩下的"伸到哪儿、用什么协议、文件怎么同步、出错怎么取消"统统由 <code>env</code> 自己负责。这副"统一手套"就是 <strong>执行环境</strong>。</p>
+<hr/>
+<h2 id="_2">二、本章的核心用例<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<blockquote>
+<p>agent 想跑一句 <code>cat huge.log</code> 收集日志。我们希望<strong>主程序里只有一行 <code>env.execute(...)</code></strong>，但底层可以无缝切换成本地、Docker、SSH、Singularity、Modal、Daytona 中任意一种——而上一章的<a href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">工具产物预算系统（Tool Result Budget）</a>也能把超大输出<strong>写进同一个沙箱</strong>，让 <code>read_file</code> 之后能取得回来。</p>
+</blockquote>
+<p>读完本章，你会理解这套抽象的接口、各种后端如何挂载到它上面、以及为什么这是"自提柜能跨环境工作"的关键。</p>
+<hr/>
+<h2 id="_3">三、执行环境到底是什么？<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>每一个执行环境都是一个类，<strong>统一继承自抽象基类 <code>BaseEnvironment</code></strong>。基类规定了"这副手套必须能做什么"——对外只有寥寥几个方法：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>它干什么</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>execute(cmd, ...)</code></td>
+<td>跑一句 shell 命令，返回 <code>{output, returncode}</code></td>
+<td>"去做这件事"</td>
+</tr>
+<tr>
+<td><code>cwd</code>（属性）</td>
+<td>当前在哪个目录</td>
+<td>"你站在哪一格地板上"</td>
+</tr>
+<tr>
+<td><code>init_session()</code></td>
+<td>启动后做一次环境初始化</td>
+<td>"穿好手套"</td>
+</tr>
+<tr>
+<td><code>cleanup()</code></td>
+<td>收尾，关连接、卸沙箱、同步文件</td>
+<td>"下班，洗手回家"</td>
+</tr>
+</tbody>
+</table>
+<p>主程序只看这几个方法。<strong>它从不直接调用 <code>subprocess</code>、<code>paramiko</code>、<code>docker.client</code></strong>——这些细节藏在每个具体后端里。</p>
+<h3 id="31">3.1 一张全景图：手套有几款？<a class="headerlink" href="#31" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>BaseEnvironment（抽象基类）
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>├── LocalEnvironment          → 本机直接跑
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>├── DockerEnvironment         → 本地 Docker 容器
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>├── SSHEnvironment            → 远程服务器（SSH）
+<a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>├── SingularityEnvironment    → HPC 集群常用容器
+<a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>├── ModalEnvironment          → Modal 云沙箱（直连）
+<a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>├── ManagedModalEnvironment   → Modal 云沙箱（经 Nous 网关）
+<a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a>├── DaytonaEnvironment        → Daytona 云沙箱
+<a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a>└── VercelSandboxEnvironment  → Vercel 云沙箱
+</code></pre></div>
+<p><strong>8 副手套，同一个接口</strong>。在 <code>config.yaml</code> 里改一行就能切换：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">terminal</span><span class="p">:</span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker</span><span class="w">         </span><span class="c1"># 改成 ssh / modal / daytona ...</span>
+</code></pre></div>
+<hr/>
+<h2 id="_4">四、关键概念逐个看<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<h3 id="41-execute">4.1 <code>execute()</code>：唯一的"伸手动作"<a class="headerlink" href="#41-execute" title="Permanent link">¶</a></h3>
+<p>主程序只用这一个方法。例子：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"echo hello &amp;&amp; pwd"</span><span class="p">)</span>
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"output"</span><span class="p">])</span>      <span class="c1"># → "hello\n/home/me\n"</span>
+<a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"returncode"</span><span class="p">])</span>  <span class="c1"># → 0</span>
+</code></pre></div>
+<p>无论是本地还是 Modal 云端，返回的字典结构完全一样——这是和上一章 <code>NormalizedResponse</code> 同一种"普通话"哲学。</p>
+<h3 id="42-cwd">4.2 CWD（当前目录）跟踪<a class="headerlink" href="#42-cwd" title="Permanent link">¶</a></h3>
+<p>每副手套都自己记着"我现在站在哪个目录"。这一点很关键，因为大多数后端是<strong>spawn-per-call</strong>——每次 <code>execute</code> 都新开一个进程，原本 <code>cd /tmp</code> 是不会被记住的。</p>
+<p><code>BaseEnvironment</code> 通过在命令尾巴上偷偷加一个标记，把"现在的 pwd"通过 stdout 报回主程序，主程序把它存进 <code>env.cwd</code>。下一条命令再执行时，自动 <code>cd $cwd</code> 一下再开干。这样从 agent 视角看，目录是"持久的"。</p>
+<h3 id="43-filesyncmanager">4.3 文件同步（FileSyncManager）<a class="headerlink" href="#43-filesyncmanager" title="Permanent link">¶</a></h3>
+<p>如果 agent 在云沙箱里跑，那它本来看不到你电脑上的 <code>~/.hermes/skills/</code> 文件夹。怎么办？</p>
+<p><strong>解决方案</strong>：每个远程/容器后端都自带一个 <strong>FileSyncManager</strong>——执行前把本地 <code>~/.hermes/</code> 同步到沙箱，执行后再同步回来。这样无论手套伸到哪儿，agent 都能用上你的 skills、credentials、cache。</p>
+<h3 id="44">4.4 中断与取消<a class="headerlink" href="#44" title="Permanent link">¶</a></h3>
+<p>用户按 Ctrl+C 想叫停？每副手套都要能干净地"缩回来"：</p>
+<ul>
+<li>本地：发 SIGTERM 给进程。</li>
+<li>SSH：关掉 SSH 连接。</li>
+<li>Daytona：调用 <code>sandbox.stop()</code>。</li>
+<li>Modal：调用 <code>cancel_modal_exec()</code>。</li>
+</ul>
+<p>主程序不需要关心细节，它只知道"叫停了就叫停了"。</p>
+<h3 id="45">4.5 持久化文件系统（可选）<a class="headerlink" href="#45" title="Permanent link">¶</a></h3>
+<p>像 Daytona、Modal、Singularity 这些云后端，支持<strong>持久化沙箱</strong>——下次启动还能拿到上次的文件。这通常通过 <code>persistent_filesystem=True</code> 参数开启。本地、SSH 天然就是持久的，所以不需要这个参数。</p>
+<hr/>
+<h2 id="_5">五、动手用一下！跟着核心用例走一遍<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<p>我们假设 agent 当前用的是 Docker 后端，要跑 <code>cat huge.log</code> 然后让预算系统把产物存进沙箱。</p>
+<h3 id="1">步骤 1：根据配置选一副手套<a class="headerlink" href="#1" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">tools.environments.docker</span><span class="w"> </span><span class="kn">import</span> <span class="n">DockerEnvironment</span>
+<a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>
+<a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="n">env</span> <span class="o">=</span> <span class="n">DockerEnvironment</span><span class="p">(</span>
+<a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a>    <span class="n">image</span><span class="o">=</span><span class="s2">"ubuntu:22.04"</span><span class="p">,</span>
+<a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>    <span class="n">cwd</span><span class="o">=</span><span class="s2">"/root"</span><span class="p">,</span>
+<a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a>    <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+<a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="p">)</span>
+</code></pre></div>
+<p>工厂函数（<code>tools/terminal_tool.py</code> 里的 <code>_create_environment</code>）会按配置自动挑出对应类——你平时不需要手动 new。</p>
+<h3 id="2">步骤 2：跑命令<a class="headerlink" href="#2" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"cat huge.log"</span><span class="p">)</span>
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"output"</span><span class="p">]))</span>   <span class="c1"># → 比如 800000 个字符</span>
+</code></pre></div>
+<p><strong>输入</strong>：一条 shell 命令字符串。
+<strong>输出</strong>：一个 <code>{output, returncode}</code> 字典——和你直接在本地跑 <code>subprocess.run</code> 拿到的形状一样。</p>
+<h3 id="3-envexecute">步骤 3：预算系统调用 <code>env.execute</code> 写自提柜<a class="headerlink" href="#3-envexecute" title="Permanent link">¶</a></h3>
+<p>回顾上一章 <code>tool_result_storage.py</code> 里那段：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="n">cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"mkdir -p </span><span class="si">{</span><span class="nb">dir</span><span class="si">}</span><span class="s2"> &amp;&amp; cat &gt; </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">"</span>
+<a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="n">env</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">stdin_data</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+</code></pre></div>
+<p>这里的 <code>env</code> 就是当前激活的执行环境。<strong>Docker 后端会在容器内创建文件</strong>，而不是写到主机的 <code>/tmp</code>——这样后续 <code>read_file</code> 在容器里跑时也能取到 🎉。</p>
+<h3 id="4">步骤 4：会话结束时清理<a class="headerlink" href="#4" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="n">env</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+</code></pre></div>
+<p>Docker 会停容器、Daytona 会停沙箱、SSH 会关闭 ControlMaster 连接。<strong>主程序什么都不用管。</strong></p>
+<hr/>
+<h2 id="_6">六、内部是怎么运转的？<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<h3 id="61">6.1 一段直白的流程描述<a class="headerlink" href="#61" title="Permanent link">¶</a></h3>
+<p>当主程序调用 <code>env.execute("cat huge.log")</code> 时，幕后发生：</p>
+<ol>
+<li><strong><code>_before_execute()</code> 钩子触发</strong>——比如 SSH/Docker/Daytona 会先做一次文件同步。</li>
+<li><strong>包装命令</strong>——给命令尾巴加上 cwd 跟踪标记，必要时把 stdin 数据塞进 heredoc。</li>
+<li><strong>后端特有的"打电话"</strong>——SSH 用 <code>ssh ...</code> 子进程、Daytona 用 SDK、Modal 用 HTTP API、Local 直接 <code>Popen</code>。</li>
+<li><strong>等结果</strong>——轮询/阻塞读取，同时监听是否有中断信号。</li>
+<li><strong>解析 stdout</strong>——从尾部标记里抠出新的 cwd，更新 <code>self.cwd</code>。</li>
+<li><strong>返回 <code>{output, returncode}</code></strong>——主程序拿到统一格式的结果。</li>
+</ol>
+<h3 id="62">6.2 用图来理解<a class="headerlink" href="#62" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant L as 主循环
+    participant E as 执行环境
+    participant S as 文件同步管理器
+    participant B as 后端（SSH/Modal/...）
+    participant R as 远程沙箱
+
+    L-&gt;&gt;E: execute("cat huge.log")
+    E-&gt;&gt;S: 同步 ~/.hermes 到远端
+    E-&gt;&gt;B: 通过特定协议发命令
+    B-&gt;&gt;R: 真正运行
+    R--&gt;&gt;B: stdout + returncode
+    B--&gt;&gt;E: 原始结果
+    E--&gt;&gt;L: {output, returncode}
+</code></pre>
+<p>注意：<strong>主循环只和 <code>E</code>（执行环境）对话</strong>。中间那条"协议特异链路"完全被封在手套里——这就是抽象的力量。</p>
+<hr/>
+<h2 id="_7">七、再深入一点：关键源码片段<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<h3 id="71">7.1 抽象基类的核心约定<a class="headerlink" href="#71" title="Permanent link">¶</a></h3>
+<p><code>tools/environments/__init__.py</code> 的注释一句话讲清楚了：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="sd">"""Each backend provides the same interface (BaseEnvironment ABC) for running</span>
+<a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="sd">shell commands in a specific execution context: local, Docker, SSH,</span>
+<a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="sd">Singularity, Modal, Daytona, or Vercel Sandbox."""</span>
+</code></pre></div>
+<p>所有后端<strong>对外接口完全一致</strong>。下面我们看几个有代表性的"实现细节"。</p>
+<h3 id="72-ssh-connection">7.2 SSH 后端：connection 复用<a class="headerlink" href="#72-ssh-connection" title="Permanent link">¶</a></h3>
+<p>SSH 后端用 OpenSSH 的 <code>ControlMaster</code> 机制把一条 TCP 连接保持 5 分钟，避免每次 execute 都重新握手。来自 <code>tools/environments/ssh.py</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">"-o"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"ControlPath=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">control_socket</span><span class="si">}</span><span class="s2">"</span><span class="p">])</span>
+<a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">"-o"</span><span class="p">,</span> <span class="s2">"ControlMaster=auto"</span><span class="p">])</span>
+<a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">"-o"</span><span class="p">,</span> <span class="s2">"ControlPersist=300"</span><span class="p">])</span>
+</code></pre></div>
+<p>这就像你拨第一通电话后<strong>别挂断</strong>，后续几通对话就直接接着说，不用再拨号。</p>
+<h3 id="73-ssh">7.3 SSH 后端：批量上传文件<a class="headerlink" href="#73-ssh" title="Permanent link">¶</a></h3>
+<p>如果 agent 启动时要同步 580 个 skill 文件，逐个 <code>scp</code> 会慢到怀疑人生。SSH 后端改成<strong>一次 tar 管道</strong>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="n">tar_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"tar"</span><span class="p">,</span> <span class="s2">"-chf"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"-C"</span><span class="p">,</span> <span class="n">staging</span><span class="p">,</span> <span class="s2">"."</span><span class="p">]</span>
+<a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="n">ssh_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"tar xf - --no-overwrite-dir -C /"</span><span class="p">)</span>
+<a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="c1"># 本地 tar -&gt; SSH 管道 -&gt; 远端 tar 解包</span>
+</code></pre></div>
+<p>效果：580 个文件从"5 分钟"压缩到"&lt;2 秒"。<strong>主代码完全无感</strong>——它只调用 <code>_sync_manager.sync()</code>。</p>
+<h3 id="74-daytona-sdk">7.4 Daytona 后端：用 SDK 调度<a class="headerlink" href="#74-daytona-sdk" title="Permanent link">¶</a></h3>
+<p>Daytona 是云沙箱，得通过它的 Python SDK 干活。来自 <code>tools/environments/daytona.py</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">exec_fn</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">sandbox</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">shell_cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+<a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a>    <span class="k">return</span> <span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">result</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">exit_code</span><span class="p">)</span>
+<a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a>
+<a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="k">return</span> <span class="n">_ThreadedProcessHandle</span><span class="p">(</span><span class="n">exec_fn</span><span class="p">,</span> <span class="n">cancel_fn</span><span class="o">=</span><span class="n">cancel</span><span class="p">)</span>
+</code></pre></div>
+<p>注意：SDK 的 <code>exec</code> 是<strong>阻塞的</strong>，所以这里用了 <code>_ThreadedProcessHandle</code> 把它包成"看起来像 <code>Popen</code>"——主循环就可以用同一套 <code>_wait_for_process</code> 代码处理它。<strong>统一接口</strong>靠这种小巧思才能撑住。</p>
+<h3 id="75-daytona">7.5 Daytona 后端：持久化沙箱<a class="headerlink" href="#75-daytona" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_persistent</span><span class="p">:</span>
+<a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_sandbox</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>      <span class="c1"># 不删除，下次启动还能复用</span>
+<a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="k">else</span><span class="p">:</span>
+<a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_daytona</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sandbox</span><span class="p">)</span>
+</code></pre></div>
+<p><code>persistent_filesystem=True</code> 时，cleanup 只是停掉沙箱；下次同一 <code>task_id</code> 启动时会自动 <code>start()</code>，文件原封不动还在。这就是"云端长期工位"的实现。</p>
+<h3 id="76-modal-http">7.6 Modal 后端：通过 HTTP 网关<a class="headerlink" href="#76-modal-http" title="Permanent link">¶</a></h3>
+<p>Managed Modal（经 Nous 网关）连 SDK 都不用——直接发 HTTP 请求。来自 <code>tools/environments/managed_modal.py</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request</span><span class="p">(</span>
+<a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a>    <span class="s2">"POST"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"/v1/sandboxes/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sandbox_id</span><span class="si">}</span><span class="s2">/execs"</span><span class="p">,</span>
+<a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a>    <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">"execId"</span><span class="p">:</span> <span class="n">exec_id</span><span class="p">,</span> <span class="s2">"command"</span><span class="p">:</span> <span class="n">prepared</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="o">...</span><span class="p">},</span>
+<a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="p">)</span>
+</code></pre></div>
+<p>它发完请求后<strong>不会一直等</strong>——而是周期性 poll：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a>    <span class="k">if</span> <span class="n">is_interrupted</span><span class="p">():</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel_modal_exec</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span> <span class="k">return</span> <span class="o">...</span>
+<a href="#__codelineno-14-3" id="__codelineno-14-3" name="__codelineno-14-3"></a>    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_poll_modal_exec</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+<a href="#__codelineno-14-4" id="__codelineno-14-4" name="__codelineno-14-4"></a>    <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="n">result</span>
+<a href="#__codelineno-14-5" id="__codelineno-14-5" name="__codelineno-14-5"></a>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+</code></pre></div>
+<p>中断也是通过 HTTP 调一下 <code>/cancel</code>。<strong>所有这些都被 <code>BaseModalExecutionEnvironment.execute()</code> 封好了</strong>——具体的 transport 子类只需要实现 <code>_start_modal_exec</code> / <code>_poll_modal_exec</code> / <code>_cancel_modal_exec</code> 三个钩子。</p>
+<h3 id="77-singularity">7.7 Singularity 后端：安全加固<a class="headerlink" href="#77-singularity" title="Permanent link">¶</a></h3>
+<p>Singularity 是 HPC 集群上常用的容器，安全约束比 Docker 更严格。来自 <code>tools/environments/singularity.py</code>：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">"--containall"</span><span class="p">,</span> <span class="s2">"--no-home"</span><span class="p">])</span>
+<a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_memory</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">"--memory"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_memory</span><span class="si">}</span><span class="s2">M"</span><span class="p">])</span>
+<a href="#__codelineno-15-3" id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cpu</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>    <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">"--cpus"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cpu</span><span class="p">)])</span>
+</code></pre></div>
+<p><code>--containall</code> + <code>--no-home</code> 表示"完全隔离，不挂用户家目录"。资源上限也能直接传——主程序根本看不见这些复杂参数。</p>
+<hr/>
+<h2 id="_8">八、它和"工具产物预算"的协作（再回头看一眼）<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<p>回顾上一章那段写自提柜的代码：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="n">cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"mkdir -p </span><span class="si">{</span><span class="nb">dir</span><span class="si">}</span><span class="s2"> &amp;&amp; cat &gt; </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">"</span>
+<a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="n">result</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">stdin_data</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+</code></pre></div>
+<p>注意 <code>stdin_data=content</code>——为什么用 stdin 而不是把 800KB 字符串塞进命令？因为 Linux 单个 argv 上限 128KB，会爆。但每副"手套"对 stdin 的支持方式不同：</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="c1"># 来自 modal_utils.py</span>
+<a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="n">_stdin_mode</span> <span class="o">=</span> <span class="s2">"heredoc"</span>   <span class="c1"># Daytona / Modal：不支持直接 stdin，改用 heredoc 包一层</span>
+<a href="#__codelineno-17-3" id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="c1"># Local / Docker / SSH 默认: 直接通过 Popen.stdin 传</span>
+</code></pre></div>
+<p>这一行配置告诉基类"我这副手套不支持原生 stdin，请帮我自动包成 heredoc"。基类负责适配，主程序还是只看到一行 <code>env.execute(cmd, stdin_data=...)</code>。完美的"抽象之下还能照顾差异"。</p>
+<pre class="mermaid"><code>flowchart LR
+    A[预算系统] --&gt; B[env.execute<br/>cat &gt; file]
+    B --&gt; C{后端类型}
+    C --&gt;|本地/Docker/SSH| D[Popen.stdin 直接传]
+    C --&gt;|Daytona/Modal| E[包成 heredoc]
+    D --&gt; F[(沙箱文件系统)]
+    E --&gt; F
+</code></pre>
+<hr/>
+<h2 id="_9">九、本章小结<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<p>恭喜！你已经掌握了 <code>hermes-agent</code> 的第六个核心抽象：</p>
+<ul>
+<li><strong>执行环境</strong>是 agent 的"远程双手"——把 shell 命令执行抽象成统一的 <code>BaseEnvironment</code> 接口。</li>
+<li>当前共有 8 副手套：本地、Docker、SSH、Singularity、Modal（直连/网关）、Daytona、Vercel Sandbox。</li>
+<li>主程序只调用 <code>env.execute(cmd, ...)</code> 和 <code>env.cleanup()</code>——所有"伸到哪儿、用什么协议、文件怎么同步、中断怎么取消"细节都封装在后端里。</li>
+<li>每副手套都自带 <strong>CWD 跟踪</strong>（spawn-per-call 也能持久目录）、<strong>FileSyncManager</strong>（远端同步本地 <code>~/.hermes</code>）、<strong>中断取消</strong>、可选的<strong>持久化文件系统</strong>。</li>
+<li>上一章的<a href="../05_%E5%B7%A5%E5%85%B7%E4%BA%A7%E7%89%A9%E9%A2%84%E7%AE%97%E7%B3%BB%E7%BB%9F_tool_result_budget__/">工具产物预算系统（Tool Result Budget）</a><strong>必须</strong>透过 <code>env.execute()</code> 才能把超大产物写到 agent 真正在用的那个沙箱里——这是"自提柜跨环境工作"的根基。</li>
+</ul>
+<hr/>
+<p>到这里，agent 已经能在各种环境里跑 shell 命令、还能把超大产物妥善存放。但 agent 写代码的时候，光靠 shell 还不够——它需要更精细的代码理解能力：跳到函数定义、找所有引用、查类型错误。这些都不是 shell 能提供的，必须接入语言服务器（LSP）。</p>
+<p>那位"代码理解专家"就是下一章的主角——LSP 集成服务。</p>
+<p>👉 继续学习：<a href="../07_lsp_%E9%9B%86%E6%88%90%E6%9C%8D%E5%8A%A1_lsp_service__/">LSP 集成服务（LSP Service）</a></p>
+<hr/>
+<p>Generated by <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  回到页面顶部
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+<script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../../javascripts/mathjax.js"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>
